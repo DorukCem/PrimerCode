@@ -26,7 +26,8 @@ function App() {
             <h4>
               <b>{person.name}</b>
             </h4>
-            <p>Age: {person.age}</p>
+            {/* Tailwind example */}
+            <p className="font-bold underline">Age: {person.age}</p> 
             <p>Favourite Food: {person.favourite_food ?? "Unknown"}</p>
           </div>
         </div>
