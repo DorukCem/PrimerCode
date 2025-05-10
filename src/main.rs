@@ -1,6 +1,12 @@
-use axum::{http::StatusCode, response::IntoResponse, routing::get, Json, Router};
+use axum::{
+    Json, Router,
+    http::StatusCode,
+    response::{IntoResponse, Response},
+    routing::{get, post},
+};
+use serde_json::json;
 use tower_http::cors::{Any, CorsLayer};
-use types::Person;
+use types::CodeInput;
 
 mod types;
 
@@ -8,11 +14,14 @@ mod types;
 async fn main() {
     types::export_all_types();
 
-    let cors = CorsLayer::new().allow_origin(Any); // should be more restrictive in production
+    let cors = CorsLayer::new()
+        .allow_origin(Any)
+        .allow_methods(Any)
+        .allow_headers(Any);
 
     let router = Router::new()
         .route("/", get(root))
-        .route("/people", get(get_people))
+        .route("/submit_code", post(post_submit_code))
         .layer(cors);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
@@ -27,24 +36,41 @@ async fn root() -> &'static str {
     "Hello, World!"
 }
 
-async fn get_people() -> impl IntoResponse {
-    let people = vec![
-        Person {
-            name: String::from("Person A"),
-            age: 36,
-            favourite_food: Some(String::from("Pizza")),
-        },
-        Person {
-            name: String::from("Person B"),
-            age: 5,
-            favourite_food: Some(String::from("Broccoli")),
-        },
-        Person {
-            name: String::from("Person C"),
-            age: 100,
-            favourite_food: None,
-        },
-    ];
+async fn post_submit_code(Json(payload): Json<CodeInput>) -> impl IntoResponse {
+    let content = payload.content;
+    let language = "python";
+    let version = "3.10.0";
+    let piston_url = "https://emkc.org/api/v2/piston/execute"; // Piston API endpoint
 
-    (StatusCode::OK, Json(people))
+    // Construct the payload for piston
+    let piston_payload = json!({
+        "language": language,
+        "version": version,
+        "files": [
+            {
+                "name": "main",
+                "content": content
+            }
+        ]
+    });
+
+    let client = reqwest::Client::new();
+
+    match client.post(piston_url).json(&piston_payload).send().await {
+        Ok(response) => match response.text().await {
+            Ok(text) => Response::builder()
+                .status(StatusCode::OK)
+                .header("Content-Type", "text/plain")
+                .body(text)
+                .unwrap(),
+            Err(_) => Response::builder()
+                .status(StatusCode::INTERNAL_SERVER_ERROR)
+                .body("Failed to read response".to_string())
+                .unwrap(),
+        },
+        Err(_) => Response::builder()
+            .status(StatusCode::BAD_GATEWAY)
+            .body("Failed to contact Piston API".to_string())
+            .unwrap(),
+    }
 }
