@@ -52,7 +52,7 @@ async fn get_question_boilerplate() -> String {
     let args = data.function_args.join(", ");
     // Generate the full function signature
     let signature = format!(
-        "class Solution:\n    def {}({}):\n    ",
+        "class Solution:\n    def {}({}):\n        ",
         data.function_name, args
     );
     signature

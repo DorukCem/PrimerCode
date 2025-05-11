@@ -1,12 +1,12 @@
 import Editor from "@monaco-editor/react";
 import { useEffect, useRef, useState } from "react";
 import CodeOutput from "./CodeOutput";
+import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 export default function CodeEditor() {
   const editorRef = useRef(null);
-  const [value, setValue] = useState("");
-  const [boilerplate, setBoilerplate] = useState("# Loading...");
-
+  const [value, setValue] = useState("# Loading...");
+  const [isLoading, setIsLoading] = useState(true);
 
   const onMount = (editor: any) => {
     editorRef.current = editor;
@@ -15,28 +15,41 @@ export default function CodeEditor() {
   useEffect(() => {
     // Fetch boilerplate from the backend
     fetch("http://localhost:3000/question")
-      .then((res) => res.text())
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error(`Failed to fetch: ${res.status}`);
+        }
+        return res.text();
+      })
       .then((boilerplate) => {
-        setBoilerplate(boilerplate);
+        setValue(boilerplate);
+        setIsLoading(false);
       })
       .catch((err) => {
         console.error("Failed to fetch boilerplate:", err);
-        setBoilerplate("# Failed to load boilerplate");
+        setValue("# Failed to load boilerplate");
+        setIsLoading(false);
       });
   }, []);
 
   return (
     <>
-      <Editor
-        theme="vs-dark"
-        defaultLanguage="python"
-        defaultValue={boilerplate}
-        height="75vh"
-        value={value}
-        onChange={(value, _event) => setValue(value || "")}
-        onMount={onMount}
-      />
-      <CodeOutput editorRef={editorRef} />
+      <PanelGroup direction="vertical">
+        <Panel defaultSize={80} minSize={20}>
+          <Editor
+            theme="vs-dark"
+            defaultLanguage="python"
+            value={value}
+            onChange={(newValue) => setValue(newValue || "")}
+            onMount={onMount}
+            loading={isLoading ? "Loading..." : null}
+          />
+        </Panel>
+        <PanelResizeHandle />
+        <Panel defaultSize={20} minSize={10}>
+          <CodeOutput editorRef={editorRef} />
+        </Panel>
+      </PanelGroup>
     </>
   );
 }
