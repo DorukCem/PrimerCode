@@ -13,7 +13,6 @@ export default function CodeEditor() {
   return (
     <>
       <Editor
-        height="75vh"
         theme="vs-dark"
         defaultLanguage="python"
         defaultValue="# Enter solution"

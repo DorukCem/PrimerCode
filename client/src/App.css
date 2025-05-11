@@ -1,9 +1,1 @@
 @import "tailwindcss";
-
-.app {
-    display: flex;
-    flex-direction: column;
-    column-gap: 16px;
-  }
-  
- 

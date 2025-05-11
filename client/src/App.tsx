@@ -1,10 +1,10 @@
 import "./App.css";
-import CodeEditor from "./components/CodeEditor";
+import Question from "./components/Question";
 
 function App() {
   return (
     <div className="app">
-      <CodeEditor />
+      <Question />
     </div>
   );
 }
