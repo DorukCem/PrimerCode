@@ -1,0 +1,9 @@
+{
+  "function_name": "add",
+  "function_args": ["x", "y"],
+  "cases": {
+    "(1,2)": 3,
+    "(2,3)": 5,
+    "(13,6)": 19
+  }
+}

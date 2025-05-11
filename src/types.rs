@@ -7,6 +7,14 @@ pub struct CodeInput {
     pub content: String,
 }
 
+#[derive(Debug, Deserialize, Serialize)]
+pub struct TestResult {
+    pub is_correct: bool,
+    pub case_stdout: String,
+    pub error: Option<String>,
+}
+
+
 pub fn export_all_types() {
     CodeInput::export().unwrap();
 }
