@@ -14,7 +14,7 @@ export default function CodeEditor() {
 
   useEffect(() => {
     // Fetch boilerplate from the backend
-    fetch("http://localhost:3000/question")
+    fetch("http://localhost:3000/boilerplate/1")
       .then((res) => {
         if (!res.ok) {
           throw new Error(`Failed to fetch: ${res.status}`);

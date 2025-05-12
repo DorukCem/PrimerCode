@@ -1,0 +1,7 @@
+{
+  "id": "q1",
+  "title": "Add Two Numbers",
+  "category": "Math",
+  "difficulty": "Easy",
+  "question": "Given two number x and y return the sum of these numbers"
+}

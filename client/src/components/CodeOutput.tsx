@@ -12,7 +12,7 @@ export default function CodeOutput({ editorRef }: any) {
       content: sourceCode,
     };
 
-    fetch("http://localhost:3000/submit_code", {
+    fetch("http://localhost:3000/submit_code/1", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
