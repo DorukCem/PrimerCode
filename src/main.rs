@@ -1,16 +1,15 @@
-use std::{collections::HashMap, fs::File, io::BufReader};
+use std::{fs::File, io::BufReader};
 
 use axum::{
     Json, Router,
     extract::Path,
-    http::StatusCode,
-    response::{IntoResponse, Response},
+    response::IntoResponse,
     routing::{get, post},
 };
 use serde::Deserialize;
 use serde_json::json;
 use tower_http::cors::{Any, CorsLayer};
-use types::{CodeInput, TestResult};
+use types::{CodeInput, CodeSubmissionResponse, PistonResponse, TestResult};
 
 mod types;
 
@@ -105,37 +104,69 @@ async fn post_submit_code(
     match client.post(piston_url).json(&piston_payload).send().await {
         Ok(response) => match response.text().await {
             Ok(text) => {
-                let response_json: serde_json::Value = serde_json::from_str(&text).unwrap();
-                if let Some(stdout_str) = response_json
-                    .get("run")
-                    .and_then(|run| run.get("stdout"))
-                    .and_then(|stdout| stdout.as_str())
-                {
-                    let parsed_results: HashMap<String, TestResult> =
-                        serde_json::from_str(stdout_str).unwrap();
+                match serde_json::from_str::<PistonResponse>(&text) {
+                    Ok(piston_response) => {
+                        if !piston_response.run.stderr.is_empty() {
+                            // User has entered something that cannot be parsed by python
+                            return Json(CodeSubmissionResponse {
+                                success: false,
+                                message: format!("Execution error: {}", piston_response.run.stderr),
+                                results: Vec::new(),
+                            })
+                            .into_response();
+                        }
 
-                    let json_response = serde_json::to_string(&parsed_results).unwrap(); // ! Maybe just send json instead
+                        // Parse the stdout to get our test results
+                        match serde_json::from_str::<Vec<TestResult>>(
+                            &piston_response.run.stdout,
+                        ) {
+                            Ok(parsed_results) => {
+                                // Check if all tests passed
+                                let all_passed =
+                                    parsed_results.iter().all(|result| result.is_correct);
 
-                    Response::builder()
-                        .status(StatusCode::OK)
-                        .header("Content-Type", "application/json")
-                        .body(json_response)
-                        .unwrap()
-                } else {
-                    Response::builder()
-                        .status(StatusCode::BAD_REQUEST)
-                        .body("No stdout field in response".to_string())
-                        .unwrap()
+                                let message = if all_passed {
+                                    "Code executed successfully".to_string()
+                                } else {
+                                    "Some tests failed".to_string()
+                                };
+
+                                let submission_response = CodeSubmissionResponse {
+                                    success: all_passed,
+                                    results: parsed_results,
+                                    message,
+                                };
+
+                                Json(submission_response).into_response()
+                            }
+                            Err(e) => Json(CodeSubmissionResponse {
+                                success: false,
+                                message: format!("Failed to parse test results: {}", e),
+                                results: Vec::new(),
+                            })
+                            .into_response(),
+                        }
+                    }
+                    Err(e) => Json(CodeSubmissionResponse {
+                        success: false,
+                        message: format!("Failed to parse Piston API response: {}", e),
+                        results: Vec::new(),
+                    })
+                    .into_response(),
                 }
             }
-            Err(_) => Response::builder()
-                .status(StatusCode::INTERNAL_SERVER_ERROR)
-                .body("Failed to read response".to_string())
-                .unwrap(),
+            Err(e) => Json(CodeSubmissionResponse {
+                success: false,
+                message: format!("Failed to read response: {}", e),
+                results: Vec::new(),
+            })
+            .into_response(),
         },
-        Err(_) => Response::builder()
-            .status(StatusCode::BAD_GATEWAY)
-            .body("Failed to contact Piston API".to_string())
-            .unwrap(),
+        Err(e) => Json(CodeSubmissionResponse {
+            success: false,
+            message: format!("Failed to contact Piston API: {}", e),
+            results: Vec::new(),
+        })
+        .into_response(),
     }
 }
