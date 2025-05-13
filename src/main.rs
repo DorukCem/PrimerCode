@@ -116,6 +116,17 @@ async fn post_submit_code(
                             .into_response();
                         }
 
+                        if let Some(signal) = piston_response.run.signal{ 
+                            if signal == "SIGKILL"{
+                                return Json(CodeSubmissionResponse {
+                                    success: false,
+                                    message: "Code timed out".to_string(),
+                                    results: Vec::new(),
+                                })
+                                .into_response();
+                            }
+                        }
+
                         // Parse the stdout to get our test results
                         match serde_json::from_str::<Vec<TestResult>>(
                             &piston_response.run.stdout,
