@@ -110,14 +110,17 @@ async fn post_submit_code(
                             // User has entered something that cannot be parsed by python
                             return Json(CodeSubmissionResponse {
                                 success: false,
-                                message: format!("Execution error: {}", piston_response.run.stderr),
+                                message: format!(
+                                    "Execution error: {}",
+                                    format_stderr(&piston_response.run.stderr)
+                                ),
                                 results: Vec::new(),
                             })
                             .into_response();
                         }
 
-                        if let Some(signal) = piston_response.run.signal{ 
-                            if signal == "SIGKILL"{
+                        if let Some(signal) = piston_response.run.signal {
+                            if signal == "SIGKILL" {
                                 return Json(CodeSubmissionResponse {
                                     success: false,
                                     message: "Code timed out".to_string(),
@@ -128,9 +131,7 @@ async fn post_submit_code(
                         }
 
                         // Parse the stdout to get our test results
-                        match serde_json::from_str::<Vec<TestResult>>(
-                            &piston_response.run.stdout,
-                        ) {
+                        match serde_json::from_str::<Vec<TestResult>>(&piston_response.run.stdout) {
                             Ok(parsed_results) => {
                                 // Check if all tests passed
                                 let all_passed =
@@ -179,5 +180,14 @@ async fn post_submit_code(
             results: Vec::new(),
         })
         .into_response(),
+    }
+}
+
+/// This skips the "File: piston/jobs/main.py, ..." part
+fn format_stderr(s: &str) -> &str {
+    if let Some(idx) = s.find(",") {
+        &s[idx+1..]
+    } else {
+        &s
     }
 }
