@@ -75,8 +75,15 @@ export default function CodeEditor() {
       });
   };
 
+  const options = {
+    readOnly: false,
+    minimap: { enabled: false },
+    scrollBeyondLastLine: false,
+    folding: true
+  };
+
   return (
-    <div className="h-full flex flex-col">
+    <div className="h-full flex flex-col border border-white rounded-xl">
       <PanelGroup direction="vertical">
         <Panel defaultSize={90} minSize={20}>
           <Editor
@@ -86,6 +93,7 @@ export default function CodeEditor() {
             onChange={(newValue) => setValue(newValue || "")}
             onMount={onMount}
             loading={editorLoading ? "Loading..." : null}
+            options = {options}
           />
         </Panel>
         <PanelResizeHandle />
@@ -93,9 +101,9 @@ export default function CodeEditor() {
           <CodeOutput response={response} error={error} />
         </Panel>
       </PanelGroup>
-      <div className="flex flex-row-reverse">
+      <div className="flex flex-row-reverse bg-neutral-800 p-4 px-4 border-t-1 border-white">
         <button
-          className="bg-green-700 text-white border border-white rounded-md px-4 py-1"
+          className="bg-green-700 text-white border border-white rounded-md px-4 py-1 my-auto"
           onClick={getCode}
           disabled={responseLoading}
         >

@@ -3,7 +3,7 @@ import Question from "./components/Question";
 
 function App() {
   return (
-    <div className="app">
+    <div className="bg-neutral-700">
       <Question />
     </div>
   );
