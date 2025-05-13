@@ -35,7 +35,7 @@ export default function CodeEditor() {
   return (
     <>
       <PanelGroup direction="vertical">
-        <Panel defaultSize={80} minSize={20}>
+        <Panel defaultSize={90} minSize={20}>
           <Editor
             theme="vs-dark"
             defaultLanguage="python"
@@ -46,7 +46,7 @@ export default function CodeEditor() {
           />
         </Panel>
         <PanelResizeHandle />
-        <Panel defaultSize={20} minSize={10}>
+        <Panel collapsible={true} collapsedSize={10} minSize={10}>
           <CodeOutput editorRef={editorRef} />
         </Panel>
       </PanelGroup>
