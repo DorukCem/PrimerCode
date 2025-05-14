@@ -83,7 +83,7 @@ export default function CodeEditor() {
   };
 
   return (
-    <div className="h-full flex flex-col border border-white rounded-xl">
+    <div className="h-full flex flex-col rounded-xl border border-white">
       <PanelGroup direction="vertical">
         <Panel defaultSize={90} minSize={20}>
           <Editor
