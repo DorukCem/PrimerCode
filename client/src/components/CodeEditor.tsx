@@ -6,6 +6,8 @@ import type { CodeSubmissionResponse } from "../types/CodeSubmissionResponse";
 import type { CodeInput } from "../types/CodeInput";
 
 export default function CodeEditor() {
+  const [resetPanels, setResetPanels] = useState(1);
+
   const editorRef = useRef<any | null>(null);
   const [value, setValue] = useState("# Loading...");
   const [editorLoading, setEditorLoading] = useState(true);
@@ -71,6 +73,7 @@ export default function CodeEditor() {
         setResponse(null);
       })
       .finally(() => {
+        setResetPanels(resetPanels + 1); // ! Maybe only do this if the panel is completely collapsed
         setResponseLoading(false);
       });
   };
@@ -89,7 +92,7 @@ export default function CodeEditor() {
   return (
     <div className="h-full flex flex-col rounded-lg border border-white">
       <PanelGroup direction="vertical" className="rounded-xl">
-        <Panel defaultSize={90} minSize={20}>
+        <Panel defaultSize={60} minSize={20} order={1}>
           <Editor
             theme="vs-dark"
             defaultLanguage="python"
@@ -100,10 +103,22 @@ export default function CodeEditor() {
             options={options}
           />
         </Panel>
-        <PanelResizeHandle />
-        <Panel collapsible={true} collapsedSize={0} minSize={0}>
-          <CodeOutput response={response} error={error} />
-        </Panel>
+
+        {response && (
+          <>
+            <PanelResizeHandle />
+            <Panel
+              defaultSize={40}
+              collapsible={true}
+              collapsedSize={0}
+              minSize={0}
+              order={2}
+              key={resetPanels}
+            >
+              <CodeOutput response={response} error={error} />
+            </Panel>
+          </>
+        )}
       </PanelGroup>
       <div className="flex flex-row-reverse bg-neutral-800 p-4 px-4 border-t-1 border-white rounded-b-lg">
         <button

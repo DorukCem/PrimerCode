@@ -9,7 +9,7 @@ export default function Question() {
         <Panel defaultSize={40} minSize={20} className="h-full">
           <InfoPanel/>
         </Panel>
-        <PanelResizeHandle className="w-[8px]"/>
+        <PanelResizeHandle className="w-[8px] hover:bg-sky-600"/>
         <Panel defaultSize={60} minSize={20} className="h-full">
           <CodeEditor />
         </Panel>
