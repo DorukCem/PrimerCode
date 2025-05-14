@@ -6,7 +6,7 @@ import type { CodeSubmissionResponse } from "../types/CodeSubmissionResponse";
 import type { CodeInput } from "../types/CodeInput";
 
 export default function CodeEditor() {
-  const editorRef = useRef<any|null>(null);
+  const editorRef = useRef<any | null>(null);
   const [value, setValue] = useState("# Loading...");
   const [editorLoading, setEditorLoading] = useState(true);
 
@@ -79,12 +79,16 @@ export default function CodeEditor() {
     readOnly: false,
     minimap: { enabled: false },
     scrollBeyondLastLine: false,
-    folding: true
+    folding: true,
+    fontSize: 16,
+    padding: {
+      top: 12,
+    },
   };
 
   return (
-    <div className="h-full flex flex-col rounded-xl border border-white">
-      <PanelGroup direction="vertical">
+    <div className="h-full flex flex-col rounded-lg border border-white">
+      <PanelGroup direction="vertical" className="rounded-xl">
         <Panel defaultSize={90} minSize={20}>
           <Editor
             theme="vs-dark"
@@ -93,7 +97,7 @@ export default function CodeEditor() {
             onChange={(newValue) => setValue(newValue || "")}
             onMount={onMount}
             loading={editorLoading ? "Loading..." : null}
-            options = {options}
+            options={options}
           />
         </Panel>
         <PanelResizeHandle />
@@ -101,7 +105,7 @@ export default function CodeEditor() {
           <CodeOutput response={response} error={error} />
         </Panel>
       </PanelGroup>
-      <div className="flex flex-row-reverse bg-neutral-800 p-4 px-4 border-t-1 border-white">
+      <div className="flex flex-row-reverse bg-neutral-800 p-4 px-4 border-t-1 border-white rounded-b-lg">
         <button
           className="bg-green-700 text-white border border-white rounded-md px-4 py-1 my-auto"
           onClick={getCode}
