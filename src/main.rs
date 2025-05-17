@@ -1,4 +1,4 @@
-use std::{fs::File, io::BufReader};
+use std::{fs::File, io::BufReader, path::PathBuf};
 
 use axum::{
     Json, Router,
@@ -6,6 +6,7 @@ use axum::{
     response::IntoResponse,
     routing::{get, post},
 };
+use reqwest::{StatusCode, header};
 use serde::Deserialize;
 use serde_json::json;
 use tower_http::cors::{Any, CorsLayer};
@@ -25,6 +26,7 @@ async fn main() {
     let router = Router::new()
         .route("/", get(root))
         .route("/boilerplate/{id}", get(get_question_boilerplate))
+        .route("/question/{id}", get(get_question_md))
         .route("/submit_code/{id}", post(post_submit_code))
         .layer(cors);
 
@@ -53,6 +55,14 @@ async fn get_question_boilerplate(Path(id): Path<u32>) -> String {
         data.function_name, args
     );
     signature
+}
+
+async fn get_question_md(Path(id): Path<u32>) -> impl IntoResponse {
+    let path = PathBuf::from(format!("questions/q{}/question.md", id)); // ! Hard coded
+    match tokio::fs::read_to_string(&path).await {
+        Ok(contents) => ([(header::CONTENT_TYPE, "text/markdown")], contents).into_response(),
+        Err(_) => (StatusCode::NOT_FOUND, "Question not found").into_response(),
+    }
 }
 
 #[derive(Debug, Deserialize)]
@@ -186,7 +196,7 @@ async fn post_submit_code(
 /// This skips the "File: piston/jobs/main.py, ..." part
 fn format_stderr(s: &str) -> &str {
     if let Some(idx) = s.find(",") {
-        &s[idx+1..]
+        &s[idx + 1..]
     } else {
         &s
     }
