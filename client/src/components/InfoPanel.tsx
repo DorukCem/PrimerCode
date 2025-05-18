@@ -1,7 +1,6 @@
 import HintsTab from "./InfoPanel/HintsTab";
 import QuestionDescription from "./InfoPanel/QuestionDescription";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import TriviaTab from "./InfoPanel/TriviaTab";
 import SolutionTab from "./InfoPanel/SolutionTab";
 import { useEffect, useState } from "react";
 import type { QuestionMDResponse } from "../types/QuestionMDResponse";
@@ -12,13 +11,13 @@ export default function InfoPanel() {
   useEffect(() => {
     fetch("http://localhost:3000/question/1")
       .then((response) => {
-              if (!response.ok) {
-                return response.text().then((text) => {
-                  throw new Error(text);
-                });
-              }
-              return response.json() as Promise<QuestionMDResponse>;
-            })
+        if (!response.ok) {
+          return response.text().then((text) => {
+            throw new Error(text);
+          });
+        }
+        return response.json() as Promise<QuestionMDResponse>;
+      })
       .then((question_md) => {
         setQuestionMD(question_md);
       })
@@ -43,12 +42,7 @@ export default function InfoPanel() {
           >
             Hints
           </Tab>
-          <Tab
-            className="px-4 py-2 mr-2 cursor-pointer  "
-            selectedClassName="border-b border-white outline-none"
-          >
-            Trivia
-          </Tab>
+
           <Tab
             className="px-4 py-2 mr-2 cursor-pointer"
             selectedClassName="border-b border-white outline-none"
@@ -62,11 +56,7 @@ export default function InfoPanel() {
         </TabPanel>
 
         <TabPanel>
-          <HintsTab markdown={questionMD?.hint}/>
-        </TabPanel>
-
-        <TabPanel>
-          <TriviaTab />
+          <HintsTab markdown={questionMD?.hint} />
         </TabPanel>
 
         <TabPanel>
