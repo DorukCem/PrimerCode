@@ -30,6 +30,7 @@ pub struct CodeSubmissionResponse {
 pub struct QuestionMDResponse {
     pub question: String,
     pub hint: String,
+    pub solution: String,
 }
 
 pub fn export_all_types() {

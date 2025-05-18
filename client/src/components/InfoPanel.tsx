@@ -60,7 +60,7 @@ export default function InfoPanel() {
         </TabPanel>
 
         <TabPanel>
-          <SolutionTab />
+          <SolutionTab markdown={questionMD?.solution}/>
         </TabPanel>
       </Tabs>
     </div>

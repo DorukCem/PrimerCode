@@ -60,15 +60,17 @@ async fn get_question_boilerplate(Path(id): Path<u32>) -> String {
 async fn get_question_md(Path(id): Path<u32>) -> impl IntoResponse {
     let question_path = PathBuf::from(format!("questions/q{}/question.md", id));
     let hint_path = PathBuf::from(format!("questions/q{}/hint.md", id));
+    let solution_path = PathBuf::from(format!("questions/q{}/solution.md", id));
 
     let result = tokio::try_join!(
         tokio::fs::read_to_string(&question_path),
-        tokio::fs::read_to_string(&hint_path)
+        tokio::fs::read_to_string(&hint_path),
+        tokio::fs::read_to_string(&solution_path)
     );
 
     match result {
-        Ok((question, hint)) => {
-            let response = QuestionMDResponse { question, hint };
+        Ok((question, hint, solution)) => {
+            let response = QuestionMDResponse { question, hint, solution };
             (
                 [(header::CONTENT_TYPE, "application/json")],
                 Json(response),

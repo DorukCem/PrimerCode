@@ -1,3 +1,5 @@
-export default function SolutionTab(){
-    return <code className="h-full bg-neutral-800 text-white border border-white">return x+y</code>
+import MarkdownRenderer from "./MarkdownRenderer";
+
+export default function SolutionTab({ markdown }: any) {
+  return <MarkdownRenderer content={markdown} />;
 }
