@@ -25,10 +25,18 @@ pub struct CodeSubmissionResponse {
     pub results: Vec<TestResult>,
 }
 
+#[derive(TS, Debug, Deserialize, Serialize)]
+#[ts(export)]
+pub struct QuestionMDResponse {
+    pub question: String,
+    pub hint: String,
+}
+
 pub fn export_all_types() {
     CodeInput::export().unwrap();
     TestResult::export().unwrap();
     CodeSubmissionResponse::export().unwrap();
+    QuestionMDResponse::export().unwrap();
 }
 
 // Piston API response types

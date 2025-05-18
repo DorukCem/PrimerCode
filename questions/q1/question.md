@@ -8,7 +8,6 @@ assert(add(5, 7) == 12)
 If you do not know how to get started: [how to use python functions](https://realpython.com/defining-your-own-python-function/)
 
 
-
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quam nibh, volutpat et risus vel, dictum ultricies magna. Maecenas tincidunt urna id tellus volutpat, vel fermentum sem dictum. Nam eu tempor purus. Vestibulum pulvinar turpis condimentum dolor pellentesque, et consectetur diam iaculis. Mauris nulla dui, venenatis eu tortor et, iaculis vehicula massa. Curabitur aliquet, est eget pharetra euismod, orci risus ullamcorper mauris, eu malesuada est augue nec ligula. Sed ullamcorper faucibus arcu efficitur blandit. Aliquam nec odio at nulla elementum consectetur. Sed finibus commodo porta. Quisque sodales ut nibh non imperdiet. Praesent quis pretium dui. Aenean quam dui, gravida scelerisque justo vitae, tincidunt iaculis orci.
 
 Quisque pellentesque enim vitae nisi porttitor scelerisque. In tincidunt fermentum sapien, ac commodo ipsum vestibulum et. Integer mollis aliquet est non lacinia. Quisque vel ornare velit. In ut cursus felis. In hac habitasse platea dictumst. Vivamus quis arcu eget dui sagittis lobortis. Integer nunc nibh, ultricies quis nunc eu, fermentum imperdiet massa. Aliquam metus elit, ornare vulputate felis in, bibendum varius risus.

@@ -10,7 +10,7 @@ use reqwest::{StatusCode, header};
 use serde::Deserialize;
 use serde_json::json;
 use tower_http::cors::{Any, CorsLayer};
-use types::{CodeInput, CodeSubmissionResponse, PistonResponse, TestResult};
+use types::{CodeInput, CodeSubmissionResponse, PistonResponse, QuestionMDResponse, TestResult};
 
 mod types;
 
@@ -58,10 +58,24 @@ async fn get_question_boilerplate(Path(id): Path<u32>) -> String {
 }
 
 async fn get_question_md(Path(id): Path<u32>) -> impl IntoResponse {
-    let path = PathBuf::from(format!("questions/q{}/question.md", id)); // ! Hard coded
-    match tokio::fs::read_to_string(&path).await {
-        Ok(contents) => ([(header::CONTENT_TYPE, "text/markdown")], contents).into_response(),
-        Err(_) => (StatusCode::NOT_FOUND, "Question not found").into_response(),
+    let question_path = PathBuf::from(format!("questions/q{}/question.md", id));
+    let hint_path = PathBuf::from(format!("questions/q{}/hint.md", id));
+
+    let result = tokio::try_join!(
+        tokio::fs::read_to_string(&question_path),
+        tokio::fs::read_to_string(&hint_path)
+    );
+
+    match result {
+        Ok((question, hint)) => {
+            let response = QuestionMDResponse { question, hint };
+            (
+                [(header::CONTENT_TYPE, "application/json")],
+                Json(response),
+            )
+                .into_response()
+        }
+        Err(_) => (StatusCode::NOT_FOUND, "Question or hint not found").into_response(),
     }
 }
 

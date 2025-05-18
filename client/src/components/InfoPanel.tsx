@@ -4,24 +4,26 @@ import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import TriviaTab from "./InfoPanel/TriviaTab";
 import SolutionTab from "./InfoPanel/SolutionTab";
 import { useEffect, useState } from "react";
+import type { QuestionMDResponse } from "../types/QuestionMDResponse";
 
 export default function InfoPanel() {
-  const [question, setQuestion] = useState<string | null>(null);
+  const [questionMD, setQuestionMD] = useState<QuestionMDResponse | null>(null);
 
   useEffect(() => {
     fetch("http://localhost:3000/question/1")
-      .then((res) => {
-        if (!res.ok) {
-          throw new Error(`Failed to fetch: ${res.status}`);
-        }
-        return res.text();
-      })
+      .then((response) => {
+              if (!response.ok) {
+                return response.text().then((text) => {
+                  throw new Error(text);
+                });
+              }
+              return response.json() as Promise<QuestionMDResponse>;
+            })
       .then((question_md) => {
-        setQuestion(question_md);
+        setQuestionMD(question_md);
       })
       .catch((err) => {
         console.error("Failed to fetch question", err);
-        setQuestion("# Failed to load boilerplate");
       });
   }, []);
 
@@ -56,11 +58,11 @@ export default function InfoPanel() {
         </TabList>
 
         <TabPanel>
-          <QuestionDescription markdown={question} />
+          <QuestionDescription markdown={questionMD?.question} />
         </TabPanel>
 
         <TabPanel>
-          <HintsTab />
+          <HintsTab markdown={questionMD?.hint}/>
         </TabPanel>
 
         <TabPanel>
