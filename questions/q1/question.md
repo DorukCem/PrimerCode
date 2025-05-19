@@ -1,5 +1,5 @@
 # Add Number
-Write a function that returns the sum of its two arguements
+Write a function that returns the sum of its two arguments
 
 For example the statement below should not return an error
 ```py
