@@ -1,9 +1,9 @@
-import HintsTab from "./InfoPanel/HintsTab";
-import QuestionDescription from "./InfoPanel/QuestionDescription";
+import HintsTab from "./HintsTab";
+import QuestionDescription from "./QuestionDescription";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import SolutionTab from "./InfoPanel/SolutionTab";
+import SolutionTab from "./SolutionTab";
 import { useEffect, useState } from "react";
-import type { QuestionMDResponse } from "../types/QuestionMDResponse";
+import type { QuestionMDResponse } from "../../types/QuestionMDResponse";
 
 export default function InfoPanel() {
   const [questionMD, setQuestionMD] = useState<QuestionMDResponse | null>(null);

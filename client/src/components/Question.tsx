@@ -1,5 +1,5 @@
-import CodeEditor from "./CodeEditor";
-import InfoPanel from "./InfoPanel";
+import CodeEditor from "./CodeEditor/CodeEditor";
+import InfoPanel from "./InfoPanel/InfoPanel";
 import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
 
 export default function Question() {

@@ -1,4 +1,4 @@
-import type { TestResult } from "../types/TestResult";
+import type { TestResult } from "../../types/TestResult";
 
 export default function CodeOutput({ error, response }: any) {
   return (
