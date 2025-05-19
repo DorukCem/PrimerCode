@@ -1,13 +1,11 @@
 import ReactModal from "react-modal";
 import Select from "react-select";
 
-const fontOptions = [
-  { value: 12, label: "12px" },
-  { value: 14, label: "14px" },
-  { value: 16, label: "16px" },
-  { value: 18, label: "18px" },
-  { value: 20, label: "20px" },
-];
+// 12 to 24
+const fontOptions = Array.from({ length: 13 }, (_, i) => {
+    const size = i + 12; // starts from 12
+    return { value: size, label: `${size}px` };
+  });
 
 export default function Modal({ isModalOpen, closeModal, fontSize, setFontSize}: any) {
   function getCurrentFontOption() {

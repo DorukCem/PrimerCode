@@ -119,7 +119,7 @@ export default function CodeEditor() {
     <div className="h-full flex flex-col rounded-lg border border-white">
       <Modal isModalOpen={isModalOpen} closeModal={closeModal} fontSize={fontSize} setFontSize={setFontSize}/>
       {/* Buttons */}
-      <div className="flex justify-end text-white bg-stone-900 rounded-t-lg p-2">
+      <div className="flex justify-end text-white bg-stone-900 border-b border-dashed border-white rounded-t-lg p-2">
         <div
           className="border border-white mx-2 px-4 hover:cursor-pointer"
           onClick={() => setEditorValue(boilerplate)}
@@ -165,7 +165,7 @@ export default function CodeEditor() {
       </PanelGroup>
       <div className="flex flex-row-reverse bg-neutral-800 p-4 px-4 border-t-1 border-white rounded-b-lg">
         <button
-          className="bg-green-700 text-white border border-white rounded-md px-4 py-1 my-auto"
+          className="bg-green-700 text-white border border-white rounded-md px-4 py-1 my-auto hover:cursor-pointer"
           onClick={getCode}
           disabled={responseLoading}
         >
