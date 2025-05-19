@@ -7,7 +7,7 @@ import type { CodeInput } from "../../types/CodeInput";
 
 import Modal from "./Modal";
 
-export default function CodeEditor() {
+export default function CodeEditor({ name }: any) {
   const [resetPanels, setResetPanels] = useState(1);
 
   const editorRef = useRef<any | null>(null);
@@ -21,7 +21,7 @@ export default function CodeEditor() {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [fontSize, setFontSize] = useState(16)
+  const [fontSize, setFontSize] = useState(16);
 
   const onMount = (editor: any) => {
     editorRef.current = editor;
@@ -42,7 +42,7 @@ export default function CodeEditor() {
 
   useEffect(() => {
     // Fetch boilerplate from the backend
-    fetch("http://localhost:3000/boilerplate/1")
+    fetch(`http://localhost:3000/boilerplate/${name}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error(`Failed to fetch: ${res.status}`);
@@ -71,7 +71,7 @@ export default function CodeEditor() {
       content: sourceCode,
     };
 
-    fetch("http://localhost:3000/submit_code/1", {
+    fetch(`http://localhost:3000/submit_code/${name}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -109,15 +109,18 @@ export default function CodeEditor() {
     },
   };
 
-  
-  
   function closeModal() {
     setIsModalOpen(false);
   }
 
   return (
     <div className="h-full flex flex-col rounded-lg border border-white">
-      <Modal isModalOpen={isModalOpen} closeModal={closeModal} fontSize={fontSize} setFontSize={setFontSize}/>
+      <Modal
+        isModalOpen={isModalOpen}
+        closeModal={closeModal}
+        fontSize={fontSize}
+        setFontSize={setFontSize}
+      />
       {/* Buttons */}
       <div className="flex justify-end text-white bg-stone-900 border-b border-dashed border-white rounded-t-lg p-2">
         <div
