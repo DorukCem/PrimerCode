@@ -1,11 +1,18 @@
 import "./App.css";
-import Question from "./components/Question";
+import Navbar from "./components/Navbar";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import QuestionList from "./components/QuestionList";
 
 function App() {
   return (
-    <div className="bg-neutral-700">
-      <Question />
-    </div>
+    <Router>
+      <Navbar />
+      <div className="bg-neutral-700">
+        <Routes>
+          <Route path="/" element={<QuestionList />} />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 
