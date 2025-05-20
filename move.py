@@ -1,54 +1,75 @@
 import sqlite3
-import os
 import json
 from pathlib import Path
 
-# TODO turn this into a tool for creating db entries
+""" This is a script to move all files from /questions into the database """
 
-DB_PATH = "database.db"  # Change this if needed
-QUESTIONS_DIR = Path("questions")
+# Configuration
+DB_PATH = "database.db"  # Replace with your actual path
+QUESTIONS_DIR = Path("questions")  # Your folder structure
 
+# Connect to SQLite
 conn = sqlite3.connect(DB_PATH)
 cursor = conn.cursor()
 
-def load_cases(py_file_path):
-    namespace = {}
-    with open(py_file_path) as f:
-        exec(f.read(), {}, namespace)
-    return namespace['cases']
 
-for question_folder in QUESTIONS_DIR.iterdir():
-    if not question_folder.is_dir():
+# Traverse each question folder
+for folder in QUESTIONS_DIR.iterdir():
+    if not folder.is_dir():
         continue
 
-    slug = question_folder.name
-    title = slug.replace('-', ' ').title()
+    slug = folder.name
+    title = slug.replace("-", " ").title()
 
-    with open(question_folder / "boilerplate.json") as f:
-        boiler = json.load(f)
-    function_name = boiler["function_name"]
-    function_args = json.dumps(boiler["function_args"])  # store as JSON string
+    boilerplate_path = folder / "boilerplate.json"
+    question_md_path = folder / "question.md"
+    hint_md_path = folder / "hint.md"
+    solution_md_path = folder / "solution.md"
+    cases_py_path = folder / "cases.py"
 
-    with open(question_folder / "question.md") as f:
-        question_md = f.read()
-    with open(question_folder / "hint.md") as f:
-        hint_md = f.read()
-    with open(question_folder / "solution.md") as f:
-        solution_md = f.read()
+    try:
+        # Load boilerplate.json
+        with open(boilerplate_path, "r") as f:
+            boiler = json.load(f)
+        function_name = boiler["function_name"]
+        function_args = json.dumps(boiler["function_args"])  # Store list as JSON string
 
-    cases_dict = load_cases(question_folder / "cases.py")
-    cases_json = json.dumps({str(k): v for k, v in cases_dict.items()})  # serialize tuple keys as strings
+        # Load markdown content
+        with open(question_md_path, "r") as f:
+            question_md = f.read()
+        with open(hint_md_path, "r") as f:
+            hint_md = f.read()
+        with open(solution_md_path, "r") as f:
+            solution_md = f.read()
+        with open(cases_py_path, "r") as f:
+            cases = f.read() # Put python file content as string
 
-    cursor.execute("""
-        INSERT INTO questions (
-            slug, title, function_name, function_args,
-            question_md, hint_md, solution_md, cases
-        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-    """, (
-        slug, title, function_name, function_args,
-        question_md, hint_md, solution_md, cases_json
-    ))
-    print(f"Imported: {title}")
+        # Insert into DB
+        cursor.execute(
+            """
+            INSERT OR REPLACE INTO questions (
+                slug, title, function_name, function_args,
+                question_md, hint_md, solution_md, cases
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        """,
+            (
+                slug,
+                title,
+                function_name,
+                function_args,
+                question_md,
+                hint_md,
+                solution_md,
+                cases,
+            ),
+        )
 
+        print(f"[OK] Imported question: {title}")
+
+    except Exception as e:
+        print(f"[ERROR] Failed to import '{slug}': {e}")
+
+# Commit and close
 conn.commit()
 conn.close()
+print("✅ All done.")
