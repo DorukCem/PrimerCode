@@ -1,21 +1,46 @@
 use std::{fs::File, io::BufReader, path::PathBuf};
 
 use axum::{
-    Json, Router,
-    extract::Path,
-    response::IntoResponse,
-    routing::{get, post},
+    extract::{Path, State}, response::IntoResponse, routing::{get, post}, Json, Router
 };
+use db::DbPool;
+use diesel::prelude::*;
+use dotenvy::dotenv;
+use models::QuestionSummary;
 use reqwest::{StatusCode, header};
 use serde::Deserialize;
 use serde_json::json;
+use std::env;
 use tower_http::cors::{Any, CorsLayer};
-use types::{CodeInput, CodeSubmissionResponse, PistonResponse, QuestionList, QuestionMDResponse, TestResult};
+use types::{
+    CodeInput, CodeSubmissionResponse, PistonResponse, QuestionList, QuestionMDResponse, TestResult,
+};
 
+
+pub mod models;
+pub mod schema;
 mod types;
+mod db;
+
+pub fn establish_connection() -> SqliteConnection {
+    dotenv().ok();
+    
+    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL must be set");
+    SqliteConnection::establish(&database_url)
+    .unwrap_or_else(|_| panic!("Error connecting to {}", database_url))
+}
+
+
+pub fn get_question_summaries(conn: &mut SqliteConnection) -> QueryResult<Vec<QuestionSummary>> {
+    use crate::schema::questions::dsl::*;
+    questions.select((id, title)).load::<QuestionSummary>(conn)
+}
 
 #[tokio::main]
 async fn main() {
+    dotenvy::dotenv().ok();
+    let pool = db::establish_pool();
+
     types::export_all_types();
 
     let cors = CorsLayer::new()
@@ -29,6 +54,7 @@ async fn main() {
         .route("/question/{q_name}", get(get_question_md))
         .route("/all-questions", get(get_all_questions))
         .route("/submit_code/{q_name}", post(post_submit_code))
+        .with_state(pool.clone()) // Share pool via state
         .layer(cors);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
@@ -43,30 +69,18 @@ async fn root() -> &'static str {
     "Hello, World!"
 }
 
-async fn get_all_questions() -> impl IntoResponse {
-    let path = std::path::Path::new("questions");
+async fn get_all_questions(
+    State(pool): State<DbPool>,
+) -> impl IntoResponse {
+    let conn = &mut pool.get().expect("Couldn't get db connection from pool");
 
-    let mut entries = match tokio::fs::read_dir(path).await {
-        Ok(entries) => entries,
-        Err(_) => return Json(QuestionList { questions: vec![] }),
-    };
-
-    let mut questions = Vec::new();
-
-    while let Ok(Some(entry)) = entries.next_entry().await {
-        let file_type = match entry.file_type().await {
-            Ok(ft) => ft,
-            Err(_) => continue,
-        };
-
-        if file_type.is_dir() {
-            if let Some(name) = entry.file_name().to_str() {
-                questions.push(name.to_string());
-            }
-        }
+    match get_question_summaries(conn) {
+        Ok(summaries) => Json(QuestionList { questions: summaries }).into_response(),
+        Err(err) => (
+            axum::http::StatusCode::INTERNAL_SERVER_ERROR,
+            format!("Error: {:?}", err),
+        ).into_response(),
     }
-
-    Json(QuestionList { questions })
 }
 
 async fn get_question_boilerplate(Path(q_name): Path<String>) -> String {
@@ -97,12 +111,12 @@ async fn get_question_md(Path(q_name): Path<String>) -> impl IntoResponse {
 
     match result {
         Ok((question, hint, solution)) => {
-            let response = QuestionMDResponse { question, hint, solution };
-            (
-                [(header::CONTENT_TYPE, "application/json")],
-                Json(response),
-            )
-                .into_response()
+            let response = QuestionMDResponse {
+                question,
+                hint,
+                solution,
+            };
+            ([(header::CONTENT_TYPE, "application/json")], Json(response)).into_response()
         }
         Err(_) => (StatusCode::NOT_FOUND, "Question or hint not found").into_response(),
     }

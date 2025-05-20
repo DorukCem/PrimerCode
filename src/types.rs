@@ -1,6 +1,7 @@
-
 use serde::{Deserialize, Serialize};
 use ts_rs::TS;
+
+use crate::models::QuestionSummary;
 
 #[derive(TS, Serialize, Deserialize)]
 #[ts(export)]
@@ -36,7 +37,7 @@ pub struct QuestionMDResponse {
 #[derive(TS, Debug, Deserialize, Serialize)]
 #[ts(export)]
 pub struct QuestionList {
-    pub questions: Vec<String>,
+    pub questions: Vec<QuestionSummary>,
 }
 
 pub fn export_all_types() {
@@ -44,6 +45,7 @@ pub fn export_all_types() {
     TestResult::export().unwrap();
     CodeSubmissionResponse::export().unwrap();
     QuestionMDResponse::export().unwrap();
+    QuestionSummary::export().unwrap();
     QuestionList::export().unwrap();
 }
 

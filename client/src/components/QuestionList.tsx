@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import type { QuestionList } from "../types/QuestionList";
+import type { QuestionSummary } from "../types/QuestionSummary";
 
 export default function QuestionList() {
   const [questions, setQuestions] = useState<QuestionList | null>(null);
@@ -30,10 +31,10 @@ export default function QuestionList() {
       </h1>
       {questions && (
         <ul className="space-y-3">
-          {questions.questions.map((question, index) => (
-            <li key={index}>
+          {questions.questions.map((question: QuestionSummary, index) => (
+            <li key={question.id}>
               <Link
-                to={`/question/${question}`}
+                to={`/question/${question.title}`}
                 className={
                   "block hover:cursor-pointer text-white px-4 py-3 rounded-md transition-colors duration-200" +
                   (index % 2 == 0 ? " bg-neutral-700" : "")
@@ -56,7 +57,7 @@ export default function QuestionList() {
                       />
                     </svg>
 
-                    <div>{`${index+1}. ${question}`}</div>
+                    <div>{`${index+1}. ${question.title}`}</div>
                   </div>
                 }
               </Link>
