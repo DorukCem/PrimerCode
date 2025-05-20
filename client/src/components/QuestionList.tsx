@@ -24,7 +24,7 @@ export default function QuestionList() {
   }, []);
 
   return (
-    <div className="h-screen text-gray-200 p-8 max-w-7xl mx-auto border border-white rounded-lg">
+    <div className="h-full text-gray-200 p-8 max-w-7xl mx-auto   rounded-lg">
       <h1 className="text-3xl font-bold mb-6 border-b border-gray-700 pb-2  text-center">
         Questions
       </h1>
@@ -34,9 +34,31 @@ export default function QuestionList() {
             <li key={index}>
               <Link
                 to={`/question/${question}`}
-                className="block  bg-neutral-900 hover:bg-gray-600 text-white px-4 py-3 rounded-md transition-colors duration-200"
+                className={
+                  "block hover:cursor-pointer text-white px-4 py-3 rounded-md transition-colors duration-200" +
+                  (index % 2 == 0 ? " bg-neutral-700" : "")
+                }
               >
-                {question}
+                {
+                  <div className="flex">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth={1.5}
+                      stroke="green"
+                      className="size-6 mr-2"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="m4.5 12.75 6 6 9-13.5"
+                      />
+                    </svg>
+
+                    <div>{`${index+1}. ${question}`}</div>
+                  </div>
+                }
               </Link>
             </li>
           ))}
