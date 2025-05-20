@@ -7,12 +7,14 @@ import Question from "./components/Question";
 function App() {
   return (
     <Router>
-      <Navbar />
-      <div className="bg-neutral-700">
-        <Routes>
-          <Route path="/" element={<QuestionList />} />
-          <Route path="/question/:name" element={<Question />} />
-        </Routes>
+      <div className="flex flex-col h-screen bg-neutral-900">
+        <Navbar />
+        <div className="flex-1 overflow-auto">
+          <Routes>
+            <Route path="/" element={<QuestionList />} />
+            <Route path="/question/:name" element={<Question />} />
+          </Routes>
+        </div>
       </div>
     </Router>
   );
