@@ -34,7 +34,7 @@ export default function QuestionList() {
           {questions.questions.map((question: QuestionSummary, index) => (
             <li key={question.id}>
               <Link
-                to={`/question/${question.title}`}
+                to={`/question/${question.id}`}
                 className={
                   "block hover:cursor-pointer text-white px-4 py-3 rounded-md transition-colors duration-200" +
                   (index % 2 == 0 ? " bg-neutral-700" : "")

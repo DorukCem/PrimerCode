@@ -5,11 +5,11 @@ import SolutionTab from "./SolutionTab";
 import { useEffect, useState } from "react";
 import type { QuestionMDResponse } from "../../types/QuestionMDResponse";
 
-export default function InfoPanel({name}: any) {
+export default function InfoPanel({id}: any) {
   const [questionMD, setQuestionMD] = useState<QuestionMDResponse | null>(null);
 
   useEffect(() => {
-    fetch(`http://localhost:3000/question/${name}`)
+    fetch(`http://localhost:3000/question/${id}`)
       .then((response) => {
         if (!response.ok) {
           return response.text().then((text) => {

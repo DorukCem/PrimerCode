@@ -24,3 +24,9 @@ pub struct QuestionSummary {
     pub id: i32,
     pub title: String,
 }
+
+#[derive(Queryable, Debug)]
+pub struct QuestionBoilerplate {
+    pub function_name: String,
+    pub function_args: String,
+}
