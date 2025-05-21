@@ -3,7 +3,9 @@ from contextlib import redirect_stdout
 import json
 
 test_results = []
-for case_id, (args, result) in enumerate(cases.items()):
+for case_id, test_case in enumerate(cases):
+    args = test_case.inputs
+    result = test_case.expected
     with io.StringIO() as buf, redirect_stdout(buf):
         error = None
         correct = False
