@@ -1,0 +1,4 @@
+{
+  "function_name": "first_last",
+  "function_args": ["reviews: list[int]"]
+}

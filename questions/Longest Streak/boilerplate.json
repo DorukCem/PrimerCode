@@ -1,0 +1,4 @@
+{
+  "function_name": "longest_streak",
+  "function_args": ["matches: list[bool]"]
+}
