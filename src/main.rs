@@ -162,7 +162,8 @@ async fn post_submit_code(State(pool): State<DbPool>,
     let content = payload.content;
     let language = "python";
     let version = "3.10.0";
-    let piston_url = "https://emkc.org/api/v2/piston/execute"; // Piston API endpoint
+    // let piston_url = "https://emkc.org/api/v2/piston/execute";
+    let piston_url = "http://localhost:2000/api/v2/execute"; // Piston API endpoint
 
     let injected_code = inject_code(id, content, pool);
     // std::fs::write("test.py", &injected_code).unwrap(); // debug the created python file    
@@ -191,8 +192,8 @@ async fn post_submit_code(State(pool): State<DbPool>,
                             return Json(CodeSubmissionResponse {
                                 success: false,
                                 message: format!(
-                                    "Execution error: {}",
-                                    format_stderr(&piston_response.run.stderr)
+                                    "Execution error: {}, signal: {:?}, stdout: {}",
+                                    format_stderr(&piston_response.run.stderr), piston_response.run.signal, piston_response.run.stdout
                                 ),
                                 results: Vec::new(),
                             })
@@ -207,7 +208,7 @@ async fn post_submit_code(State(pool): State<DbPool>,
                                     results: Vec::new(),
                                 })
                                 .into_response();
-                            }
+                            } 
                         }
 
                         // Parse the stdout to get our test results
