@@ -1,0 +1,4 @@
+{
+  "function_name": "hash_avoidance",
+  "function_args": ["table: list[int], numbers_to_add: list[int]"]
+}

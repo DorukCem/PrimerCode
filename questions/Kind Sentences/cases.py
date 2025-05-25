@@ -1,0 +1,17 @@
+cases = (
+    [
+        TestCase(inputs=("Can you please clean the kitchen",), expected=True),
+        TestCase(inputs=("Please close the door",), expected=True),
+        TestCase(inputs=("Could you help me, please?",), expected=True),
+        TestCase(inputs=("I would appreciate it if you could help",), expected=False),
+        TestCase(inputs=("Do it now",), expected=False),
+        TestCase(inputs=("pretty please with sugar on top",), expected=True),
+        TestCase(inputs=("She said please several times",), expected=True),
+        TestCase(inputs=("He was polite",), expected=False),
+        TestCase(inputs=("The word 'please' was not used",), expected=True),
+        TestCase(inputs=("Nothing to see here",), expected=False),
+        TestCase(inputs=("PLEASE turn off the lights",), expected=True),
+        TestCase(inputs=("My pleasure",), expected=False),
+        TestCase(inputs=("pLeASe cLeaN thE DisHeS",), expected=True),
+    ],
+)

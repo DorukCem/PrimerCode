@@ -1,0 +1,4 @@
+{
+  "function_name": "decipher_reverse",
+  "function_args": ["sentence: str"]
+}

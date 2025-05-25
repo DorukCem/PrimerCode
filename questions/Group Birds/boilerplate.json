@@ -1,0 +1,4 @@
+{
+  "function_name": "chunk_by",
+  "function_args": ["birds: list[str]"]
+}

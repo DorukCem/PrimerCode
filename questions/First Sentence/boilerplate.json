@@ -1,0 +1,4 @@
+{
+  "function_name": "first_sentence",
+  "function_args": ["text: str"]
+}

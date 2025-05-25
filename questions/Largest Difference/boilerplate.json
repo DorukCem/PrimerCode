@@ -1,0 +1,4 @@
+{
+  "function_name": "largest_diff",
+  "function_args": ["scores: list[int]"]
+}

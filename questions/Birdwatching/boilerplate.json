@@ -1,0 +1,4 @@
+{
+  "function_name": "num_birds",
+  "function_args": ["birds: str"]
+}

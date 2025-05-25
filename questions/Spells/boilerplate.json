@@ -1,0 +1,4 @@
+{
+  "function_name": "cast_spell",
+  "function_args": ["spell: str"]
+}

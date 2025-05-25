@@ -1,0 +1,4 @@
+{
+  "function_name": "is_kind",
+  "function_args": ["sentence: str"]
+}
