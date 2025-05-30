@@ -1,0 +1,4 @@
+{
+  "function_name": "remove_doppelgangers",
+  "function_args": ["crew_members: list[str]"]
+}

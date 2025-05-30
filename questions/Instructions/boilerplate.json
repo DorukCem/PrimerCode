@@ -1,0 +1,4 @@
+{
+  "function_name": "particle_count",
+  "function_args": ["particle_count: int, events: list[str]"]
+}

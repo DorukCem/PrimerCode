@@ -1,0 +1,4 @@
+{
+  "function_name": "average_rating",
+  "function_args": ["ratings: list[tuple[str,int]]"]
+}

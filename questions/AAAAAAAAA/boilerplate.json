@@ -1,0 +1,4 @@
+{
+  "function_name": "repeat",
+  "function_args": ["sound: str", "n: int"]
+}

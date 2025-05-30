@@ -1,0 +1,1 @@
+> The next index to use is always (num ingredients added) % len(ingredients)

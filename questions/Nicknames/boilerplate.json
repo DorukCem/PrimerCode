@@ -1,0 +1,4 @@
+{
+  "function_name": "orc_hierarchy",
+  "function_args": ["squad: dict[str, str]"]
+}

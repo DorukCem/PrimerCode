@@ -1,0 +1,4 @@
+{
+  "function_name": "avg_decline",
+  "function_args": ["reviews: list[int]"]
+}
