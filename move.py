@@ -26,6 +26,8 @@ for folder in QUESTIONS_DIR.iterdir():
     hint_md_path = folder / "hint.md"
     solution_md_path = folder / "solution.md"
     cases_py_path = folder / "cases.py"
+    metadata_path = folder / "metadata.json"
+
 
     try:
         # Load boilerplate.json
@@ -44,14 +46,21 @@ for folder in QUESTIONS_DIR.iterdir():
         with open(cases_py_path, "r") as f:
             cases = f.read() # Put python file content as string
 
+        # Load optional metadata.json
+        test_strategy = None
+        if metadata_path.exists():
+            with open(metadata_path, "r") as f:
+                metadata = json.load(f)
+                test_strategy = metadata.get("test_strategy")
+
         # Insert into DB
         cursor.execute(
             """
             INSERT OR REPLACE INTO questions (
                 slug, title, function_name, function_args,
-                question_md, hint_md, solution_md, cases
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
-        """,
+                question_md, hint_md, solution_md, cases, test_strategy
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """,
             (
                 slug,
                 title,
@@ -61,6 +70,7 @@ for folder in QUESTIONS_DIR.iterdir():
                 hint_md,
                 solution_md,
                 cases,
+                test_strategy,
             ),
         )
 
