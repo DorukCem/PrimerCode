@@ -1,4 +1,4 @@
 {
-  "function_name": "generate_spell",
-  "function_args": ["entropy: list[int]"]
+  "function_name": "cast_spell",
+  "function_args": ["goblins: list[int]", "spell"]
 }

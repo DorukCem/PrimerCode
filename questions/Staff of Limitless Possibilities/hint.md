@@ -1,1 +1,0 @@
-> Python types can be converted between each other using int(), float, bool(), etc..

@@ -1,4 +1,0 @@
-{
-  "function_name": "string_lang_to_py",
-  "function_args": ["token: str"]
-}
