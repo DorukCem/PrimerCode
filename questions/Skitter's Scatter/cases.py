@@ -9,7 +9,7 @@ cases = [
     ),
     TestCase(
         inputs=([1, 1, 1, 1, 2],),
-        expected=lambda x: x // 6  # 1+1+1+1+4=8 (divisible by 2)
+        expected=lambda x: x // 8  # 1+1+1+1+4=8 (divisible by 2)
     ),
     TestCase(
         inputs=([3, 3],),
@@ -17,7 +17,7 @@ cases = [
     ),
     TestCase(
         inputs=([1, 1, 1],),
-        expected=lambda x: x // 3  # 1+1+1=3 (divisible by 3 but not 2)
+        expected=lambda x: x + 3  # 1+1+1=3 (divisible by 3 but not 2)
     ),
     TestCase(
         inputs=([2, 1, 1],),
@@ -29,14 +29,14 @@ cases = [
     ),
     TestCase(
         inputs=([1, 2, 4],),
-        expected=lambda x: x // 21  # 1+4+16=21 (divisible by 3 but not 2)
+        expected=lambda x: x + 21  # 1+4+16=21 (divisible by 3 but not 2)
     ),
     TestCase(
         inputs=([4, 2, 1],),
-        expected=lambda x: x // 21  # 16+4+1=21 (divisible by 3 but not 2)
+        expected=lambda x: x + 21  # 16+4+1=21 (divisible by 3 but not 2)
     ),
     TestCase(
-        inputs=([7, 1],),
-        expected=lambda x: x % 50  # 49+1=50 (divisible by 2)
+        inputs=([7],),
+        expected=lambda x: x % 49  # 
     ),
 ]

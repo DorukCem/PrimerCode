@@ -172,7 +172,7 @@ async fn post_submit_code(State(pool): State<DbPool>,
     let piston_url = "http://localhost:2000/api/v2/execute"; // Piston API endpoint
 
     let injected_code = inject_code(id, content, pool);
-    std::fs::write("test.py", &injected_code).unwrap(); // debug the created python file    
+    // std::fs::write("test.py", &injected_code).unwrap(); // debug the created python file    
 
     // Construct the payload for piston
     let piston_payload = json!({    
