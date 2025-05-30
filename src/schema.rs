@@ -11,5 +11,6 @@ diesel::table! {
         hint_md -> Text,
         solution_md -> Text,
         cases -> Text,
+        test_strategy -> Nullable<Text>,
     }
 }

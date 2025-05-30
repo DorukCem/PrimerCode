@@ -1,0 +1,24 @@
+import io
+from contextlib import redirect_stdout
+import json
+
+test_results = []
+for case_id, test_case in enumerate(cases):
+    args = test_case.inputs
+    result = test_case.expected
+    with io.StringIO() as buf, redirect_stdout(buf):
+        error = None
+        correct = False
+        try:
+            func_output = __some_function(*args)
+            correct = all([func_output(i) == result(i) for i in range(100)])
+
+        except Exception as e:
+            error = e
+
+        function_stdout = buf.getvalue()
+        case_signature = f"{str(args)} -> {str(result)}"
+        test_results.append(
+            {"is_correct": correct, "case_stdout": function_stdout, "error": error, "case_signature": case_signature}
+        )
+print(json.dumps(test_results, default=str))  # Ensures exceptions are stringified

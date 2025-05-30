@@ -10,6 +10,7 @@ use diesel::prelude::*;
 use dotenvy::dotenv;
 use models::{Question, QuestionSummary};
 use reqwest::{StatusCode, header};
+use schema::questions::test_strategy;
 use serde_json::json;
 use std::env;
 use tower_http::cors::{Any, CorsLayer};
@@ -143,14 +144,19 @@ async fn get_question_md(State(pool): State<DbPool>, Path(id): Path<i32>) -> imp
 }
 
 
-
 fn inject_code(question_id: i32, content: String, db_pool: DbPool) -> String {
     let question= get_single_question(question_id, db_pool).expect("Expected to find question");
     
-    let imports= std::fs::read_to_string("injections/function_top.py").unwrap();
+    let imports= std::fs::read_to_string("injections/imports.py").unwrap();
     let change_name = format!("__some_function = Solution.{}", question.function_name);
     let cases = question.cases;
-    let py_runner = std::fs::read_to_string("injections/function.py").unwrap(); // ! hardcoded
+
+    let strategy = match question.test_strategy.as_ref().map(String::as_ref)  {
+        Some("func_output") => "func_output",
+        Some(x) => panic!("Unexpected data in database: test_strategy= {x}"),
+        None => "standard",
+    };
+    let py_runner = std::fs::read_to_string(format!("injections/{strategy}.py")).unwrap(); // ! hardcoded
 
     format!("{imports}\n\n{content}\n\n{change_name}\n\n{cases}\n\n{py_runner}")
 }
@@ -166,7 +172,7 @@ async fn post_submit_code(State(pool): State<DbPool>,
     let piston_url = "http://localhost:2000/api/v2/execute"; // Piston API endpoint
 
     let injected_code = inject_code(id, content, pool);
-    // std::fs::write("test.py", &injected_code).unwrap(); // debug the created python file    
+    std::fs::write("test.py", &injected_code).unwrap(); // debug the created python file    
 
     // Construct the payload for piston
     let piston_payload = json!({    
