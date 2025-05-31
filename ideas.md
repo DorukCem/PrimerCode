@@ -59,9 +59,6 @@
 - *Confusing aliases of a list with copies*
 
 ### Questions
-- Given a list of lists flatten it
-- pop from front or both depending on condition until list empty
-
 
 ## Loops
 ### Notes:

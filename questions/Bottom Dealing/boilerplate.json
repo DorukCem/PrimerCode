@@ -1,0 +1,4 @@
+{
+  "function_name": "deal_cards",
+  "function_args": ["cards: list[int]"]
+}

@@ -1,0 +1,1 @@
+> The `.pop(index)` method for lists is really helpful for this question
