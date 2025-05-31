@@ -1,0 +1,4 @@
+{
+  "function_name": "calculate_thrill",
+  "function_args": ["road_heights: list[int]"]
+}
