@@ -10,7 +10,6 @@ use diesel::prelude::*;
 use dotenvy::dotenv;
 use models::{Question, QuestionSummary};
 use reqwest::{StatusCode, header};
-use schema::questions::test_strategy;
 use serde_json::json;
 use std::env;
 use tower_http::cors::{Any, CorsLayer};

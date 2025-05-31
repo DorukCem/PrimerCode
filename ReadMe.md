@@ -3,7 +3,7 @@
 `cargo run`
 `npm run dev`
 Inside piston folder:
-`docker compose up -d`
+`docker compose up`
 
 Typescript might complain that it might cannot find the types folder but that should be created after `cargo run`
 
