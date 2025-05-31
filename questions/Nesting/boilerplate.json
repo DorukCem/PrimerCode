@@ -1,0 +1,4 @@
+{
+  "function_name": "flatten",
+  "function_args": ["gift: list"]
+}
