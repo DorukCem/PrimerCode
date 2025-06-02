@@ -1,11 +1,11 @@
 # Glowberries
 
-You are a farmer growing Glowberries. Tourist have come over from Nocturna, who are obsessed with all things luminescent. 
-These tourists are known for spending generously on anything that shines.
-
+You are a farmer growing Glowberries. Tourist have come over from the underground, obsessed with anything luminescent. 
+These tourists are known to spend gold from their mines generously on anything that shines.
 Your are expecting the crops to be ripe in two to three week, but the tourists can’t wait that long. 
-Fortunately, your ancestors have taught you a trick: tomorrow is a moonless night. 
-On such nights, some crops can hold a lot of value even if they aren’t fully ripe, thanks to an unusual glow that can only be spotted in the dark. These are the berries that will fetch a premium price.
+Fortunately, you remember that tomorrow will be a moonless night. 
+Your ancestors have taught you that some crops can hold a lot of value even if they aren’t fully ripe.
+These are the berries that will glow unusually, even somewhat illuminating the berries around them which can only be spotted in the dark. 
 
 Your function takes a single input `farm` which is a 2D list of integers.
 A Glowberry is considered special if:

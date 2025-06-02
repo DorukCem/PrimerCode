@@ -1,11 +1,10 @@
 # Doppelgangers Movie Rating
-After a failed attempt to remove the doppelgangers by the lonely unique crewmates,
+After a failed attempt to remove the doppelgangers by the lonely unique crew members,
 the crew has agreed that all doppelgangers of the same person must now share a single vote — one vote per unique person.
 
-After every movie night, the movie is rated by all crew members to decide if it should be replayed in the future (since the number of movies is limited in space).
-The doppelgangers have evolved to the point where each of them can rate the movie differently.
-
-However, under the new voting system, it has been decided that the average rating given by all doppelgangers of a person will be counted as that person’s final rating.
+After every movie night, the movie is rated by all crew members to decide if it should be replayed in the future since the number of movies is limited in space.
+AS time has passed, the doppelgangers have now evolved to the point where each of them can rate the movie differently.
+Under the new voting system, it has been decided that the average rating given by all doppelgangers of a person will be counted as that person’s final rating.
 
 Your function takes a single input ratings, which is a list of tuples, where:
 - The first element is the name of the person (string)

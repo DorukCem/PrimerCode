@@ -1,7 +1,7 @@
 # Bottom Dealing
 Bigni the Imp has been summoned to the overworld to play poker. Seated at a table with the grandest wizards at the Spellslingers Casino, Bigni knows he’s outmatched.
 Competing against wizards with minds already razor-sharp and now further amplified by potent 'Raise Intellect' spells he decides that he will have to
-crate his own luck. Using his cunningness, he decides he’ll leave this table rich — thanks to a little trick called [Bottom Dealing](https://en.wikipedia.org/wiki/Bottom_dealing).
+crate his own luck. Using his cunningness, he decides he’ll leave this table rich thanks to a little trick called [Bottom Dealing](https://en.wikipedia.org/wiki/Bottom_dealing).
 
 Your function takes a single input `cards`, which is a list of integers representing the card values. 
 At each dealing turn:
