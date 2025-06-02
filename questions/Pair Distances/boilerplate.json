@@ -1,0 +1,4 @@
+{
+  "function_name": "distances",
+  "function_args": ["grid: list[list[str]]"]
+}

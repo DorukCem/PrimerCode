@@ -20,7 +20,6 @@
 # Grid Questions
 Grid questions will hit both nested loops and nested lists
 - Word search in a grid
-- Something involving the the distance a^2 + b^2 between points in grid
 - Some symbol on the grid that unifies its surroundings in a way or a calculation
 - Maybe something that navigates trough a 2d grid 
 - How is something guarded by things in the same row or column 9 5 1 4 9 (one is protected by the outer nines here)
