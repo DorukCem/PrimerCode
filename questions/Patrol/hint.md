@@ -1,0 +1,2 @@
+> You are going to face problems if you use the given grid as a data structure when the officers collide, it is
+> easier to just keep track of every officers direction and position as a single object in data structure 

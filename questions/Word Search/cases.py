@@ -36,5 +36,5 @@ cases = [
 
     TestCase(inputs=([['X', 'M', 'M'], ['I', 'I', 'X'], ['X', 'X', 'X']], "MIX"), expected=0),
 
-    TestCase(inputs=([['M', 'M', 'I'], ['I', 'X', 'M'], ['X', 'X', 'I']], MIX), expected=1),
+    TestCase(inputs=([['M', 'M', 'I'], ['I', 'X', 'M'], ['X', 'X', 'I']], "MIX"), expected=1),
 ]

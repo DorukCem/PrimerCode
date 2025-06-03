@@ -1,0 +1,4 @@
+{
+  "function_name": "patrol_result",
+  "function_args": ["grid: list[list[str]]", "num_intervals: int"]
+}
