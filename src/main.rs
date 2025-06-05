@@ -22,9 +22,7 @@ pub mod models;
 pub mod schema;
 mod types;
 
-// TODO api should use slugs instead
 // TODO improve frontend test case results
-// TODO move pistonAPI into this project
 // TODO add localstorage data: settings, questions solved, last submission?
 // TODO add search functionality to questions
 // TODO add category / difficulty / rank to questions

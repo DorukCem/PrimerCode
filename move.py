@@ -18,8 +18,8 @@ for folder in QUESTIONS_DIR.iterdir():
     if not folder.is_dir():
         continue
 
-    slug = folder.name
-    title = slug.replace("-", " ").title()
+    title = folder.name
+    slug = "-".join(folder.name.strip().split()).lower()
 
     boilerplate_path = folder / "boilerplate.json"
     question_md_path = folder / "question.md"

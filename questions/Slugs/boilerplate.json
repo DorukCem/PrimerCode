@@ -1,0 +1,4 @@
+{
+  "function_name": "get_slug",
+  "function_args": ["title: str"]
+}

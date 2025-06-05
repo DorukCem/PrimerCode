@@ -1,0 +1,1 @@
+> There is a string method for every operation needed to solve this question.

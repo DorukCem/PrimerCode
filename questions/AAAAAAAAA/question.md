@@ -5,7 +5,8 @@ It seems that the people being dragged away are trying to say something... but t
 
 For example
 - Explorer 1: "AaAA-"
-- Explorer 2: "Whyyy-"
+- Explorer 2: "Arghh-"
+
 You’re curious to learn what these explorers might have been trying to say in their final moments.
 
 Your function takes two inputs

@@ -17,6 +17,8 @@
 - Parse number of items from string (hard)
 `"3 cats 4 dogs" -> {"cats": 3, "dogs", 4}`
 
+- GENERATE SLUG
+
 # Grid Questions
 Grid questions will hit both nested loops and nested lists
 - Some symbol on the grid that unifies its surroundings in a way or a calculation
