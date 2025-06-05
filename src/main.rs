@@ -22,6 +22,15 @@ pub mod models;
 pub mod schema;
 mod types;
 
+// TODO api should use slugs instead
+// TODO improve frontend test case results
+// TODO move pistonAPI into this project
+// TODO add localstorage data: settings, questions solved, last submission?
+// TODO add search functionality to questions
+// TODO add category / difficulty / rank to questions
+// TODO add Authentication and User to DB
+// TODO add persistent login with localstorage
+
 pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();
 
@@ -32,7 +41,7 @@ pub fn establish_connection() -> SqliteConnection {
 
 pub fn get_question_summaries(conn: &mut SqliteConnection) -> QueryResult<Vec<QuestionSummary>> {
     use crate::schema::questions::dsl::*;
-    questions.select((id, title)).load::<QuestionSummary>(conn)
+    questions.select((id, title, slug)).load::<QuestionSummary>(conn)
 }
 
 #[tokio::main]
@@ -50,9 +59,9 @@ async fn main() {
     let router = Router::new()
         .route("/", get(root))
         .route("/all-questions", get(get_all_questions))
-        .route("/boilerplate/{id}", get(get_question_boilerplate))
-        .route("/question/{id}", get(get_question_md))
-        .route("/submit_code/{id}", post(post_submit_code))
+        .route("/boilerplate/{slug}", get(get_question_boilerplate))
+        .route("/question/{slug}", get(get_question_md))
+        .route("/submit_code/{slug}", post(post_submit_code))
         .with_state(pool.clone()) // Share pool via state
         .layer(cors);
 
@@ -84,17 +93,23 @@ async fn get_all_questions(State(pool): State<DbPool>) -> impl IntoResponse {
     }
 }
 #[must_use]
-fn get_single_question(question_id: i32, db_pool: DbPool) -> Result<Question, diesel::result::Error> {
+fn get_single_question_by_pk(question_id: i32, db_pool: DbPool) -> Result<Question, diesel::result::Error> {
     let conn = &mut db_pool.get().expect("Failed to get DB connection");
     use crate::schema::questions::dsl::*;
     questions.find(question_id).select(Question::as_select()).first(conn)
 }
 
+fn get_single_question(slug_name: &str, db_pool: DbPool) -> Result<Question, diesel::result::Error> {
+    let conn = &mut db_pool.get().expect("Failed to get DB connection");
+    use crate::schema::questions::dsl::*;
+    questions.filter(slug.eq(slug_name)).first(conn)
+}
+
 async fn get_question_boilerplate(
     State(pool): State<DbPool>,
-    Path(id): Path<i32>,
+    Path(slug): Path<String>,
 ) -> impl IntoResponse {
-    let question = get_single_question(id, pool);
+    let question = get_single_question(&slug, pool);
 
     match question {
         Ok(question) => {
@@ -112,15 +127,15 @@ async fn get_question_boilerplate(
             eprintln!("{e}");
             (
                 StatusCode::NOT_FOUND,
-                format!("No question with id {id} found. {e}"),
+                format!("No question with slug {slug} found. {e}"),
             )
                 .into_response()
         }
     }
 }
 
-async fn get_question_md(State(pool): State<DbPool>, Path(id): Path<i32>) -> impl IntoResponse {
-    let question = get_single_question(id, pool);
+async fn get_question_md(State(pool): State<DbPool>, Path(slug): Path<String>) -> impl IntoResponse {
+    let question = get_single_question(&slug, pool);
 
     match question {
         Ok(q) => {
@@ -135,7 +150,7 @@ async fn get_question_md(State(pool): State<DbPool>, Path(id): Path<i32>) -> imp
             eprintln!("{e}");
             (
                 StatusCode::NOT_FOUND,
-                format!("No question with id {id} found. {e}"),
+                format!("No question with slug {slug} found. {e}"),
             )
                 .into_response()
         }
@@ -143,8 +158,8 @@ async fn get_question_md(State(pool): State<DbPool>, Path(id): Path<i32>) -> imp
 }
 
 
-fn inject_code(question_id: i32, content: String, db_pool: DbPool) -> String {
-    let question= get_single_question(question_id, db_pool).expect("Expected to find question");
+fn inject_code(slug: &str, content: String, db_pool: DbPool) -> String {
+    let question= get_single_question(slug, db_pool).expect("Expected to find question");
     
     let imports= std::fs::read_to_string("injections/imports.py").unwrap();
     let change_name = format!("__some_function = Solution.{}", question.function_name);
@@ -161,7 +176,7 @@ fn inject_code(question_id: i32, content: String, db_pool: DbPool) -> String {
 }
 
 async fn post_submit_code(State(pool): State<DbPool>,
-    Path(id): Path<i32>,
+    Path(slug): Path<String>,
     Json(payload): Json<CodeInput>,
 ) -> impl IntoResponse {
     let content = payload.content;
@@ -170,7 +185,7 @@ async fn post_submit_code(State(pool): State<DbPool>,
     // let piston_url = "https://emkc.org/api/v2/piston/execute";
     let piston_url = "http://localhost:2000/api/v2/execute"; // Piston API endpoint
 
-    let injected_code = inject_code(id, content, pool);
+    let injected_code = inject_code(&slug, content, pool);
     // std::fs::write("test.py", &injected_code).unwrap(); // debug the created python file    
 
     // Construct the payload for piston

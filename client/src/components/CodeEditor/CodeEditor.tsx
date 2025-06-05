@@ -7,7 +7,7 @@ import type { CodeInput } from "../../types/CodeInput";
 
 import Modal from "./Modal";
 
-export default function CodeEditor({ id }: any) {
+export default function CodeEditor({ slug }: any) {
   const [resetPanels, setResetPanels] = useState(1);
 
   const editorRef = useRef<any | null>(null);
@@ -42,7 +42,7 @@ export default function CodeEditor({ id }: any) {
 
   useEffect(() => {
     // Fetch boilerplate from the backend
-    fetch(`http://localhost:3000/boilerplate/${id}`)
+    fetch(`http://localhost:3000/boilerplate/${slug}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error(`Failed to fetch: ${res.status}`);
@@ -71,7 +71,7 @@ export default function CodeEditor({ id }: any) {
       content: sourceCode,
     };
 
-    fetch(`http://localhost:3000/submit_code/${id}`, {
+    fetch(`http://localhost:3000/submit_code/${slug}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

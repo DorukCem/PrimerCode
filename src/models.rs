@@ -24,6 +24,7 @@ pub struct Question {
 pub struct QuestionSummary {
     pub id: i32,
     pub title: String,
+    pub slug: String,
 }
 
 #[derive(Queryable, Debug)]

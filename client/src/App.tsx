@@ -12,7 +12,7 @@ function App() {
         <div className="flex-1 overflow-auto">
           <Routes>
             <Route path="/" element={<QuestionList />} />
-            <Route path="/question/:id" element={<Question />} />
+            <Route path="/question/:slug" element={<Question />} />
           </Routes>
         </div>
       </div>
