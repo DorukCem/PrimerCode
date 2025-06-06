@@ -1,4 +1,0 @@
-{
-  "function_name": "search",
-  "function_args": ["grid: list[list[str]]"]
-}
