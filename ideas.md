@@ -17,13 +17,11 @@
 - Parse number of items from string (hard)
 `"3 cats 4 dogs" -> {"cats": 3, "dogs", 4}`
 
-- GENERATE SLUG
 
 # Grid Questions
 Grid questions will hit both nested loops and nested lists
 - Some symbol on the grid that unifies its surroundings in a way or a calculation
 - Maybe something that navigates trough a 2d grid 
-- How is something guarded by things in the same row or column 9 5 1 4 9 (one is protected by the outer nines here)
 
 # After this I want to do some AOC style format parsing
 - ??

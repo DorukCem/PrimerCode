@@ -1,0 +1,4 @@
+{
+  "function_name": "find_shelter",
+  "function_args": ["grid: list[list[int]]"]
+}
