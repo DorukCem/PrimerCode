@@ -29,6 +29,7 @@ mod types;
 // TODO add category / difficulty / rank to questions
 // TODO add Authentication and User to DB
 // TODO add persistent login with localstorage
+// TODO check for timeouts
 
 pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();

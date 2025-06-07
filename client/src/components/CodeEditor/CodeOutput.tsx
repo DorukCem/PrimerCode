@@ -52,11 +52,7 @@ export default function CodeOutput({ error, response }: any) {
                   {response.results.map((result: TestResult, idx: number) => (
                     <Tab
                       key={idx}
-                      className={`px-4 py-2 font-medium rounded-md cursor-pointer transition-colors flex items-center gap-2 t ${
-                        result.is_correct
-                          ? "text-gray-300 hover:bg-gray-600/50"
-                          : "text-red-400 hover:bg-gray-600/50"
-                      }`}
+                      className={`px-4 py-2 font-medium rounded-md cursor-pointer transition-colors flex items-center gap-2 t `}
                       selectedClassName={"bg-gray-600/50"}
                     >
                       {!result.is_correct ? (
@@ -70,64 +66,32 @@ export default function CodeOutput({ error, response }: any) {
                 </TabList>
 
                 {response.results.map((result: TestResult, idx: number) => (
-                  <TabPanel
-                    key={idx}
-                    selectedClassName={`mt-4 p-4 rounded-lg border ${
-                      result.is_correct
-                        ? "bg-emerald-900/30 border-emerald-800"
-                        : "bg-red-900/30 border-red-800"
-                    }`}
-                  >
-                    <div className="font-semibold mb-4 flex place-content-between">
-                      <h3 className="text-lg font-medium flex items-center gap-2">
-                        {!result.is_correct ? (
-                          <XCircleIcon size={20} className="text-red-500" />
-                        ) : (
-                          <CheckCircleIcon
-                            size={20}
-                            className="text-green-500"
-                          />
-                        )}
-                        Test Case {idx + 1}
-                      </h3>
-                      <div
-                        className={`py-1 px-3 rounded-full text-sm font-medium
-                        ${
-                          !result.is_correct
-                            ? "bg-red-600/50 text-red-200"
-                            : "bg-green-600/50 text-green-200"
-                        } 
-                      `}
-                      >
-                        {!result.is_correct ? "Failed" : "Passed"}
-                      </div>
-                    </div>
-
+                  <TabPanel key={idx} selectedClassName={`mt-4 rounded-lg `}>
                     {/* Display case signature details */}
                     <div className="space-y-4 mb-4">
                       <div>
-                        <p className="text-sm font-medium text-gray-300 mb-2">
+                        <p className="text-md font-medium text-gray-300 mb-2">
                           Arguments:
                         </p>
-                        <pre className="text-sm bg-gray-950 p-3 rounded overflow-auto max-h-20 text-gray-300">
+                        <pre className="text-md bg-gray-950 p-3 rounded overflow-auto max-h-20 text-gray-300">
                           {result.case_signature.args}
                         </pre>
                       </div>
 
                       <div>
-                        <p className="text-sm font-medium text-gray-300 mb-2">
+                        <p className="text-md font-medium text-gray-300 mb-2">
                           Expected
                         </p>
-                        <pre className="text-sm bg-gray-950 p-3 rounded overflow-auto max-h-40 text-gray-300">
+                        <pre className="text-md bg-gray-950 p-3 rounded overflow-auto max-h-40 text-gray-300">
                           {result.case_signature.expected}
                         </pre>
                       </div>
 
                       <div>
-                        <p className="text-sm font-medium text-gray-300 mb-2">
+                        <p className="text-md font-medium text-gray-300 mb-2">
                           Result:
                         </p>
-                        <pre className="text-sm bg-gray-950 p-3 rounded overflow-auto max-h-40 text-gray-300">
+                        <pre className="text-md bg-gray-950 p-3 rounded overflow-auto max-h-40 text-gray-300">
                           {result.case_signature.result}
                         </pre>
                       </div>
@@ -135,10 +99,10 @@ export default function CodeOutput({ error, response }: any) {
 
                     {result.case_stdout && (
                       <div className="mb-4">
-                        <p className="text-sm font-medium text-gray-300 mb-2">
+                        <p className="text-md font-medium text-gray-300 mb-2">
                           Standard Output:
                         </p>
-                        <pre className="text-sm bg-gray-950 p-3 rounded overflow-auto max-h-32 text-gray-300">
+                        <pre className="text-md bg-gray-950 p-3 rounded overflow-auto max-h-32 text-gray-300">
                           {result.case_stdout}
                         </pre>
                       </div>
@@ -146,10 +110,8 @@ export default function CodeOutput({ error, response }: any) {
 
                     {result.error && (
                       <div className="mb-4">
-                        <p className="text-sm font-medium text-red-300 mb-2">
-                          Error:
-                        </p>
-                        <pre className="text-sm bg-red-950 p-3 rounded overflow-auto max-h-32 text-red-200">
+                        <p className="text-md font-medium mb-2">Error:</p>
+                        <pre className="text-md bg-gray-950 text-gray-300 p-3 rounded overflow-auto max-h-32">
                           {result.error}
                         </pre>
                       </div>
