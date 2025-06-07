@@ -11,11 +11,19 @@ pub struct CodeInput {
 
 #[derive(TS, Debug, Deserialize, Serialize)]
 #[ts(export)]
+pub struct CaseSignature {
+    pub args: String,
+    pub expected: String,
+    pub result: String,
+}
+
+#[derive(TS, Debug, Deserialize, Serialize)]
+#[ts(export)]
 pub struct TestResult {
     pub is_correct: bool,
     pub case_stdout: String,
     pub error: Option<String>,
-    pub case_signature: String,
+    pub case_signature: CaseSignature,
 }
 
 #[derive(TS, Debug, Deserialize, Serialize)]
@@ -42,6 +50,7 @@ pub struct QuestionList {
 
 pub fn export_all_types() {
     CodeInput::export().unwrap();
+    CaseSignature::export().unwrap();
     TestResult::export().unwrap();
     CodeSubmissionResponse::export().unwrap();
     QuestionMDResponse::export().unwrap();

@@ -35,9 +35,34 @@ export default function CodeOutput({ error, response }: any) {
                         : "bg-red-900/50 border-red-700"
                     }`}
                   >
-                    <div className="font-semibold mb-2 flex place-content-between">
-                      <p>{result.case_signature}</p>
-                      <p>{result.is_correct ? "✅ Passed" : "❌ Failed"}</p>
+                    {/* Display case signature details */}
+                    <div className="space-y-2 mb-3">
+                      <div>
+                        <p className="text-sm font-medium text-gray-300">
+                          Args:
+                        </p>
+                        <pre className="mt-1 text-sm bg-gray-950 p-2 rounded overflow-auto max-h-20 text-gray-300">
+                          {result.case_signature.args}
+                        </pre>
+                      </div>
+
+                      <div>
+                        <p className="text-sm font-medium text-gray-300">
+                          Expected:
+                        </p>
+                        <pre className="mt-1 text-sm bg-gray-950 p-2 rounded overflow-auto max-h-32 text-gray-300">
+                          {result.case_signature.expected}
+                        </pre>
+                      </div>
+
+                      <div>
+                        <p className="text-sm font-medium text-gray-300">
+                          Result:
+                        </p>
+                        <pre className="mt-1 text-sm bg-gray-950 p-2 rounded overflow-auto max-h-32 text-gray-300">
+                          {result.case_signature.result}
+                        </pre>
+                      </div>
                     </div>
 
                     {result.case_stdout && (
