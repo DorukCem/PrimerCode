@@ -22,8 +22,6 @@ pub mod models;
 pub mod schema;
 mod types;
 
-// TODO improve frontend test case results
-// TODO add blur to solutions
 // TODO add localstorage data: settings, questions solved, last submission?
 // TODO add search functionality to questions
 // TODO add category / difficulty / rank to questions
