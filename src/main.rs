@@ -22,7 +22,6 @@ pub mod models;
 pub mod schema;
 mod types;
 
-// TODO add category / difficulty / rank to questions
 // TODO add search functionality to questions
 // TODO improve question list UI
 // TODO add localstorage data: settings, questions solved, last submission?
