@@ -16,6 +16,8 @@ pub struct Question {
     pub solution_md: String,
     pub cases: String,
     pub test_strategy: Option<String>,
+    pub rank: Option<i32>,
+    pub category: Option<String>,
 }
 
 #[derive(Queryable, Debug)]

@@ -12,5 +12,7 @@ diesel::table! {
         solution_md -> Text,
         cases -> Text,
         test_strategy -> Nullable<Text>,
+        rank -> Nullable<Integer>,
+        category -> Nullable<Text>,
     }
 }
