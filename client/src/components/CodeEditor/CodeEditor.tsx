@@ -21,7 +21,10 @@ export default function CodeEditor({ slug }: any) {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const [fontSize, setFontSize] = useState(16);
+  const [fontSize, setFontSize] = useState(() => {
+    const storedSetting = localStorage.getItem("fontSize");
+    return storedSetting ? JSON.parse(storedSetting) : 16;
+  });
 
   const onMount = (editor: any) => {
     editorRef.current = editor;

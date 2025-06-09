@@ -32,7 +32,12 @@ export default function Modal({ isModalOpen, closeModal, fontSize, setFontSize}:
             options={fontOptions}
             defaultValue={getCurrentFontOption()}
             className="text-black"
-            onChange={(option: any) => setFontSize(option?.value || 16)}
+            onChange={(option: any) => {
+              if (option.value){
+                localStorage.setItem('fontSize', JSON.stringify(option.value));
+              }
+              return setFontSize(option?.value || 16);
+            }}
           />
         </div>
       </div>
