@@ -29,6 +29,7 @@ pub struct TestResult {
 #[derive(TS, Debug, Deserialize, Serialize)]
 #[ts(export)]
 pub struct CodeSubmissionResponse {
+    pub question_id: i32,
     pub success: bool,
     pub message: String,
     pub results: Vec<TestResult>,

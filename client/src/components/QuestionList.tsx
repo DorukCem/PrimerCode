@@ -40,6 +40,14 @@ export default function QuestionList() {
     );
   }, [questions, searchTerm]);
 
+  const solvedQuestions = useMemo(() => {
+    try {
+      return JSON.parse(localStorage.getItem("solvedQuestions") || "{}");
+    } catch {
+      return {};
+    }
+  }, []);
+
   return (
     <div className="h-full text-gray-200 py-8 max-w-7xl mx-auto rounded-lg ">
       <h2 className="text-2xl font-bold text-white mb-6 text-center">
@@ -117,7 +125,12 @@ export default function QuestionList() {
                 <span className="text-gray-200">{question.title}</span>
               </div>
               <div className="flex items-center justify-center h-6 w-6 rounded-full bg-transparent border border-gray-700 group-hover:border-gray-500 transition-all">
-                <CheckCheck size={16} className={`${question.id%4 == 0 &&  "text-green-500"}`} />
+                <CheckCheck
+                  size={16}
+                  className={
+                    solvedQuestions[question.id] ? "text-green-500" : ""
+                  }
+                />
               </div>
             </Link>
           ))}

@@ -91,6 +91,20 @@ export default function CodeEditor({ slug }: any) {
       })
       .then((result) => {
         setResponse(result);
+        if (result.success) {
+          if (result) {
+            const solvedQuestions = JSON.parse(
+              localStorage.getItem("solvedQuestions") || "{}"
+            );
+
+            solvedQuestions[result.question_id] = true;
+
+            localStorage.setItem(
+              "solvedQuestions",
+              JSON.stringify(solvedQuestions)
+            );
+          }
+        }
       })
       .catch((err) => {
         setError("Error: " + err.message);

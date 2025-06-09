@@ -155,8 +155,8 @@ async fn get_question_md(State(pool): State<DbPool>, Path(slug): Path<String>) -
 }
 
 
-fn inject_code(slug: &str, content: String, db_pool: DbPool) -> String {
-    let question= get_single_question(slug, db_pool).expect("Expected to find question");
+fn inject_code(content: String, question: Question) -> String {
+    
     
     let imports= std::fs::read_to_string("injections/imports.py").unwrap();
     let change_name = format!("__some_function = Solution.{}", question.function_name);
@@ -182,7 +182,9 @@ async fn post_submit_code(State(pool): State<DbPool>,
     // let piston_url = "https://emkc.org/api/v2/piston/execute";
     let piston_url = "http://localhost:2000/api/v2/execute"; // Piston API endpoint
 
-    let injected_code = inject_code(&slug, content, pool);
+    let question= get_single_question(&slug, pool).expect("Expected to find question");
+    let question_id = question.id;
+    let injected_code = inject_code(content, question);
     // std::fs::write("test.py", &injected_code).unwrap(); // debug the created python file    
 
     // Construct the payload for piston
@@ -207,6 +209,7 @@ async fn post_submit_code(State(pool): State<DbPool>,
                         if !piston_response.run.stderr.is_empty() {
                             // User has entered something that cannot be parsed by python
                             return Json(CodeSubmissionResponse {
+                                question_id,
                                 success: false,
                                 message: format!(
                                     "Execution error: {}, signal: {:?}, stdout: {}",
@@ -220,6 +223,7 @@ async fn post_submit_code(State(pool): State<DbPool>,
                         if let Some(signal) = piston_response.run.signal {
                             if signal == "SIGKILL" {
                                 return Json(CodeSubmissionResponse {
+                                    question_id,
                                     success: false,
                                     message: "Code timed out".to_string(),
                                     results: Vec::new(),
@@ -242,6 +246,7 @@ async fn post_submit_code(State(pool): State<DbPool>,
                                 };
 
                                 let submission_response = CodeSubmissionResponse {
+                                    question_id,
                                     success: all_passed,
                                     results: parsed_results,
                                     message,
@@ -250,6 +255,7 @@ async fn post_submit_code(State(pool): State<DbPool>,
                                 Json(submission_response).into_response()
                             }
                             Err(e) => Json(CodeSubmissionResponse {
+                                question_id,
                                 success: false,
                                 message: format!("Failed to parse test results: {}", e),
                                 results: Vec::new(),
@@ -258,6 +264,7 @@ async fn post_submit_code(State(pool): State<DbPool>,
                         }
                     }
                     Err(e) => Json(CodeSubmissionResponse {
+                        question_id,
                         success: false,
                         message: format!("Failed to parse Piston API response: {}", e),
                         results: Vec::new(),
@@ -266,6 +273,7 @@ async fn post_submit_code(State(pool): State<DbPool>,
                 }
             }
             Err(e) => Json(CodeSubmissionResponse {
+                question_id,
                 success: false,
                 message: format!("Failed to read response: {}", e),
                 results: Vec::new(),
@@ -273,6 +281,7 @@ async fn post_submit_code(State(pool): State<DbPool>,
             .into_response(),
         },
         Err(e) => Json(CodeSubmissionResponse {
+            question_id,
             success: false,
             message: format!("Failed to contact Piston API: {}", e),
             results: Vec::new(),
