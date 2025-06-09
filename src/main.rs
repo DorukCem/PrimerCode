@@ -22,11 +22,11 @@ pub mod models;
 pub mod schema;
 mod types;
 
-// TODO add localstorage data: settings, questions solved, last submission?
 // TODO add Authentication and User to DB
 // TODO add persistent login with localstorage
 // TODO check for timeouts
 // TODO home page
+// TODO navbar
 
 pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();
