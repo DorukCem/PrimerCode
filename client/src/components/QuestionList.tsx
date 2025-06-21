@@ -12,7 +12,9 @@ export default function QuestionList() {
   const [status, setStatus] = useState("Any");
 
   useEffect(() => {
-    fetch("http://localhost:3000/all-questions")
+    fetch("http://127.0.0.1:3000/all-questions", {
+      credentials: "include", // Important for sending auth cookies
+    })
       .then((response) => {
         if (!response.ok) {
           return response.text().then((text) => {
@@ -57,8 +59,6 @@ export default function QuestionList() {
       return matchesStatus && matchesSearch;
     });
   }, [questions, searchTerm, status]);
-
-  
 
   return (
     <div className="h-full text-gray-200 py-8 max-w-7xl mx-auto rounded-lg ">
@@ -128,6 +128,7 @@ export default function QuestionList() {
         <div className="space-y-4">
           {filteredItems.map((question, index) => (
             <Link
+              key={index}
               to={`/question/${question.slug}`}
               className="flex items-center justify-between px-4 py-3 bg-[#1e1e1e] 
             rounded-md border border-gray-800 transition-all hover:bg-[#252525] hover:border-gray-700 group cursor-pointer"

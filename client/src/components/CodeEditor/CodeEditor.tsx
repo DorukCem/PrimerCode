@@ -45,7 +45,7 @@ export default function CodeEditor({ slug }: any) {
 
   useEffect(() => {
     // Fetch boilerplate from the backend
-    fetch(`http://localhost:3000/boilerplate/${slug}`)
+    fetch(`http://127.0.0.1:3000/boilerplate/${slug}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error(`Failed to fetch: ${res.status}`);
@@ -74,11 +74,12 @@ export default function CodeEditor({ slug }: any) {
       content: sourceCode,
     };
 
-    fetch(`http://localhost:3000/submit_code/${slug}`, {
+    fetch(`http://127.0.0.1:3000/submit_code/${slug}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
+      credentials: "include", // Important for sending auth cookies
       body: JSON.stringify(payload),
     })
       .then((response) => {

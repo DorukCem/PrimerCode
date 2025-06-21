@@ -19,7 +19,7 @@ use types::{
     CodeInput, CodeSubmissionResponse, PistonResponse, QuestionList, QuestionMDResponse, TestResult,
 };
 
-use crate::auth::{AppState, oauth_client};
+use crate::auth::{AppState, User, oauth_client};
 
 mod auth;
 mod db;
@@ -105,8 +105,10 @@ async fn main() {
     axum::serve::serve(listener, router).await.unwrap();
 }
 
-async fn get_all_questions(State(pool): State<DbPool>) -> impl IntoResponse {
+async fn get_all_questions(State(pool): State<DbPool>, user: Option<User>) -> impl IntoResponse {
     let conn = &mut pool.get().expect("Couldn't get db connection from pool");
+
+    println!("{user:?}");
 
     match get_question_summaries(conn) {
         Ok(summaries) => Json(QuestionList {
@@ -121,6 +123,7 @@ async fn get_all_questions(State(pool): State<DbPool>) -> impl IntoResponse {
     }
 }
 #[must_use]
+#[allow(dead_code)]
 fn get_single_question_by_pk(
     question_id: i32,
     db_pool: DbPool,
@@ -213,6 +216,7 @@ fn inject_code(content: String, question: Question) -> String {
 }
 
 async fn post_submit_code(
+    user: Option<User>,
     State(pool): State<DbPool>,
     Path(slug): Path<String>,
     Json(payload): Json<CodeInput>,
@@ -227,6 +231,8 @@ async fn post_submit_code(
     let question_id = question.id;
     let injected_code = inject_code(content, question);
     // std::fs::write("test.py", &injected_code).unwrap(); // debug the created python file
+
+    println!("{user:?}");
 
     // Construct the payload for piston
     let piston_payload = json!({
