@@ -11,11 +11,7 @@
 use anyhow::{Context, Result, anyhow};
 use async_session::{MemoryStore, Session, SessionStore};
 use axum::{
-    RequestPartsExt, Router,
-    extract::{FromRef, FromRequestParts, OptionalFromRequestParts, Query, State},
-    http::{HeaderMap, header::SET_COOKIE},
-    response::{IntoResponse, Redirect, Response},
-    routing::get,
+    extract::{FromRef, FromRequestParts, OptionalFromRequestParts, Query, State}, http::{header::SET_COOKIE, HeaderMap}, response::{IntoResponse, Redirect, Response}, Json, RequestPartsExt
 };
 use axum_extra::{TypedHeader, headers, typed_header::TypedHeaderRejectionReason};
 use diesel::{
@@ -28,6 +24,7 @@ use oauth2::{
     TokenResponse, TokenUrl, basic::BasicClient, reqwest::async_http_client,
 };
 use serde::{Deserialize, Serialize};
+use serde_json::json;
 use std::{convert::Infallible, env};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
@@ -228,10 +225,9 @@ pub async fn login_authorized(
         .await
         .context("failed in sending request request to authorization server")?;
 
-    // Fetch user data from discord
+    // Fetch user data from Google
     let client = reqwest::Client::new();
     let user_data: User = client
-        // https://discord.com/developers/docs/resources/user#get-current-user
         .get("https://www.googleapis.com/oauth2/v2/userinfo")
         .bearer_auth(token.access_token().secret())
         .send()
@@ -254,8 +250,8 @@ pub async fn login_authorized(
         .context("failed to store session")?
         .context("unexpected error retrieving cookie value")?;
 
-    // Build the cookie
-    let cookie = format!("{COOKIE_NAME}={cookie}; SameSite=Lax; HttpOnly; Secure; Path=/");
+    // Build the cookie - IMPORTANT: Remove Secure flag for localhost
+    let cookie = format!("{COOKIE_NAME}={cookie}; SameSite=Lax; HttpOnly; Path=/");
 
     // Set cookie
     let mut headers = HeaderMap::new();
@@ -264,7 +260,33 @@ pub async fn login_authorized(
         cookie.parse().context("failed to parse cookie")?,
     );
 
-    Ok((headers, Redirect::to("/")))
+    // Redirect to frontend after successful authentication
+    let frontend_url = std::env::var("FRONTEND_REDIRECT")
+        .unwrap_or_else(|_| "http://localhost:5173/".to_string());
+    
+    Ok((headers, Redirect::to(&frontend_url)))
+}
+
+
+// Add this new route to check current user
+pub async fn get_current_user(user: Option<User>) -> impl IntoResponse {
+    match user {
+        Some(user) => Json(json!({
+            "authenticated": true,
+            "user": user
+        })).into_response(),
+        None => Json(json!({
+            "authenticated": false,
+            "user": null
+        })).into_response(),
+    }
+}
+
+// Add this route to check auth status
+pub async fn auth_status(user: Option<User>) -> impl IntoResponse {
+    Json(json!({
+        "authenticated": user.is_some()
+    }))
 }
 
 pub struct AuthRedirect;

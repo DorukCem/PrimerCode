@@ -8,6 +8,7 @@ use axum::{
 use db::DbPool;
 use diesel::prelude::*;
 use dotenvy::dotenv;
+use http::{HeaderValue, Method};
 use models::{Question, QuestionSummary};
 use reqwest::{StatusCode, header};
 use serde_json::json;
@@ -31,6 +32,7 @@ mod types;
 // TODO check for timeouts
 // TODO home page
 // TODO navbar
+// TODO Production Setup: In production, you'll want to use proper domain names and ensure cookies are properly configured with the Secure flag for HTTPS
 
 pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();
@@ -72,9 +74,10 @@ async fn main() {
     };
 
     let cors = CorsLayer::new()
-        .allow_origin(Any)
-        .allow_methods(Any)
-        .allow_headers(Any);
+        .allow_origin("http://127.0.0.1:5173".parse::<HeaderValue>().unwrap())
+        .allow_methods([Method::GET, Method::POST, Method::OPTIONS])
+        .allow_headers([header::CONTENT_TYPE, header::AUTHORIZATION, header::COOKIE])
+        .allow_credentials(true); // This is crucial for cookies to work
 
     let router = Router::new()
         .route("/", get(auth::index))
@@ -86,6 +89,8 @@ async fn main() {
         .route("/auth/authorized", get(auth::login_authorized))
         .route("/protected", get(auth::protected))
         .route("/logout", get(auth::logout))
+        .route("/auth/me", get(auth::get_current_user))
+        .route("/auth/status", get(auth::auth_status))
         .with_state(app_state)
         .layer(cors);
 
@@ -99,7 +104,6 @@ async fn main() {
 
     axum::serve::serve(listener, router).await.unwrap();
 }
-
 
 async fn get_all_questions(State(pool): State<DbPool>) -> impl IntoResponse {
     let conn = &mut pool.get().expect("Couldn't get db connection from pool");

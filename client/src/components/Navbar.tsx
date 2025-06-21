@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import LoginButton from "./LoginButton";
 
 export default function Navbar() {
   return (
@@ -8,6 +9,7 @@ export default function Navbar() {
           <Link to="/" className="text-gray-300 hover:text-white">
             Questions
           </Link>
+          <LoginButton/>
         </div>
       </div>
     </nav>
