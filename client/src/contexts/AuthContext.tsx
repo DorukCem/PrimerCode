@@ -1,4 +1,3 @@
-// hooks/useAuth.ts
 import { useState, useEffect, createContext, useContext, type ReactNode } from 'react';
 
 export interface User {

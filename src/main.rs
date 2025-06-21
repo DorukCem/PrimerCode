@@ -13,7 +13,7 @@ use models::{Question, QuestionSummary};
 use reqwest::{StatusCode, header};
 use serde_json::json;
 use std::env;
-use tower_http::cors::{Any, CorsLayer};
+use tower_http::cors::CorsLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use types::{
     CodeInput, CodeSubmissionResponse, PistonResponse, QuestionList, QuestionMDResponse, TestResult,
@@ -33,6 +33,7 @@ mod types;
 // TODO home page
 // TODO navbar
 // TODO Production Setup: In production, you'll want to use proper domain names and ensure cookies are properly configured with the Secure flag for HTTPS
+// TODO replace MemoryStore with redis or something like that
 
 pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();

@@ -1,17 +1,10 @@
-//! Example OAuth (Discord) implementation.
-//!
-//! 1) Create a new project in Google Cloud Console: <https://console.cloud.google.com/apis/credentials>
-//! 2) Set up OAuth 2.0 Client ID, and obtain your CLIENT_ID and CLIENT_SECRET
-//! 3) Add a new redirect URI (for this example: `http://127.0.0.1:3000/auth/authorized`)
-//! 4) Run with the following (replacing values appropriately):
-//! ```not_rust
-//! CLIENT_ID=REPLACE_ME CLIENT_SECRET=REPLACE_ME cargo run -p example-oauth
-//! ```
-
 use anyhow::{Context, Result, anyhow};
 use async_session::{MemoryStore, Session, SessionStore};
 use axum::{
-    extract::{FromRef, FromRequestParts, OptionalFromRequestParts, Query, State}, http::{header::SET_COOKIE, HeaderMap}, response::{IntoResponse, Redirect, Response}, Json, RequestPartsExt
+    Json, RequestPartsExt,
+    extract::{FromRef, FromRequestParts, OptionalFromRequestParts, Query, State},
+    http::{HeaderMap, header::SET_COOKIE},
+    response::{IntoResponse, Redirect, Response},
 };
 use axum_extra::{TypedHeader, headers, typed_header::TypedHeaderRejectionReason};
 use diesel::{
@@ -26,7 +19,6 @@ use oauth2::{
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::{convert::Infallible, env};
-use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 static COOKIE_NAME: &str = "SESSION";
 static CSRF_TOKEN: &str = "csrf_token";
@@ -38,6 +30,7 @@ pub struct AppState {
     pub pool: Pool<ConnectionManager<SqliteConnection>>,
 }
 
+// * --- This part is basically to tell Axum how to get components of AppState from a AppState ref ---
 impl FromRef<AppState> for MemoryStore {
     fn from_ref(state: &AppState) -> Self {
         state.store.clone()
@@ -55,7 +48,11 @@ impl FromRef<AppState> for Pool<ConnectionManager<SqliteConnection>> {
         state.pool.clone()
     }
 }
+// * --- ----
 
+// * Configure oauth constants
+/// Creates a struct to handle oauth operations with the required information
+/// such as redirect URL, Client ID and Secret
 pub fn oauth_client() -> Result<BasicClient, AppError> {
     let client_id = dotenvy::var("CLIENT_ID").context("Missing CLIENT_ID!")?;
     let client_secret = dotenvy::var("CLIENT_SECRET").context("Missing CLIENT_SECRET!")?;
@@ -87,7 +84,7 @@ pub struct User {
     pub picture: Option<String>,
 }
 
-// ? The Index route
+// * Index route to test backend
 pub async fn index(user: Option<User>) -> impl IntoResponse {
     match user {
         Some(u) => format!(
@@ -98,13 +95,19 @@ pub async fn index(user: Option<User>) -> impl IntoResponse {
     }
 }
 
+/// Generates the Google OAuth login URL and CSRF token.
+/// Saves the CSRF token in a session.
+/// Stores the session and creates a cookie.
+/// Sends a Set-Cookie header and redirects the user to Google’s login page.
 pub async fn google_auth(
-    State(client): State<BasicClient>,
+    State(client): State<BasicClient>, // We are the oauth client here not to be confused with the user
     State(store): State<MemoryStore>,
 ) -> Result<impl IntoResponse, AppError> {
+    // auth_url: the Google OAuth2 login URL the user should be redirected to.
+    // csrf_token: a unique token for preventing CSRF attacks.
     let (auth_url, csrf_token) = client
         .authorize_url(CsrfToken::new_random)
-        .add_scope(Scope::new("openid email profile".to_string()))
+        .add_scope(Scope::new("openid email profile".to_string())) // Specifies what user info you want access to: openid, email and profile
         .url();
 
     // Create session to store csrf_token
@@ -136,6 +139,7 @@ pub async fn protected(user: User) -> impl IntoResponse {
     format!("Welcome to the protected area :)\nHere's your info:\n{user:?}")
 }
 
+/// Gets current user session using the cookie provided by the user; then, destroys the session
 pub async fn logout(
     State(store): State<MemoryStore>,
     TypedHeader(cookies): TypedHeader<headers::Cookie>,
@@ -162,13 +166,16 @@ pub async fn logout(
     Ok(Redirect::to("/"))
 }
 
+/// AuthRequest is a struct representing the query parameters sent by Google to your OAuth2 callback route
 #[derive(Debug, Deserialize)]
 #[allow(dead_code)]
 pub struct AuthRequest {
-    code: String,
-    state: String,
+    code: String, // the temporary authorization code that your server will exchange for an access token.
+    state: String, // the CSRF token your app originally sent to Google during the authorize_url() call.
 }
 
+// * OAuth state (CSRF token) is meant to be single-use. Once validated, it must not be reused again.
+/// Validates csrf token and removes the csrf session from MemoryStore since its not needed after this point
 async fn csrf_token_validation_workflow(
     auth_request: &AuthRequest,
     cookies: &headers::Cookie,
@@ -210,6 +217,13 @@ async fn csrf_token_validation_workflow(
     Ok(())
 }
 
+// * This route should only be called by Google, as a redirect after user login.
+// * Google redirects back to your app with ?code=...&state=....
+// * Your route receives and validates the state (CSRF token).
+// * You exchange the code for an access token.
+// * You use the access token to fetch user info from Google.
+// * You create a new session containing the user data.
+// * You set a cookie with the session ID and redirect the user to the frontend.
 pub async fn login_authorized(
     Query(query): Query<AuthRequest>,
     State(store): State<MemoryStore>,
@@ -261,24 +275,26 @@ pub async fn login_authorized(
     );
 
     // Redirect to frontend after successful authentication
-    let frontend_url = std::env::var("FRONTEND_REDIRECT")
-        .unwrap_or_else(|_| "http://localhost:5173/".to_string());
-    
+    let frontend_url =
+        std::env::var("FRONTEND_REDIRECT").unwrap();
+
     Ok((headers, Redirect::to(&frontend_url)))
 }
 
-
+// *  We can say user: Option<User> here to get the user thanks to the From request parts trait we have implemented for User  
 // Add this new route to check current user
 pub async fn get_current_user(user: Option<User>) -> impl IntoResponse {
     match user {
         Some(user) => Json(json!({
             "authenticated": true,
             "user": user
-        })).into_response(),
+        }))
+        .into_response(),
         None => Json(json!({
             "authenticated": false,
             "user": null
-        })).into_response(),
+        }))
+        .into_response(),
     }
 }
 
@@ -293,10 +309,13 @@ pub struct AuthRedirect;
 
 impl IntoResponse for AuthRedirect {
     fn into_response(self) -> Response {
-        Redirect::temporary("/auth/discord").into_response()
+        Redirect::temporary("/auth/google").into_response()
     }
 }
 
+// * In Axum, you can implement the FromRequestParts or OptionalFromRequestParts traits to extract custom types (like User) from a request. 
+
+/// This is for routes where authentication is required.
 impl<S> FromRequestParts<S> for User
 where
     MemoryStore: FromRef<S>,
@@ -305,6 +324,9 @@ where
     // If anything goes wrong or no session is found, redirect to the auth page
     type Rejection = AuthRedirect;
 
+    // Attempts to extract the session cookie from the request.
+    // Loads the session from MemoryStore.
+    // Extracts the User struct from the session.
     async fn from_request_parts(parts: &mut Parts, state: &S) -> Result<Self, Self::Rejection> {
         let store = MemoryStore::from_ref(state);
 
@@ -332,6 +354,7 @@ where
     }
 }
 
+/// This is for routes where authentication is optional
 impl<S> OptionalFromRequestParts<S> for User
 where
     MemoryStore: FromRef<S>,
