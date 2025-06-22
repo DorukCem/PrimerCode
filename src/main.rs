@@ -1,3 +1,4 @@
+use anyhow::Context;
 use async_session::MemoryStore;
 use axum::{
     Json, Router,
@@ -6,7 +7,7 @@ use axum::{
     routing::{get, post},
 };
 use db::DbPool;
-use diesel::prelude::*;
+use diesel::{dsl::insert_or_ignore_into, prelude::*};
 use dotenvy::dotenv;
 use http::{HeaderValue, Method};
 use models::{Question, QuestionSummary};
@@ -19,7 +20,7 @@ use types::{
     CodeInput, CodeSubmissionResponse, PistonResponse, QuestionList, QuestionMDResponse, TestResult,
 };
 
-use crate::auth::{AppState, User, oauth_client};
+use crate::{auth::{oauth_client, AppState, AuthUser}, models::NewSolved};
 
 mod auth;
 mod db;
@@ -34,6 +35,7 @@ mod types;
 // TODO navbar
 // TODO Production Setup: In production, you'll want to use proper domain names and ensure cookies are properly configured with the Secure flag for HTTPS
 // TODO replace MemoryStore with redis or something like that
+// TODO handle all unwraps
 
 pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();
@@ -106,10 +108,8 @@ async fn main() {
     axum::serve::serve(listener, router).await.unwrap();
 }
 
-async fn get_all_questions(State(pool): State<DbPool>, user: Option<User>) -> impl IntoResponse {
+async fn get_all_questions(State(pool): State<DbPool>, user: Option<AuthUser>) -> impl IntoResponse {
     let conn = &mut pool.get().expect("Couldn't get db connection from pool");
-
-    println!("{user:?}");
 
     match get_question_summaries(conn) {
         Ok(summaries) => Json(QuestionList {
@@ -139,7 +139,7 @@ fn get_single_question_by_pk(
 
 fn get_single_question(
     slug_name: &str,
-    db_pool: DbPool,
+    db_pool: &DbPool,
 ) -> Result<Question, diesel::result::Error> {
     let conn = &mut db_pool.get().expect("Failed to get DB connection");
     use crate::schema::questions::dsl::*;
@@ -150,7 +150,7 @@ async fn get_question_boilerplate(
     State(pool): State<DbPool>,
     Path(slug): Path<String>,
 ) -> impl IntoResponse {
-    let question = get_single_question(&slug, pool);
+    let question = get_single_question(&slug, &pool);
 
     match question {
         Ok(question) => {
@@ -179,7 +179,7 @@ async fn get_question_md(
     State(pool): State<DbPool>,
     Path(slug): Path<String>,
 ) -> impl IntoResponse {
-    let question = get_single_question(&slug, pool);
+    let question = get_single_question(&slug, &pool);
 
     match question {
         Ok(q) => {
@@ -217,7 +217,7 @@ fn inject_code(content: String, question: Question) -> String {
 }
 
 async fn post_submit_code(
-    user: Option<User>,
+    user: Option<AuthUser>,
     State(pool): State<DbPool>,
     Path(slug): Path<String>,
     Json(payload): Json<CodeInput>,
@@ -228,12 +228,10 @@ async fn post_submit_code(
     // let piston_url = "https://emkc.org/api/v2/piston/execute";
     let piston_url = "http://localhost:2000/api/v2/execute"; // Piston API endpoint
 
-    let question = get_single_question(&slug, pool).expect("Expected to find question");
+    let question = get_single_question(&slug, &pool).expect("Expected to find question");
     let question_id = question.id;
     let injected_code = inject_code(content, question);
     // std::fs::write("test.py", &injected_code).unwrap(); // debug the created python file
-
-    println!("{user:?}");
 
     // Construct the payload for piston
     let piston_payload = json!({
@@ -289,6 +287,12 @@ async fn post_submit_code(
                                 let all_passed =
                                     parsed_results.iter().all(|result| result.is_correct);
 
+                                if all_passed{
+                                    if let Some(user) = user{
+                                        insert_solved_question_to_db(question_id, &user, &pool).unwrap();
+                                    }
+                                }
+
                                 let message = if all_passed {
                                     "Code executed successfully".to_string()
                                 } else {
@@ -338,6 +342,24 @@ async fn post_submit_code(
         })
         .into_response(),
     }
+}
+
+fn insert_solved_question_to_db(q_id: i32, user: &AuthUser , pool: &diesel::r2d2::Pool<diesel::r2d2::ConnectionManager<SqliteConnection>>) -> anyhow::Result<()> {
+    use crate::schema::user_solved_questions::dsl::*;
+    let mut conn = pool.get().context("failed to get DB connection")?;
+    
+    let solved_q = NewSolved{
+        user_id: &user.id,
+        question_id: q_id,
+    };
+
+    insert_or_ignore_into(user_solved_questions)
+        .values(solved_q)
+        .execute(&mut conn)
+        .context("failed to insert solved question for user")?;
+
+
+    Ok(())
 }
 
 /// This skips the "File: piston/jobs/main.py, ..." part

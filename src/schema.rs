@@ -16,3 +16,26 @@ diesel::table! {
         category -> Nullable<Text>,
     }
 }
+
+diesel::table! {
+    user_solved_questions (user_id, question_id) {
+        user_id -> Text,
+        question_id -> Integer,
+    }
+}
+
+diesel::table! {
+    users (id) {
+        id -> Text,
+        user_name -> Text,
+        email -> Text,
+    }
+}
+
+diesel::joinable!(user_solved_questions -> questions (question_id));
+
+diesel::allow_tables_to_appear_in_same_query!(
+    questions,
+    user_solved_questions,
+    users,
+);

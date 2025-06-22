@@ -8,8 +8,7 @@ use axum::{
 };
 use axum_extra::{TypedHeader, headers, typed_header::TypedHeaderRejectionReason};
 use diesel::{
-    SqliteConnection,
-    r2d2::{ConnectionManager, Pool},
+    dsl::insert_or_ignore_into, r2d2::{ConnectionManager, Pool}, RunQueryDsl, SqliteConnection
 };
 use http::{StatusCode, header, request::Parts};
 use oauth2::{
@@ -19,6 +18,8 @@ use oauth2::{
 use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::{convert::Infallible, env};
+
+use crate::{db::DbPool, models::NewUser};
 
 static COOKIE_NAME: &str = "SESSION";
 static CSRF_TOKEN: &str = "csrf_token";
@@ -77,7 +78,7 @@ pub fn oauth_client() -> Result<BasicClient, AppError> {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-pub struct User {
+pub struct AuthUser {
     pub id: String,
     pub email: String,
     pub name: String,
@@ -85,7 +86,7 @@ pub struct User {
 }
 
 // * Index route to test backend
-pub async fn index(user: Option<User>) -> impl IntoResponse {
+pub async fn index(user: Option<AuthUser>) -> impl IntoResponse {
     match user {
         Some(u) => format!(
             "Hey {}! You're logged in!\nYou may now access `/protected`.\nLog out with `/logout`.",
@@ -135,7 +136,7 @@ pub async fn google_auth(
 }
 
 // Valid user session required. If there is none, redirect to the auth page
-pub async fn protected(user: User) -> impl IntoResponse {
+pub async fn protected(user: AuthUser) -> impl IntoResponse {
     format!("Welcome to the protected area :)\nHere's your info:\n{user:?}")
 }
 
@@ -226,6 +227,7 @@ async fn csrf_token_validation_workflow(
 // * You set a cookie with the session ID and redirect the user to the frontend.
 pub async fn login_authorized(
     Query(query): Query<AuthRequest>,
+    State(pool): State<DbPool>,
     State(store): State<MemoryStore>,
     State(oauth_client): State<BasicClient>,
     TypedHeader(cookies): TypedHeader<headers::Cookie>,
@@ -241,15 +243,17 @@ pub async fn login_authorized(
 
     // Fetch user data from Google
     let client = reqwest::Client::new();
-    let user_data: User = client
+    let user_data: AuthUser = client
         .get("https://www.googleapis.com/oauth2/v2/userinfo")
         .bearer_auth(token.access_token().secret())
         .send()
         .await
         .context("failed in sending request to target Url")?
-        .json::<User>()
+        .json::<AuthUser>()
         .await
         .context("failed to deserialize response as JSON")?;
+
+    insert_user_to_db(&user_data, &pool).unwrap();
 
     // Create a new session filled with user data
     let mut session = Session::new();
@@ -275,15 +279,34 @@ pub async fn login_authorized(
     );
 
     // Redirect to frontend after successful authentication
-    let frontend_url =
-        std::env::var("FRONTEND_REDIRECT").unwrap();
+    let frontend_url = std::env::var("FRONTEND_REDIRECT").unwrap();
 
     Ok((headers, Redirect::to(&frontend_url)))
 }
 
-// *  We can say user: Option<User> here to get the user thanks to the From request parts trait we have implemented for User  
+fn insert_user_to_db(
+    user_data: &AuthUser,
+    pool: &Pool<ConnectionManager<SqliteConnection>>,
+) -> anyhow::Result<()> {
+    use crate::schema::users::dsl::*;
+    let mut conn = pool.get().context("failed to get DB connection")?;
+    let new_user = NewUser {
+        id: &user_data.id,
+        user_name: &user_data.name,
+        email: &user_data.email,
+    };
+
+    insert_or_ignore_into(users)
+        .values(new_user)
+        .execute(&mut conn)
+        .context("failed to insert new user")?;
+
+    Ok(())
+}
+
+// *  We can say user: Option<User> here to get the user thanks to the From request parts trait we have implemented for User
 // Add this new route to check current user
-pub async fn get_current_user(user: Option<User>) -> impl IntoResponse {
+pub async fn get_current_user(user: Option<AuthUser>) -> impl IntoResponse {
     match user {
         Some(user) => Json(json!({
             "authenticated": true,
@@ -299,7 +322,7 @@ pub async fn get_current_user(user: Option<User>) -> impl IntoResponse {
 }
 
 // Add this route to check auth status
-pub async fn auth_status(user: Option<User>) -> impl IntoResponse {
+pub async fn auth_status(user: Option<AuthUser>) -> impl IntoResponse {
     Json(json!({
         "authenticated": user.is_some()
     }))
@@ -313,10 +336,10 @@ impl IntoResponse for AuthRedirect {
     }
 }
 
-// * In Axum, you can implement the FromRequestParts or OptionalFromRequestParts traits to extract custom types (like User) from a request. 
+// * In Axum, you can implement the FromRequestParts or OptionalFromRequestParts traits to extract custom types (like User) from a request.
 
 /// This is for routes where authentication is required.
-impl<S> FromRequestParts<S> for User
+impl<S> FromRequestParts<S> for AuthUser
 where
     MemoryStore: FromRef<S>,
     S: Send + Sync,
@@ -348,14 +371,14 @@ where
             .unwrap()
             .ok_or(AuthRedirect)?;
 
-        let user = session.get::<User>("user").ok_or(AuthRedirect)?;
+        let user = session.get::<AuthUser>("user").ok_or(AuthRedirect)?;
 
         Ok(user)
     }
 }
 
 /// This is for routes where authentication is optional
-impl<S> OptionalFromRequestParts<S> for User
+impl<S> OptionalFromRequestParts<S> for AuthUser
 where
     MemoryStore: FromRef<S>,
     S: Send + Sync,
@@ -366,7 +389,7 @@ where
         parts: &mut Parts,
         state: &S,
     ) -> Result<Option<Self>, Self::Rejection> {
-        match <User as FromRequestParts<S>>::from_request_parts(parts, state).await {
+        match <AuthUser as FromRequestParts<S>>::from_request_parts(parts, state).await {
             Ok(res) => Ok(Some(res)),
             Err(AuthRedirect) => Ok(None),
         }
