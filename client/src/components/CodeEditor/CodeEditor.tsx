@@ -98,7 +98,11 @@ export default function CodeEditor({ slug }: any) {
               localStorage.getItem("solvedQuestions") || "{}"
             );
 
-            solvedQuestions[result.question_id] = true;
+            solvedQuestions[result.question_id] = {
+              solved: true,
+              synced:
+                solvedQuestions[result.question_id]?.synced || result.synced,
+            };
 
             localStorage.setItem(
               "solvedQuestions",

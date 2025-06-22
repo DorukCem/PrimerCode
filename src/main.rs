@@ -20,7 +20,11 @@ use types::{
     CodeInput, CodeSubmissionResponse, PistonResponse, QuestionList, QuestionMDResponse, TestResult,
 };
 
-use crate::{auth::{oauth_client, AppState, AuthUser}, models::NewSolved};
+use crate::{
+    auth::{AppState, AuthUser, oauth_client},
+    models::NewSolved,
+    types::QuestionIds,
+};
 
 mod auth;
 mod db;
@@ -85,6 +89,7 @@ async fn main() {
     let router = Router::new()
         .route("/", get(auth::index))
         .route("/all-questions", get(get_all_questions))
+        .route("/user-questions", get(get_all_user_questions))
         .route("/boilerplate/{slug}", get(get_question_boilerplate))
         .route("/question/{slug}", get(get_question_md))
         .route("/submit_code/{slug}", post(post_submit_code))
@@ -94,6 +99,7 @@ async fn main() {
         .route("/logout", get(auth::logout))
         .route("/auth/me", get(auth::get_current_user))
         .route("/auth/status", get(auth::auth_status))
+        .route("/sync-questions", post(sync_solved_questions))
         .with_state(app_state)
         .layer(cors);
 
@@ -108,7 +114,7 @@ async fn main() {
     axum::serve::serve(listener, router).await.unwrap();
 }
 
-async fn get_all_questions(State(pool): State<DbPool>, user: Option<AuthUser>) -> impl IntoResponse {
+async fn get_all_questions(State(pool): State<DbPool>) -> impl IntoResponse {
     let conn = &mut pool.get().expect("Couldn't get db connection from pool");
 
     match get_question_summaries(conn) {
@@ -123,6 +129,45 @@ async fn get_all_questions(State(pool): State<DbPool>, user: Option<AuthUser>) -
             .into_response(),
     }
 }
+
+async fn sync_solved_questions(
+    user: AuthUser,
+    State(pool): State<DbPool>,
+    Json(payload): Json<QuestionIds>,
+) -> impl IntoResponse {
+    if payload
+        .ids
+        .into_iter()
+        .map(|x| insert_solved_question_to_db(x, &user, &pool))
+        .all(|x| x.is_ok())
+    {
+        "success"
+    } else {
+        "error inserting into database"
+    }
+}
+
+async fn get_all_user_questions(
+    State(pool): State<DbPool>,
+    user: Option<AuthUser>,
+) -> impl IntoResponse {
+    match user {
+        Some(user) => {
+            let conn = &mut pool.get().expect("Couldn't get db connection from pool");
+            use crate::schema::user_solved_questions::dsl::*;
+
+            let solved = user_solved_questions
+                .filter(user_id.eq(user.id))
+                .select(question_id)
+                .load::<i32>(conn)
+                .unwrap();
+
+            Json(QuestionIds { ids: solved })
+        }
+        None => Json(QuestionIds { ids: Vec::new() }),
+    }
+}
+
 #[must_use]
 #[allow(dead_code)]
 fn get_single_question_by_pk(
@@ -264,6 +309,7 @@ async fn post_submit_code(
                                     piston_response.run.stdout
                                 ),
                                 results: Vec::new(),
+                                synced: false,
                             })
                             .into_response();
                         }
@@ -275,6 +321,7 @@ async fn post_submit_code(
                                     success: false,
                                     message: "Code timed out".to_string(),
                                     results: Vec::new(),
+                                    synced: false,
                                 })
                                 .into_response();
                             }
@@ -287,9 +334,13 @@ async fn post_submit_code(
                                 let all_passed =
                                     parsed_results.iter().all(|result| result.is_correct);
 
-                                if all_passed{
-                                    if let Some(user) = user{
-                                        insert_solved_question_to_db(question_id, &user, &pool).unwrap();
+                                let mut sync = false;
+                                if all_passed {
+                                    if let Some(user) = user {
+                                        insert_solved_question_to_db(question_id, &user, &pool)
+                                            .unwrap();
+                                        sync = true
+                                        // ! weird
                                     }
                                 }
 
@@ -304,6 +355,7 @@ async fn post_submit_code(
                                     success: all_passed,
                                     results: parsed_results,
                                     message,
+                                    synced: sync,
                                 };
 
                                 Json(submission_response).into_response()
@@ -313,6 +365,7 @@ async fn post_submit_code(
                                 success: false,
                                 message: format!("Failed to parse test results: {}", e),
                                 results: Vec::new(),
+                                synced: false,
                             })
                             .into_response(),
                         }
@@ -322,6 +375,7 @@ async fn post_submit_code(
                         success: false,
                         message: format!("Failed to parse Piston API response: {}", e),
                         results: Vec::new(),
+                        synced: false,
                     })
                     .into_response(),
                 }
@@ -331,6 +385,7 @@ async fn post_submit_code(
                 success: false,
                 message: format!("Failed to read response: {}", e),
                 results: Vec::new(),
+                synced: false,
             })
             .into_response(),
         },
@@ -339,16 +394,21 @@ async fn post_submit_code(
             success: false,
             message: format!("Failed to contact Piston API: {}", e),
             results: Vec::new(),
+            synced: false,
         })
         .into_response(),
     }
 }
 
-fn insert_solved_question_to_db(q_id: i32, user: &AuthUser , pool: &diesel::r2d2::Pool<diesel::r2d2::ConnectionManager<SqliteConnection>>) -> anyhow::Result<()> {
+fn insert_solved_question_to_db(
+    q_id: i32,
+    user: &AuthUser,
+    pool: &diesel::r2d2::Pool<diesel::r2d2::ConnectionManager<SqliteConnection>>,
+) -> anyhow::Result<()> {
     use crate::schema::user_solved_questions::dsl::*;
     let mut conn = pool.get().context("failed to get DB connection")?;
-    
-    let solved_q = NewSolved{
+
+    let solved_q = NewSolved {
         user_id: &user.id,
         question_id: q_id,
     };
@@ -357,7 +417,6 @@ fn insert_solved_question_to_db(q_id: i32, user: &AuthUser , pool: &diesel::r2d2
         .values(solved_q)
         .execute(&mut conn)
         .context("failed to insert solved question for user")?;
-
 
     Ok(())
 }

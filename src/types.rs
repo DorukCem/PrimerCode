@@ -33,6 +33,7 @@ pub struct CodeSubmissionResponse {
     pub success: bool,
     pub message: String,
     pub results: Vec<TestResult>,
+    pub synced: bool,
 }
 
 #[derive(TS, Debug, Deserialize, Serialize)]
@@ -49,6 +50,12 @@ pub struct QuestionList {
     pub questions: Vec<QuestionSummary>,
 }
 
+#[derive(TS, Debug, Deserialize, Serialize)]
+#[ts(export)]
+pub struct QuestionIds{
+    pub ids : Vec<i32>,
+}
+
 pub fn export_all_types() {
     CodeInput::export().unwrap();
     CaseSignature::export().unwrap();
@@ -57,6 +64,7 @@ pub fn export_all_types() {
     QuestionMDResponse::export().unwrap();
     QuestionSummary::export().unwrap();
     QuestionList::export().unwrap();
+    QuestionIds::export().unwrap();
 }
 
 // Piston API response types

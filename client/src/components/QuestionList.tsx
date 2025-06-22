@@ -139,7 +139,14 @@ export default function QuestionList() {
               </div>
               <div className="flex items-center justify-center h-6 w-6 rounded-full bg-transparent border border-gray-700 group-hover:border-gray-500 transition-all">
                 {solvedQuestions[question.id] && (
-                  <CheckCheck size={20} className={"text-green-500"} />
+                  <CheckCheck
+                    size={20}
+                    className={
+                      solvedQuestions[question.id]?.synced
+                        ? "text-green-500" // Solved and synced = green
+                        : "text-orange-500" // Solved but not synced = orange
+                    }
+                  />
                 )}
               </div>
             </Link>
