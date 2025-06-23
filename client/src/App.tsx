@@ -6,6 +6,7 @@ import Question from "./components/Question";
 import { useAuth } from "./contexts/AuthContext";
 import { useEffect } from "react";
 import type { QuestionIds } from "./types/QuestionIds";
+import About from "./components/About";
 
 function App() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -99,8 +100,9 @@ function App() {
         <Navbar />
         <div className="flex-1 overflow-auto">
           <Routes>
-            <Route path="/" element={<QuestionList />} />
-            <Route path="/question/:slug" element={<Question />} />
+            <Route path="/" element={<About />} />
+            <Route path="/questions" element={<QuestionList />} />
+            <Route path="/questions/:slug" element={<Question />} />
           </Routes>
         </div>
       </div>

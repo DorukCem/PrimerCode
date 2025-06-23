@@ -32,11 +32,10 @@ pub mod models;
 pub mod schema;
 mod types;
 
-// TODO add Authentication and User to DB
-// TODO add persistent login with localstorage
-// TODO check for timeouts
 // TODO home page
 // TODO navbar
+// TODO Reroute to where user was after signup / login
+// TODO check for timeouts
 // TODO Production Setup: In production, you'll want to use proper domain names and ensure cookies are properly configured with the Secure flag for HTTPS
 // TODO replace MemoryStore with redis or something like that
 // TODO handle all unwraps

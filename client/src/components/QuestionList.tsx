@@ -129,7 +129,7 @@ export default function QuestionList() {
           {filteredItems.map((question, index) => (
             <Link
               key={index}
-              to={`/question/${question.slug}`}
+              to={`/questions/${question.slug}`}
               className="flex items-center justify-between px-4 py-3 bg-[#1e1e1e] 
             rounded-md border border-gray-800 transition-all hover:bg-[#252525] hover:border-gray-700 group cursor-pointer"
             >
