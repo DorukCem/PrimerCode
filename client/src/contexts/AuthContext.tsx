@@ -1,4 +1,10 @@
-import { useState, useEffect, createContext, useContext, type ReactNode } from 'react';
+import {
+  useState,
+  useEffect,
+  createContext,
+  useContext,
+  type ReactNode,
+} from "react";
 
 export interface User {
   id: string;
@@ -18,7 +24,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const API_BASE_URL = 'http://127.0.0.1:3000';
+const API_BASE_URL = "http://127.0.0.1:3000";
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
@@ -27,9 +33,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const checkAuth = async () => {
     try {
       const response = await fetch(`${API_BASE_URL}/auth/me`, {
-        credentials: 'include', // Important for sending cookies
+        credentials: "include", // Important for sending cookies
       });
-      
+
       if (response.ok) {
         const data = await response.json();
         if (data.authenticated) {
@@ -41,7 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(null);
       }
     } catch (error) {
-      console.error('Auth check failed:', error);
+      console.error("Auth check failed:", error);
       setUser(null);
     } finally {
       setIsLoading(false);
@@ -49,18 +55,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const login = () => {
-    // Redirect to backend OAuth route
+    const currentPath = window.location.pathname + window.location.search;
+    document.cookie = `redirect_after_login=${encodeURIComponent(
+      currentPath
+    )}; path=/`;
     window.location.href = `${API_BASE_URL}/auth/google`;
   };
 
   const logout = async () => {
     try {
       await fetch(`${API_BASE_URL}/logout`, {
-        credentials: 'include',
+        credentials: "include",
       });
       setUser(null);
     } catch (error) {
-      console.error('Logout failed:', error);
+      console.error("Logout failed:", error);
     }
   };
 
@@ -83,7 +92,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   const context = useContext(AuthContext);
   if (context === undefined) {
-    throw new Error('useAuth must be used within an AuthProvider');
+    throw new Error("useAuth must be used within an AuthProvider");
   }
   return context;
 }

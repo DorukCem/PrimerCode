@@ -34,7 +34,6 @@ mod types;
 
 // TODO home page
 // TODO navbar
-// TODO Reroute to where user was after signup / login
 // TODO check for timeouts
 // TODO Production Setup: In production, you'll want to use proper domain names and ensure cookies are properly configured with the Secure flag for HTTPS
 // TODO replace MemoryStore with redis or something like that

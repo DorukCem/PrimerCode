@@ -8,7 +8,9 @@ use axum::{
 };
 use axum_extra::{TypedHeader, headers, typed_header::TypedHeaderRejectionReason};
 use diesel::{
-    dsl::insert_or_ignore_into, r2d2::{ConnectionManager, Pool}, RunQueryDsl, SqliteConnection
+    RunQueryDsl, SqliteConnection,
+    dsl::insert_or_ignore_into,
+    r2d2::{ConnectionManager, Pool},
 };
 use http::{StatusCode, header, request::Parts};
 use oauth2::{
@@ -278,10 +280,20 @@ pub async fn login_authorized(
         cookie.parse().context("failed to parse cookie")?,
     );
 
-    // Redirect to frontend after successful authentication
-    let frontend_url = std::env::var("FRONTEND_REDIRECT").unwrap();
+    let redirect_path = cookies
+        .get("redirect_after_login")
+        .map(|val| {
+            percent_encoding::percent_decode_str(val)
+                .decode_utf8()
+                .map(|s| s.to_string())
+                .unwrap_or_else(|_| "/".to_string()) // fallback if decoding fails
+        })
+        .unwrap_or_else(|| "/".to_string());
 
-    Ok((headers, Redirect::to(&frontend_url)))
+    let frontend_base_url = std::env::var("FRONTEND_REDIRECT").unwrap();
+    let full_redirect = format!("{}{}", frontend_base_url, redirect_path);
+
+    Ok((headers, Redirect::to(&full_redirect)))
 }
 
 fn insert_user_to_db(
