@@ -12,7 +12,7 @@ export default function Navbar() {
             Questions
           </Link>
           <Link
-            to="/about"
+            to="/"
             className="text-gray-300 hover:text-white font-medium"
           >
             About
