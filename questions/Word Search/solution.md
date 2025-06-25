@@ -1,5 +1,5 @@
 ```py
-def search(grid: list[list[str]], word):
+def search(grid: list[list[str]], word : str):
     if not grid or not grid[0] or not word:
         return 0
 

@@ -1,18 +1,18 @@
 cases = [
+    
     TestCase(
-        TestCase(
-            inputs=(
-                [
-                    ["O", "O", "O", "K"],
-                    ["K", "O", "K", "K"],
-                    ["O", "O", "K", "O"],
-                    ["O", "K", "K", "O"],
-                ],
-                "OK",
-            ),
-            expected=7,
+        inputs=(
+            [
+                ["O", "O", "O", "K"],
+                ["K", "O", "K", "K"],
+                ["O", "O", "K", "O"],
+                ["O", "K", "K", "O"],
+            ],
+            "OK",
         ),
+        expected=7,
     ),
+
     TestCase(
         inputs=(
             [
