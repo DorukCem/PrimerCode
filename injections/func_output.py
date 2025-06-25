@@ -21,7 +21,7 @@ for case_id, test_case in enumerate(cases):
         correct = False
         try:
             result = __some_function(*args)
-            correct = all([result(i) == result(i) for i in range(100)])
+            correct = all([result(i) == expected(i) for i in range(100)])
 
         except Exception as e:
             error = e
