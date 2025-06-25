@@ -21,7 +21,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::{convert::Infallible, env};
 
-use crate::{db::DbPool, models::NewUser};
+use crate::{db::DbPool, models::NewUser};   
 
 static COOKIE_NAME: &str = "SESSION";
 static CSRF_TOKEN: &str = "csrf_token";

@@ -1,18 +1,27 @@
 import type { TestResult } from "../../types/TestResult";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import { CheckCircleIcon, XCircleIcon } from "lucide-react";
+import { CheckCircleIcon, Loader2Icon, XCircleIcon } from "lucide-react";
 import { AlertTriangleIcon } from "lucide-react";
 
-export default function CodeOutput({ error, response }: any) {
+export default function CodeOutput({ error, response, loading }: any) {
   return (
     <div className="space-y-4 h-full bg-neutral-800 text-gray-100 p-4 overflow-y-auto  scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900 border-t-1 border-white ">
-      {error && (
+      {loading && (
+        <div className="flex items-center justify-center py-12">
+          <div className="flex flex-col items-center gap-4">
+            <Loader2Icon size={32} className="text-blue-400 animate-spin" />
+            <p className="text-lg text-gray-300">Running tests...</p>
+          </div>
+        </div>
+      )}
+
+      {!loading && error && (
         <div className="bg-red-900 border border-red-700 text-red-100 px-4 py-3 rounded">
           {error}
         </div>
       )}
 
-      {response && (
+      {!loading && response && (
         <div className="space-y-4 p-4 bg-neutral-800 rounded-lg">
           <h1 className="text-3xl font-bold mb-2">Test Results</h1>
           <div className="flex items-center gap-6 text-sm text-gray-300">
