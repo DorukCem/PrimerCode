@@ -1,5 +1,6 @@
 use anyhow::{Context, Result, anyhow};
-use async_session::{MemoryStore, Session, SessionStore};
+use async_redis_session::RedisSessionStore;
+use async_session::{Session, SessionStore};
 use axum::{
     Json, RequestPartsExt,
     extract::{FromRef, FromRequestParts, OptionalFromRequestParts, Query, State},
@@ -21,20 +22,20 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::{convert::Infallible, env};
 
-use crate::{db::DbPool, models::NewUser};   
+use crate::{db::DbPool, models::NewUser};
 
 static COOKIE_NAME: &str = "SESSION";
 static CSRF_TOKEN: &str = "csrf_token";
 
 #[derive(Clone)]
 pub struct AppState {
-    pub store: MemoryStore,
+    pub store: RedisSessionStore,
     pub oauth_client: BasicClient,
     pub pool: Pool<ConnectionManager<SqliteConnection>>,
 }
 
 // * --- This part is basically to tell Axum how to get components of AppState from a AppState ref ---
-impl FromRef<AppState> for MemoryStore {
+impl FromRef<AppState> for RedisSessionStore {
     fn from_ref(state: &AppState) -> Self {
         state.store.clone()
     }
@@ -51,6 +52,17 @@ impl FromRef<AppState> for Pool<ConnectionManager<SqliteConnection>> {
         state.pool.clone()
     }
 }
+
+// Create Redis session store
+pub fn create_redis_store() -> Result<RedisSessionStore, AppError> {
+    let redis_url =
+        dotenvy::var("REDIS_URL").unwrap_or_else(|_| "redis://127.0.0.1:6379".to_string());
+
+    let store = RedisSessionStore::new(redis_url)?;
+
+    Ok(store)
+}
+
 // * --- ----
 
 // * Configure oauth constants
@@ -104,7 +116,7 @@ pub async fn index(user: Option<AuthUser>) -> impl IntoResponse {
 /// Sends a Set-Cookie header and redirects the user to Google’s login page.
 pub async fn google_auth(
     State(client): State<BasicClient>, // We are the oauth client here not to be confused with the user
-    State(store): State<MemoryStore>,
+    State(store): State<RedisSessionStore>,
 ) -> Result<impl IntoResponse, AppError> {
     // auth_url: the Google OAuth2 login URL the user should be redirected to.
     // csrf_token: a unique token for preventing CSRF attacks.
@@ -144,7 +156,7 @@ pub async fn protected(user: AuthUser) -> impl IntoResponse {
 
 /// Gets current user session using the cookie provided by the user; then, destroys the session
 pub async fn logout(
-    State(store): State<MemoryStore>,
+    State(store): State<RedisSessionStore>,
     TypedHeader(cookies): TypedHeader<headers::Cookie>,
 ) -> Result<impl IntoResponse, AppError> {
     let cookie = cookies
@@ -182,7 +194,7 @@ pub struct AuthRequest {
 async fn csrf_token_validation_workflow(
     auth_request: &AuthRequest,
     cookies: &headers::Cookie,
-    store: &MemoryStore,
+    store: &RedisSessionStore,
 ) -> Result<(), AppError> {
     // Extract the cookie from the request
     let cookie = cookies
@@ -230,7 +242,7 @@ async fn csrf_token_validation_workflow(
 pub async fn login_authorized(
     Query(query): Query<AuthRequest>,
     State(pool): State<DbPool>,
-    State(store): State<MemoryStore>,
+    State(store): State<RedisSessionStore>,
     State(oauth_client): State<BasicClient>,
     TypedHeader(cookies): TypedHeader<headers::Cookie>,
 ) -> Result<impl IntoResponse, AppError> {
@@ -353,7 +365,7 @@ impl IntoResponse for AuthRedirect {
 /// This is for routes where authentication is required.
 impl<S> FromRequestParts<S> for AuthUser
 where
-    MemoryStore: FromRef<S>,
+    RedisSessionStore: FromRef<S>,
     S: Send + Sync,
 {
     // If anything goes wrong or no session is found, redirect to the auth page
@@ -363,7 +375,7 @@ where
     // Loads the session from MemoryStore.
     // Extracts the User struct from the session.
     async fn from_request_parts(parts: &mut Parts, state: &S) -> Result<Self, Self::Rejection> {
-        let store = MemoryStore::from_ref(state);
+        let store = RedisSessionStore::from_ref(state);
 
         let cookies = parts
             .extract::<TypedHeader<headers::Cookie>>()
@@ -392,7 +404,7 @@ where
 /// This is for routes where authentication is optional
 impl<S> OptionalFromRequestParts<S> for AuthUser
 where
-    MemoryStore: FromRef<S>,
+    RedisSessionStore: FromRef<S>,
     S: Send + Sync,
 {
     type Rejection = Infallible;

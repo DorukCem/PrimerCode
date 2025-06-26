@@ -1,5 +1,4 @@
 use anyhow::Context;
-use async_session::MemoryStore;
 use axum::{
     Json, Router,
     extract::{Path, State},
@@ -21,7 +20,7 @@ use types::{
 };
 
 use crate::{
-    auth::{AppState, AuthUser, oauth_client},
+    auth::{AppState, AuthUser, create_redis_store, oauth_client},
     models::NewSolved,
     types::QuestionIds,
 };
@@ -32,9 +31,9 @@ pub mod models;
 pub mod schema;
 mod types;
 
-// TODO replace MemoryStore with redis or something like that
 // TODO handle all unwraps
 // TODO Production Setup: In production, you'll want to use proper domain names and ensure cookies are properly configured with the Secure flag for HTTPS
+// TODO Production Setup: Start redis on that server or something, right now on my computer redis is starting on boot
 
 pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();
@@ -67,7 +66,7 @@ async fn main() {
     let pool: diesel::r2d2::Pool<diesel::r2d2::ConnectionManager<SqliteConnection>> =
         db::establish_pool();
 
-    let store = MemoryStore::new();
+    let store = create_redis_store().unwrap();
     let oauth_client = oauth_client().unwrap();
     let app_state = AppState {
         store,
