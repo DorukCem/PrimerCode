@@ -28,4 +28,3 @@ oauth2 = "4.1"
 tracing = "0.1"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 percent-encoding = "2.1"
-redis = { version = "0.24", features = ["aio", "tokio-comp"] }

@@ -2,7 +2,7 @@ use anyhow::Context;
 use axum::{
     Json, Router,
     extract::{Path, State},
-    response::IntoResponse,
+    response::{IntoResponse, Response},
     routing::{get, post},
 };
 use db::DbPool;
@@ -31,7 +31,8 @@ pub mod models;
 pub mod schema;
 mod types;
 
-// TODO handle all unwraps
+// TODO remove ai and — from questions
+// TODO ?? Procedurally generate some decoration for each question
 // TODO Production Setup: In production, you'll want to use proper domain names and ensure cookies are properly configured with the Secure flag for HTTPS
 // TODO Production Setup: Start redis on that server or something, right now on my computer redis is starting on boot
 
@@ -66,8 +67,8 @@ async fn main() {
     let pool: diesel::r2d2::Pool<diesel::r2d2::ConnectionManager<SqliteConnection>> =
         db::establish_pool();
 
-    let store = create_redis_store().unwrap();
-    let oauth_client = oauth_client().unwrap();
+    let store = create_redis_store().expect("Expected to connect to redis");
+    let oauth_client = oauth_client().expect("Expected to create successfully oauth client");
     let app_state = AppState {
         store,
         oauth_client,
@@ -75,7 +76,11 @@ async fn main() {
     };
 
     let cors = CorsLayer::new()
-        .allow_origin("http://127.0.0.1:5173".parse::<HeaderValue>().unwrap())
+        .allow_origin(
+            "http://127.0.0.1:5173"
+                .parse::<HeaderValue>()
+                .expect("Expected to parse origin"),
+        )
         .allow_methods([Method::GET, Method::POST, Method::OPTIONS])
         .allow_headers([header::CONTENT_TYPE, header::AUTHORIZATION, header::COOKIE])
         .allow_credentials(true); // This is crucial for cookies to work
@@ -99,13 +104,18 @@ async fn main() {
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
         .await
-        .unwrap();
+        .expect("Expected to create tcp server");
     println!(
         "listening on http://127.0.0.1:{}",
-        listener.local_addr().unwrap().port()
+        listener
+            .local_addr()
+            .expect("Expected to get local address")
+            .port()
     );
 
-    axum::serve::serve(listener, router).await.unwrap();
+    axum::serve::serve(listener, router)
+        .await
+        .expect("Expected to start axum server");
 }
 
 async fn get_all_questions(State(pool): State<DbPool>) -> impl IntoResponse {
@@ -128,23 +138,17 @@ async fn sync_solved_questions(
     user: AuthUser,
     State(pool): State<DbPool>,
     Json(payload): Json<QuestionIds>,
-) -> impl IntoResponse {
-    if payload
-        .ids
-        .into_iter()
-        .map(|x| insert_solved_question_to_db(x, &user, &pool))
-        .all(|x| x.is_ok())
-    {
-        "success"
-    } else {
-        "error inserting into database"
+) -> Result<impl IntoResponse, AppError> {
+    for x in payload.ids.into_iter() {
+        insert_solved_question_to_db(x, &user, &pool)?;
     }
+    Ok(Json(json!({ "status": "success" })))
 }
 
 async fn get_all_user_questions(
     State(pool): State<DbPool>,
     user: Option<AuthUser>,
-) -> impl IntoResponse {
+) -> Result<impl IntoResponse, AppError> {
     match user {
         Some(user) => {
             let conn = &mut pool.get().expect("Couldn't get db connection from pool");
@@ -153,12 +157,11 @@ async fn get_all_user_questions(
             let solved = user_solved_questions
                 .filter(user_id.eq(user.id))
                 .select(question_id)
-                .load::<i32>(conn)
-                .unwrap();
+                .load::<i32>(conn)?;
 
-            Json(QuestionIds { ids: solved })
+            Ok(Json(QuestionIds { ids: solved }))
         }
-        None => Json(QuestionIds { ids: Vec::new() }),
+        None => Ok(Json(QuestionIds { ids: Vec::new() })),
     }
 }
 
@@ -241,7 +244,7 @@ async fn get_question_md(
 }
 
 fn inject_code(content: String, question: Question) -> String {
-    let imports = std::fs::read_to_string("injections/imports.py").unwrap();
+    let imports = std::fs::read_to_string("injections/imports.py").expect("Expected to find injections folder");
     let change_name = format!("__some_function = Solution.{}", question.function_name);
     let cases = question.cases;
 
@@ -250,7 +253,7 @@ fn inject_code(content: String, question: Question) -> String {
         Some(x) => panic!("Unexpected data in database: test_strategy= {x}"),
         None => "standard",
     };
-    let py_runner = std::fs::read_to_string(format!("injections/{strategy}.py")).unwrap(); // ! hardcoded
+    let py_runner = std::fs::read_to_string(format!("injections/{strategy}.py")).expect("Expected to find injections folder");
 
     format!("{imports}\n\n{content}\n\n{change_name}\n\n{cases}\n\n{py_runner}")
 }
@@ -332,10 +335,11 @@ async fn post_submit_code(
                                 let mut sync = false;
                                 if all_passed {
                                     if let Some(user) = user {
-                                        insert_solved_question_to_db(question_id, &user, &pool)
-                                            .unwrap();
+                                        match insert_solved_question_to_db(question_id, &user, &pool){
+                                            Ok(_) => (),
+                                            Err(e) => eprintln!("{e:?}"),
+                                        }
                                         sync = true
-                                        // ! weird
                                     }
                                 }
 
@@ -399,7 +403,7 @@ fn insert_solved_question_to_db(
     q_id: i32,
     user: &AuthUser,
     pool: &diesel::r2d2::Pool<diesel::r2d2::ConnectionManager<SqliteConnection>>,
-) -> anyhow::Result<()> {
+) -> Result<impl IntoResponse, AppError> {
     use crate::schema::user_solved_questions::dsl::*;
     let mut conn = pool.get().context("failed to get DB connection")?;
 
@@ -422,5 +426,30 @@ fn format_stderr(s: &str) -> &str {
         &s[idx + 1..]
     } else {
         &s
+    }
+}
+
+// Use anyhow, define error and enable '?'
+// For a simplified example of using anyhow in axum check /examples/anyhow-error-response
+#[derive(Debug)]
+pub struct AppError(anyhow::Error);
+
+// Tell axum how to convert `AppError` into a response.
+impl IntoResponse for AppError {
+    fn into_response(self) -> Response {
+        tracing::error!("Application error: {:#}", self.0);
+
+        (StatusCode::INTERNAL_SERVER_ERROR, "Something went wrong").into_response()
+    }
+}
+
+// This enables using `?` on functions that return `Result<_, anyhow::Error>` to turn them into
+// `Result<_, AppError>`. That way you don't need to do that manually.
+impl<E> From<E> for AppError
+where
+    E: Into<anyhow::Error>,
+{
+    fn from(err: E) -> Self {
+        Self(err.into())
     }
 }

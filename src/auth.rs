@@ -13,7 +13,7 @@ use diesel::{
     dsl::insert_or_ignore_into,
     r2d2::{ConnectionManager, Pool},
 };
-use http::{StatusCode, header, request::Parts};
+use http::{header, request::Parts};
 use oauth2::{
     AuthUrl, AuthorizationCode, ClientId, ClientSecret, CsrfToken, RedirectUrl, Scope,
     TokenResponse, TokenUrl, basic::BasicClient, reqwest::async_http_client,
@@ -22,7 +22,7 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::{convert::Infallible, env};
 
-use crate::{db::DbPool, models::NewUser};
+use crate::{db::DbPool, models::NewUser, AppError};
 
 static COOKIE_NAME: &str = "SESSION";
 static CSRF_TOKEN: &str = "csrf_token";
@@ -267,7 +267,7 @@ pub async fn login_authorized(
         .await
         .context("failed to deserialize response as JSON")?;
 
-    insert_user_to_db(&user_data, &pool).unwrap();
+    insert_user_to_db(&user_data, &pool)?;
 
     // Create a new session filled with user data
     let mut session = Session::new();
@@ -311,7 +311,7 @@ pub async fn login_authorized(
 fn insert_user_to_db(
     user_data: &AuthUser,
     pool: &Pool<ConnectionManager<SqliteConnection>>,
-) -> anyhow::Result<()> {
+) -> Result<impl IntoResponse, AppError> {
     use crate::schema::users::dsl::*;
     let mut conn = pool.get().context("failed to get DB connection")?;
     let new_user = NewUser {
@@ -417,30 +417,5 @@ where
             Ok(res) => Ok(Some(res)),
             Err(AuthRedirect) => Ok(None),
         }
-    }
-}
-
-// Use anyhow, define error and enable '?'
-// For a simplified example of using anyhow in axum check /examples/anyhow-error-response
-#[derive(Debug)]
-pub struct AppError(anyhow::Error);
-
-// Tell axum how to convert `AppError` into a response.
-impl IntoResponse for AppError {
-    fn into_response(self) -> Response {
-        tracing::error!("Application error: {:#}", self.0);
-
-        (StatusCode::INTERNAL_SERVER_ERROR, "Something went wrong").into_response()
-    }
-}
-
-// This enables using `?` on functions that return `Result<_, anyhow::Error>` to turn them into
-// `Result<_, AppError>`. That way you don't need to do that manually.
-impl<E> From<E> for AppError
-where
-    E: Into<anyhow::Error>,
-{
-    fn from(err: E) -> Self {
-        Self(err.into())
     }
 }
