@@ -1,6 +1,6 @@
 # First Sentence
-Realizing that his friend stops making sense after the first sentence when texting, 
-Andy wonders if should just read the first sentence in each text instead.
+Realizing that your friend stops making sense after the first sentence when texting, 
+you wonder if you should just read the first sentence in each text instead.
 
 Your function takes a single argument `text`, which is a string containing one or more sentences. 
 Each sentence end with a dot (.).

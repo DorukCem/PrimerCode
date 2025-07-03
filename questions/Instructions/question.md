@@ -1,6 +1,6 @@
 # Instructions
 Scientists are tracking a newly discovered particle.
-This particle displays extraordinary behavior — such as suddenly duplicating itself or vanishing from existence.
+This particle displays extraordinary behavior such as suddenly duplicating itself or vanishing from existence.
 
 Due to its unpredictable nature, once an experiment starts, it becomes impossible to directly count the number of particles in the system.
 Thankfully, the particle can only perform a few well-understood and observable actions:

@@ -1,6 +1,6 @@
 # Skitter's Scatter 
-It turns out that the Staff of Limitless Possibilities is not total random, it pseudo-random. 
-Its unpredictable nature stems from Skitter, a harried creature eternally bound to the artifact as punishment for an ancient gambling debt.
+It turns out that the Staff of Limitless Possibilities is not totally random, it pseudo-random. 
+Its unpredictable nature stems from Skitter, a frazzled creature eternally bound to the artifact as punishment for an ancient gambling debt.
 Each time a spell is cast, Skitter must perform the "Entropy Scramble": frantically collecting chaotic energies from the immediate surroundings. 
 These energies manifest as numbers which Skitter shoves into the Staff's core.
 

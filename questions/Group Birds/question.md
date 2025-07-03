@@ -1,5 +1,5 @@
-# Chunk by
-Erg the Ogre loves watching birds—but remembering all their names is no easy task for an ogre!
+# Group Birds
+Erg the Ogre loves watching birds but remembering all their names is no easy task for an ogre!
 To help himself, Erg decides to group the birds based on how long their names are.
 
 Your function takes one input, birds, which is a list of bird names (strings).

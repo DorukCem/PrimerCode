@@ -1,12 +1,11 @@
 # Alchemist's Volatile Brew
-Alia the Alchemist is on the verge of a breakthrough: creating the legendary Potion of Unstable Power. 
-To brew it, she must carefully add ingredients from her available stock, one by one, to build its magical potency.
-Alia has a specific sequence of ingredients she plans to use. She adds them in the order they appear in the list. If she reaches the end of her ingredients list and the potion isn't ready, she cycles back to the beginning of the list and continues adding ingredients.
-The potion is delicate. As soon as its total potency meets or exceeds the activation threshold, it starts to bubble violently. 
-At this exact moment, no more ingredients can be safely added, and the brewing process for this attempt stops immediately.
-Alia has discovered that any potency achieved beyond this activation threshold is not wasted! It crystallizes into a rare substance known as 'Volatile Essence.' She theorizes this Essence is a crucial component, perhaps even the primary one, needed to ultimately stabilize and complete the Potion of Unstable Power
+You are an alchemist, searching for the Potion of Unstable Power. 
+To brew it, you must carefully add ingredients from the available stock, building its magical potency in the process.
+You have a specific sequence of ingredients you plan to use. The potion is delicate. 
+As soon as its total potency reaches the **activation threshold**, it starts to bubble violently and no more ingredients can be safely added, and the brewing process stops immediately. 
+You have discovered that any potency achieved beyond this **activation threshold** is not wasted; it crystallizes into a rare substance which you call 'Volatile Essence.You theorize that this is crucial component needed to ultimately stabilize and complete the Potion of Unstable Power.
 
-Your task is to write a function that simulates Alia's brewing process and calculates the amount of 'Volatile Essence' produced.
+Your task is to write a function that simulates this brewing process and calculates the amount of 'Volatile Essence' produced.
 The function will take two inputs:
 - ingredients_to_add: A list of strings, representing the alchemist's cyclic sequence of ingredients.
 - activation_threshold: An integer, the potency level at which the potion activates and stops accepting ingredients.

@@ -8,7 +8,7 @@ Your function takes a single input squad, which is a dictionary where:
 You should return a list of orc names, sorted by the number of words in their nickname, in descending order.
 That is, orcs with more words in their nickname should appear earlier in the list.
 
-All orcs will have a unique number of words in their nickname — so no two orcs will be tied.
+All orcs will have a unique number of words in their nickname so no two orcs will be tied.
 
 For example
 ```py

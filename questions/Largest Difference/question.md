@@ -1,12 +1,12 @@
 # Largest Diff
 
 At the end of a board game night, the players compare their final scores.
-One player is shocked to see how big the gap is between 
-the winner and the last-place player — clearly, some are much better at the game than others!
+You are shocked to see how big the gap is between 
+the winner and the last-place player. Clearly, some are much better at the game than others!
 
 Your function takes a single input scores, which is a list of integers representing each player's final score.
 
-Return the difference between the highest and lowest scores — this is called the [range](https://en.wikipedia.org/wiki/Range_(statistics)).
+Return the difference between the highest and lowest scores this is called the [range](https://en.wikipedia.org/wiki/Range_(statistics)).
 
 For example
 ```py

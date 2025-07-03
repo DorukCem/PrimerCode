@@ -1,5 +1,5 @@
 # StringLang
-StringLang is a programming language where the **only available data type is a string**. While this simplifies some operations (like searching or storage), it creates a challenge: it's hard to tell what kind of data a string represents—whether it's a number, a boolean, or just plain text.
+StringLang is a programming language where the **only available data type is a string**. While this simplifies some operations (like searching or storage), it creates a challenge: it's hard to tell what kind of data a string represents; whether it's a number, a boolean, or just plain text.
 
 To solve this, StringLang users have adopted a convention: **each string starts with a letter that indicates its intended type**.
 

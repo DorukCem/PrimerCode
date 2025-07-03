@@ -1,6 +1,6 @@
 # Shelter
 You are the lead scout for a nomadic tribe searching for a new home.
-Your tribe has been haunted by storms of magnificent size for ages, forcing them to constantly seek new shelter.
+Your tribe has been haunted by storms of magnificent size for ages, forcing you to constantly seek new shelter.
 The survivability of any new settlement depends on how well it's shielded from the harsh, cutting winds.
 
 Your function takes a single input grid, which is a 2D list of integers where each integer is the **height** of that tile.

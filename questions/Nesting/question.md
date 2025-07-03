@@ -1,5 +1,5 @@
-It’s Christmas, and you’re about to open your gift from your aunt. However, as you start unwrapping it, you encounter a challenge:
-Not only does the package contain other packages, but those inner packages may also contain more packages, all nested inside each other!
+It's Christmas, and you're going to unwrap your gift from your aunt. But as you begin to unwrap it, you're faced with a dilemma:
+Not only does the package consist of other packages, but even the inner packages may contain packages in them, all nested one inside the other!
 
 Your task is to unpack all these layers to reveal the innermost items.
 

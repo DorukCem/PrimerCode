@@ -1,7 +1,7 @@
 ```py
 def flatten(gift: list):
     t = []
-    for i in aList:
+    for i in gift:
         if not isinstance(i, list):
             t.append(i)
         else:

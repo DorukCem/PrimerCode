@@ -1,6 +1,5 @@
 # Thrill Coaster
-As a thrill engineer for a new theme park. 
-You're tasked with designing the ultimate rollercoaster experience. 
+As a thrill engineer for a new theme park you're tasked with designing the ultimate rollercoaster experience. 
 It's not just about height and speed; it's about the psychological build-up and release! You've developed a theory: 
 Riders like to build anticipation which which then culminates in a giant descent where all that energy is cashed in as pure Thrill.
 

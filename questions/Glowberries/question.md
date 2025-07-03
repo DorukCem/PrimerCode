@@ -2,7 +2,7 @@
 
 You are a farmer growing Glowberries. Tourist have come over from the underground, obsessed with anything luminescent. 
 These tourists are known to spend gold from their mines generously on anything that shines.
-Your are expecting the crops to be ripe in two to three week, but the tourists can’t wait that long. 
+Your are expecting the crops to be ripe in two to three weeks, but the tourists can’t wait that long. 
 Fortunately, you remember that tomorrow will be a moonless night. 
 Your ancestors have taught you that some crops can hold a lot of value even if they aren’t fully ripe.
 These are the berries that will glow unusually, even somewhat illuminating the berries around them which can only be spotted in the dark. 
