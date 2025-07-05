@@ -1,0 +1,4 @@
+{
+  "function_name": "find_vampire",
+  "function_args": ["logs: str"]
+}
