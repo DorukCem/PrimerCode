@@ -18,7 +18,7 @@ Assume that there will always be an empty index to the right if the current one 
 
 For example
 ```py
-assert(hash_avoidance([1, None, None, 6,  None], [1, 2, 2]) == [1, 1, 2, 2, 6 ,2])
+assert(hash_avoidance([1, None, None, 6,  None], [1, 2, 2]) == [1, 1, 2, 6 ,2])
 ```
 This is correct because:
 - 1 → idx=0, but 0 is taken → go to index 1 

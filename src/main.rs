@@ -32,6 +32,8 @@ pub mod schema;
 mod types;
 
 // TODO ?? Procedurally generate some decoration for each question
+// TODO add next/prev question button
+// TODO tags?
 // TODO Production Setup: In production, you'll want to use proper domain names and ensure cookies are properly configured with the Secure flag for HTTPS
 // TODO Production Setup: Start redis on that server or something, right now on my computer redis is starting on boot
 

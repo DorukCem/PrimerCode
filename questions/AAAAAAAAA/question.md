@@ -9,9 +9,11 @@ For example
 
 You’re curious to learn what these explorers might have been trying to say in their final moments.
 
+
 Your function takes two inputs
 - `sound` a string
 - `n` an integer
+
 You should return a string consisting of the sound repeated n times.
 
 For example

@@ -7,6 +7,7 @@ do once you give it some targets. Given that it is your only chance, you might w
 Your function takes two inputs
 - `goblins`: A list of integers, representing the health points of each goblin
 - `spell`: A function that takes in an integer and returns another integer
+
 You should return the result of applying the spell function to each goblin's health in order and return the transformed list.
 
 For example
