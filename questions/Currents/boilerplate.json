@@ -1,0 +1,4 @@
+{
+  "function_name": "cataboat_landing",
+  "function_args": ["distance: int, currents: dict[int, int]"]
+}

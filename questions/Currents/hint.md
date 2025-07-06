@@ -1,0 +1,1 @@
+> The .get() method for dictionaries handles missing keys while accessing them
