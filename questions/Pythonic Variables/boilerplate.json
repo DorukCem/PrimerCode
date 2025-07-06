@@ -1,0 +1,4 @@
+{
+  "function_name": "to_snake",
+  "function_args": ["word: str"]
+}
