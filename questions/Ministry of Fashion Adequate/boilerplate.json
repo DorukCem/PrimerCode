@@ -1,0 +1,4 @@
+{
+  "function_name": "find_offenders",
+  "function_args": ["logs: str"]
+}
