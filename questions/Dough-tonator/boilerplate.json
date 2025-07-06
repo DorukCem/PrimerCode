@@ -1,0 +1,4 @@
+{
+  "function_name": "defuse",
+  "function_args": ["instructions: str, wires: str"]
+}

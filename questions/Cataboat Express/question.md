@@ -7,7 +7,7 @@ Fortunately, the current flows **perpendicular** to the boat’s intended path,
 so it won’t slow the boat down, it just **shifts it sideways** as it moves forward.
 The only problem?
 The catapult must be set up **exactly where** the boat lands in order to keep the express service running on time.
-Maybe you can help calculate where the boat will land, so the **Cataboat Express** name remains untainted.
+Maybe you can help calculate where the boat will land, so the **Cataboat Express'** name remains untainted.
 
 Your function takes two inputs:
 - **distance** which is an integer representing how many forward steps it will take the boat to pass the river.
