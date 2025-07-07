@@ -1,0 +1,4 @@
+{
+  "function_name": "output",
+  "function_args": ["machines : str"]
+}
