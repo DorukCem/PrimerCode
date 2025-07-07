@@ -1,0 +1,1 @@
+> You can convert a string such as `num = "02101"` to an int in base 3 like this  `int(num, 3)`

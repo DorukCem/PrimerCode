@@ -1,0 +1,4 @@
+{
+  "function_name": "generate_password",
+  "function_args": ["answer: str, guesses: list[str]"]
+}
