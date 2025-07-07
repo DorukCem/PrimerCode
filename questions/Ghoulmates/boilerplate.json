@@ -1,0 +1,4 @@
+{
+  "function_name": "find_common",
+  "function_args": ["person_1: list[str], person_2: list[str]"]
+}
