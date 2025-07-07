@@ -1,0 +1,4 @@
+{
+  "function_name": "pay_debt",
+  "function_args": ["ledger"]
+}
