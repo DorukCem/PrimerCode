@@ -1,0 +1,4 @@
+{
+  "function_name": "read_pattern",
+  "function_args": ["cards : list[str]"]
+}
