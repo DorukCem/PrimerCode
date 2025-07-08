@@ -1,0 +1,4 @@
+{
+  "function_name": "count_time_travels",
+  "function_args": ["logs: str"]
+}

@@ -1,0 +1,1 @@
+> Parsing the dates into tuples and [comparing](https://stackoverflow.com/questions/5292303/how-does-tuple-comparison-work-in-python) them could be useful

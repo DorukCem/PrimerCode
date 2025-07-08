@@ -1,5 +1,7 @@
 ```py
 def pay_debt(ledger : str):
+    from collections import defaultdict
+    
     net_balances = defaultdict(int)
 
     for line in ledger.splitlines():
