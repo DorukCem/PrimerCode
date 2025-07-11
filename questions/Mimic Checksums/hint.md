@@ -1,0 +1,1 @@
+> `ord(a) - ord(b)` is equal to difference between to characters 
