@@ -1,0 +1,4 @@
+{
+  "function_name": "tribute_paperwork",
+  "function_args": ["items: list[str], compliment: str"]
+}
