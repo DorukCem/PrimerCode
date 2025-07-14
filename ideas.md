@@ -1,5 +1,3 @@
-- First word in string (*)
-
 - Avg of list
 
 - Most frequent element in list
@@ -9,13 +7,6 @@
 - Return a slice of the list
 
 - Correct sentence (*)
-
-- Chunk list
-
-- Find how many times the sorting directions was changed (*)
-
-- Parse number of items from string (hard)
-`"3 cats 4 dogs" -> {"cats": 3, "dogs", 4}`
 
 
 # Grid Questions
