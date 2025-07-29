@@ -46,14 +46,23 @@ pub struct QuestionMDResponse {
 
 #[derive(TS, Debug, Deserialize, Serialize)]
 #[ts(export)]
-pub struct QuestionList {
-    pub questions: Vec<QuestionSummary>,
+pub struct QuestionOverview {
+    pub id: i32,
+    pub slug: String,
+    pub title: String,
+    pub tags: Vec<String>,
 }
 
 #[derive(TS, Debug, Deserialize, Serialize)]
 #[ts(export)]
-pub struct QuestionIds{
-    pub ids : Vec<i32>,
+pub struct QuestionList {
+    pub questions: Vec<QuestionOverview>,
+}
+
+#[derive(TS, Debug, Deserialize, Serialize)]
+#[ts(export)]
+pub struct QuestionIds {
+    pub ids: Vec<i32>,
 }
 
 pub fn export_all_types() {
@@ -65,6 +74,7 @@ pub fn export_all_types() {
     QuestionSummary::export().unwrap();
     QuestionList::export().unwrap();
     QuestionIds::export().unwrap();
+    QuestionOverview::export().unwrap();
 }
 
 // Piston API response types

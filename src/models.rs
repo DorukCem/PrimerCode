@@ -18,6 +18,7 @@ pub struct Question {
     pub test_strategy: Option<String>,
     pub rank: Option<i32>,
     pub category: Option<String>,
+    pub tags: String,
 }
 
 #[derive(Queryable, Debug)]
@@ -27,6 +28,7 @@ pub struct QuestionSummary {
     pub id: i32,
     pub title: String,
     pub slug: String,
+    pub tags: String,
 }
 
 #[derive(Queryable, Debug)]

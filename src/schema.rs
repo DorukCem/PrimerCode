@@ -14,6 +14,7 @@ diesel::table! {
         test_strategy -> Nullable<Text>,
         rank -> Nullable<Integer>,
         category -> Nullable<Text>,
+        tags -> Text,
     }
 }
 

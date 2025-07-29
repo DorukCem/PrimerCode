@@ -22,7 +22,8 @@ use types::{
 use crate::{
     auth::{AppState, AuthUser, create_redis_store, oauth_client},
     models::NewSolved,
-    types::QuestionIds,
+    schema::questions,
+    types::{QuestionIds, QuestionOverview},
 };
 
 mod auth;
@@ -48,7 +49,7 @@ pub fn establish_connection() -> SqliteConnection {
 pub fn get_question_summaries(conn: &mut SqliteConnection) -> QueryResult<Vec<QuestionSummary>> {
     use crate::schema::questions::dsl::*;
     questions
-        .select((id, title, slug))
+        .select((id, title, slug, tags))
         .load::<QuestionSummary>(conn)
 }
 
@@ -123,10 +124,15 @@ async fn get_all_questions(State(pool): State<DbPool>) -> impl IntoResponse {
     let conn = &mut pool.get().expect("Couldn't get db connection from pool");
 
     match get_question_summaries(conn) {
-        Ok(summaries) => Json(QuestionList {
-            questions: summaries,
-        })
-        .into_response(),
+        Ok(summaries) => {
+            let questions = summaries.into_iter().map(|s| QuestionOverview {
+                id: s.id,
+                slug: s.slug,
+                title: s.title,
+                tags: serde_json::from_str::<Vec<String>>(&s.tags).expect("Should never be invalid JSON"),
+            }).collect();
+            Json(QuestionList { questions }).into_response()
+        }
         Err(err) => (
             axum::http::StatusCode::INTERNAL_SERVER_ERROR,
             format!("Error: {:?}", err),
@@ -245,7 +251,8 @@ async fn get_question_md(
 }
 
 fn inject_code(content: String, question: Question) -> String {
-    let imports = std::fs::read_to_string("injections/imports.py").expect("Expected to find injections folder");
+    let imports = std::fs::read_to_string("injections/imports.py")
+        .expect("Expected to find injections folder");
     let change_name = format!("__some_function = Solution.{}", question.function_name);
     let cases = question.cases;
 
@@ -254,7 +261,8 @@ fn inject_code(content: String, question: Question) -> String {
         Some(x) => panic!("Unexpected data in database: test_strategy= {x}"),
         None => "standard",
     };
-    let py_runner = std::fs::read_to_string(format!("injections/{strategy}.py")).expect("Expected to find injections folder");
+    let py_runner = std::fs::read_to_string(format!("injections/{strategy}.py"))
+        .expect("Expected to find injections folder");
 
     format!("{imports}\n\n{content}\n\n{change_name}\n\n{cases}\n\n{py_runner}")
 }
@@ -336,7 +344,11 @@ async fn post_submit_code(
                                 let mut sync = false;
                                 if all_passed {
                                     if let Some(user) = user {
-                                        match insert_solved_question_to_db(question_id, &user, &pool){
+                                        match insert_solved_question_to_db(
+                                            question_id,
+                                            &user,
+                                            &pool,
+                                        ) {
                                             Ok(_) => (),
                                             Err(e) => eprintln!("{e:?}"),
                                         }

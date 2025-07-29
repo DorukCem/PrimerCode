@@ -1,12 +1,20 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import type { QuestionList } from "../types/QuestionList";
-import type { QuestionSummary } from "../types/QuestionSummary";
-import { CheckCheck, Search } from "lucide-react";
+import { CheckCheck, Search, Brackets } from "lucide-react";
 import Select from "react-select";
+import type { QuestionOverview } from "../types/QuestionOverview";
+
+const tagIconMap: Record<string, any> = {
+  list: Brackets,
+};
+
+function getIconForTag(tag: string): any {
+  return tagIconMap[tag];
+}
 
 export default function QuestionList() {
-  const [questions, setQuestions] = useState<QuestionSummary[] | null>(null);
+  const [questions, setQuestions] = useState<QuestionOverview[] | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   const [status, setStatus] = useState("Any");
@@ -128,26 +136,54 @@ export default function QuestionList() {
         <div className="space-y-4">
           {filteredItems.map((question, index) => (
             <Link
-              key={index}
+              key={question.id}
               to={`/questions/${question.slug}`}
-              className="flex items-center justify-between px-4 py-3 bg-[#1e1e1e] 
-            rounded-md border border-gray-800 transition-all hover:bg-[#252525] hover:border-gray-700 group cursor-pointer"
+              className="flex items-center justify-between px-4 py-3 bg-[#1e1e1e]
+                   rounded-md border border-gray-800 transition-all hover:bg-[#252525]
+                   hover:border-gray-700 group cursor-pointer"
             >
-              <div className="flex items-center gap-3">
+              {/* LEFT: number + title */}
+              <div className="flex items-center gap-3 min-w-0">
                 <span className="text-gray-400 min-w-[24px]">{index + 1}.</span>
-                <span className="text-gray-200">{question.title}</span>
+                <span className="text-gray-200 truncate">{question.title}</span>
               </div>
-              <div className="flex items-center justify-center h-6 w-6 rounded-full bg-transparent border border-gray-700 group-hover:border-gray-500 transition-all">
-                {solvedQuestions[question.id] && (
-                  <CheckCheck
-                    size={20}
-                    className={
-                      solvedQuestions[question.id]?.synced
-                        ? "text-green-500" // Solved and synced = green
-                        : "text-orange-500" // Solved but not synced = orange
-                    }
-                  />
-                )}
+
+              {/* RIGHT: tags (icons) then check */}
+              <div className="flex items-center gap-3">
+                {/* Tag icons */}
+                <div className="flex items-center gap-2 mr-4">
+                  {question.tags?.map((tag) => {
+                    const Icon = getIconForTag(tag);
+                    const label = tag;
+                    return (
+                      <span
+                        key={tag}
+                        className="inline-flex"
+                        title={label}
+                        aria-label={label}
+                      >
+                        <Icon
+                          size={20}
+                          className="text-gray-400 group-hover:text-gray-300"
+                        />
+                      </span>
+                    );
+                  })}
+                </div>
+
+                {/* Check circle */}
+                <div className="flex items-center justify-center h-6 w-6 rounded-full bg-transparent border border-gray-700 group-hover:border-gray-500 transition-all">
+                  {solvedQuestions[question.id] && (
+                    <CheckCheck
+                      size={20}
+                      className={
+                        solvedQuestions[question.id]?.synced
+                          ? "text-green-500"
+                          : "text-orange-500"
+                      }
+                    />
+                  )}
+                </div>
               </div>
             </Link>
           ))}
