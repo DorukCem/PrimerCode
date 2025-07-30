@@ -1,23 +1,36 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import type { QuestionList } from "../types/QuestionList";
-import { CheckCheck, Search, Brackets } from "lucide-react";
+import { CheckCheck, Search, Brackets, Braces, Hash, Grid3X3, TextSearch, CaseSensitive, Rabbit, PawPrint, SquareFunction, Repeat, LetterText, Binary, CaseUpper } from "lucide-react";
 import Select from "react-select";
 import type { QuestionOverview } from "../types/QuestionOverview";
 
 const tagIconMap: Record<string, any> = {
   list: Brackets,
+  dict: Braces,
+  set: Hash,
+  grid: Grid3X3,
+  parse: TextSearch,
+  string: CaseUpper,
+  type: PawPrint,
+  function: SquareFunction,
+  loop: Repeat,
+  format: LetterText,
+  bool: Binary
 };
 
 function getIconForTag(tag: string): any {
-  return tagIconMap[tag];
+  let icon =  tagIconMap[tag]
+  return icon;
 }
+
 
 export default function QuestionList() {
   const [questions, setQuestions] = useState<QuestionOverview[] | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
 
   const [status, setStatus] = useState("Any");
+
 
   useEffect(() => {
     fetch("http://127.0.0.1:3000/all-questions", {
