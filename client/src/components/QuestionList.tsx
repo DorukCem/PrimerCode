@@ -1,8 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import type { QuestionList } from "../types/QuestionList";
-import { CheckCheck, Search, Brackets, Braces, Hash, Grid3X3, TextSearch, CaseSensitive, Rabbit, PawPrint, SquareFunction, Repeat, LetterText, Binary, CaseUpper } from "lucide-react";
-import Select from "react-select";
+import {
+  CheckCheck, Search, Brackets, Braces, Hash, Grid3X3, TextSearch,
+  CaseSensitive, Rabbit, PawPrint, SquareFunction, Repeat, LetterText, Binary, CaseUpper
+} from "lucide-react";
+import Select, { components, type MultiValueGenericProps, type OptionProps } from "react-select";
 import type { QuestionOverview } from "../types/QuestionOverview";
 
 const tagIconMap: Record<string, any> = {
@@ -20,21 +23,23 @@ const tagIconMap: Record<string, any> = {
 };
 
 function getIconForTag(tag: string): any {
-  let icon =  tagIconMap[tag]
+  let icon = tagIconMap[tag];
   return icon;
 }
 
+type TagOptionType = { value: string; label: string; icon?: any };
 
 export default function QuestionList() {
   const [questions, setQuestions] = useState<QuestionOverview[] | null>(null);
   const [searchTerm, setSearchTerm] = useState("");
-
   const [status, setStatus] = useState("Any");
 
+  // NEW: selected tag values
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   useEffect(() => {
     fetch("http://127.0.0.1:3000/all-questions", {
-      credentials: "include", // Important for sending auth cookies
+      credentials: "include",
     })
       .then((response) => {
         if (!response.ok) {
@@ -60,8 +65,55 @@ export default function QuestionList() {
     }
   }, []);
 
+  // NEW: gather all unique tags from your questions to populate the menu
+  const allTags = useMemo(() => {
+    if (!questions) return [];
+    const s = new Set<string>();
+    for (const q of questions) {
+      q.tags?.forEach((t) => s.add(t));
+    }
+    return Array.from(s).sort();
+  }, [questions]);
+
+  const tagOptions: TagOptionType[] = useMemo(
+    () =>
+      allTags.map((t) => ({
+        value: t,
+        label: t,
+        icon: getIconForTag(t),
+      })),
+    [allTags]
+  );
+
+  // Custom option with checkbox + icon
+  const TagOption = (props: OptionProps<TagOptionType, true>) => {
+    const Icon = (props.data as TagOptionType).icon;
+    return (
+      <components.Option {...props}>
+        <div className="flex items-center gap-2">
+          <input type="checkbox" checked={props.isSelected} readOnly />
+          {Icon ? <Icon size={16} className="text-gray-300" /> : null}
+          <span>{props.label}</span>
+        </div>
+      </components.Option>
+    );
+  };
+
+  // Custom selected chip label that shows the icon
+  const TagMultiValueLabel = (props: MultiValueGenericProps<TagOptionType>) => {
+    const Icon = (props.data as TagOptionType).icon;
+    return (
+      <components.MultiValueLabel {...props}>
+        <span className="inline-flex items-center gap-1">
+          {Icon ? <Icon size={14} className="opacity-80" /> : null}
+          {props.data.label}
+        </span>
+      </components.MultiValueLabel>
+    );
+  };
+
   const filteredItems = useMemo(() => {
-    if (!searchTerm && status === "Any") return questions;
+    if (!searchTerm && status === "Any" && selectedTags.length === 0) return questions;
     if (questions == null) {
       return [];
     }
@@ -73,13 +125,16 @@ export default function QuestionList() {
         (status === "Solved" && isSolved) ||
         (status === "Unsolved" && !isSolved);
 
-      const matchesSearch = q.title
-        .toLowerCase()
-        .includes(searchTerm.toLowerCase());
+      const matchesSearch = q.title.toLowerCase().includes(searchTerm.toLowerCase());
 
-      return matchesStatus && matchesSearch;
+      // NEW: Tag matching (ANY). For ALL, replace `some` with `every`.
+      const matchesTags =
+        selectedTags.length === 0 ||
+        (q.tags && selectedTags.some((t) => q.tags.includes(t)));
+
+      return matchesStatus && matchesSearch && matchesTags;
     });
-  }, [questions, searchTerm, status]);
+  }, [questions, searchTerm, status, selectedTags, solvedQuestions]);
 
   return (
     <div className="h-full text-gray-200 py-8 max-w-7xl mx-auto rounded-lg ">
@@ -87,22 +142,55 @@ export default function QuestionList() {
         Questions
       </h2>
 
-      {/* Search + Filter */}
+      {/* Search + Tag Filter + Status */}
       <div className="flex flex-col md:flex-row md:items-center gap-2 mb-4">
         {/* Search Box with Icon */}
-        <div className="relative w-full md:w-7/8">
+        <div className="relative w-full md:w-2/5">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-neutral-500" />
           <input
             type="text"
             placeholder="Search..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full p-2 pl-10 rounded-md border border-neutral-600  text-white focus:outline-none focus:ring-0 focus:border-neutral-400"
+            className="w-full p-2 pl-10 rounded-md border border-neutral-600 text-white focus:outline-none focus:ring-0 focus:border-neutral-400"
+          />
+        </div>
+
+        {/* NEW: Tag Multi-Select (sits between search and status) */}
+        <div className="w-full md:w-2/5">
+          <Select
+            options={tagOptions}
+            isMulti
+            closeMenuOnSelect={false}
+            hideSelectedOptions={false}
+            placeholder="Filter by tags..."
+            onChange={(items) => setSelectedTags(items.map((i) => i.value))}
+            value={tagOptions.filter((o) => selectedTags.includes(o.value))}
+            isClearable
+            components={{ Option: TagOption, MultiValueLabel: TagMultiValueLabel }}
+            className="border-none"
+            theme={(theme) => ({
+              ...theme,
+              borderRadius: 4,
+              colors: {
+                ...theme.colors,
+                primary50: "gray",
+                primary: "#525252",
+                primary25: "gray",
+                neutral0: "#171717",
+                neutral20: "#525252",
+                neutral30: "#e5e7eb",
+                neutral40: "white",
+                neutral50: "gray",
+                neutral60: "white",
+                neutral80: "#525252",
+              },
+            })}
           />
         </div>
 
         {/* Status Dropdown */}
-        <div className="w-full md:w-1/8 text-center ">
+        <div className="w-full md:w-1/5 text-center">
           <Select
             options={[
               { value: "Any", label: "Any" },
@@ -118,25 +206,15 @@ export default function QuestionList() {
               borderRadius: 4,
               colors: {
                 ...theme.colors,
-                //after select dropdown option
                 primary50: "gray",
-                //Border and Background dropdown color
                 primary: "#525252",
-                //Background hover dropdown color
                 primary25: "gray",
-                //Background color
                 neutral0: "#171717",
-                //Border before select
                 neutral20: "#525252",
-                //Hover border
                 neutral30: "#e5e7eb",
-                //No options color
                 neutral40: "white",
-                //Select color
                 neutral50: "gray",
-                //arrow icon when click select
                 neutral60: "white",
-                //Text color
                 neutral80: "#F4FFFD",
               },
             })}
