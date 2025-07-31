@@ -1,24 +1,34 @@
 # Debt King
+
+## Story
 One of the conditions to become king is to **pay off the debts of every man and woman in the village**.
 Thankfully, you discover a helpful simplification: since **you are the one making all the payments**, you don’t need to handle every individual debt.
 Instead, for each person, you calculate **how much they are owed in total minus how much they owe**.
 Then you only pay those whose net balance is positive, that is, people who are owed more than they owe.
 This trick should make your path to the throne a little easier.
 
+## Task 
+Compute the total amount you must pay after simplifying all the debts between people.
+
+## Input
 Your function takes a single input:
 - `ledger`: a multiline string where each line follows this exact format:
 ```
 [name] owes [other_name] [debt_amount] coins
 ```
 
-To compute the minimum total amount you need to pay:
-- If someone is owed more than they owe, you pay them the difference.
-- If someone owes more than they are owed, they receive nothing (you don't collect anything from them).
-- People who are owed exactly as much as they owe also receive nothing.
+## Rules
 
+- For each person, calculate their net balance:
+  - Net balance = total amount they are owed minus total amount they owe.
+- You only pay people with positive net balances.
+- People with zero or negative balances receive nothing
+
+
+## Output
 Return the total number of coins you need to pay after simplifying all debts as described above.
 
-For example:
+## Example
 ```py
 ledger = """Alice owes Bob 10 coins
 Bob owes Charlie 5 coins

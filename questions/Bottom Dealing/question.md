@@ -1,28 +1,53 @@
 # Bottom Dealing
-The grandest wizards in the SpellSlingers Casino have summoned Bigni the Imp to the overworld to fill an empty seat at the poker table. 
-Competing against wizards with sharp minds – which are now further amplified by 'Raise Intellect' spells – Bigni decides that he will have to
-create his own luck. He decides to return to the underworld with riches thanks to a little trick called [Bottom Dealing](https://en.wikipedia.org/wiki/Bottom_dealing).
 
-Your function takes a single input `cards`, which is a list of integers representing the card values. 
-At each dealing turn:
-- Bigni deals a card every fourth turn, that is, on turns 0, 4, 8, etc. (0-indexed).
-    - On Bigni’s turns, he wants the highest card available between the top and bottom of the deck.
-- On all other turns (the wizards’ turns):
-    - They receive the lowest card available between the top and bottom of the deck.
+## Story
 
-At each step, remove only one card from either end of the deck.
-Return a list of the cards that Bigni deals himself, in the order he receives them.
+The grandest wizards in the SpellSlingers Casino have summoned Bigni the Imp to the overworld to fill an empty seat at the poker table.
+Competing against wizards with sharp minds – now further amplified by *Raise Intellect* spells – Bigni decides he’ll need to create his own luck.
+He plans to return to the underworld with riches, thanks to a little trick called [Bottom Dealing](https://en.wikipedia.org/wiki/Bottom_dealing).
 
-For example:
-```py
-assert(deal_cards([3, 1, 7, 5, 9, 2, 8, 6]) == [6, 8])
+
+## Task
+
+Simulate the card dealing process and determine which cards Bigni deals to himself.
+
+
+## Input
+
+* `cards`: a list of integers representing the card values in the deck. Cards are dealt from either the **top (start)** or **bottom (end)** of the list.
+
+
+## Rules
+
+* The game proceeds in turns, starting at turn `0` (0-indexed).
+* On every 4th turn (`0`, `4`, `8`, ...), it’s **Bigni’s turn**:
+
+  * He takes the **higher** of the two cards available at the top and bottom.
+* On all other turns, a wizard takes the **lower** of the two cards.
+* Only one card is removed per turn, from either end.
+* The process continues until no cards remain.
+
+
+## Output
+
+Return a list of the card values Bigni collects, in the order he takes them.
+
+
+## Example
+
+```python
+assert deal_cards([3, 1, 7, 5, 9, 2, 8, 6]) == [6, 8]
 ```
-is correct because:
-- 0 : Bigni takes the highest of 6,3 to himself
-- 1 : 3 < 8 so 3 is dealt to a wizard
-- 2 : 1 < 8 so 1 is dealt to a wizard
-- 3 : 7 < 8 so 7 is dealt to a wizard
-- 4 : Bigni takes the highest of 8,5 to himself
-- 5 : 2 is dealt
-- 6 : 5 is dealt
-- 7 : 9 is dealt
+
+Explanation:
+
+* Turn 0 (Bigni): chooses max of `3` and `6` → takes `6`
+* Turn 1 (Wizard): chooses min of `3` and `8` → takes `3`
+* Turn 2 (Wizard): chooses min of `1` and `8` → takes `1`
+* Turn 3 (Wizard): chooses min of `7` and `8` → takes `7`
+* Turn 4 (Bigni): chooses max of `5` and `8` → takes `8`
+* Turn 5 (Wizard): chooses min of `5` and `2` → takes `2`
+* Turn 6 (Wizard): chooses min of `5` and `9` → takes `5`
+* Turn 7 (Wizard): chooses min of `9` and `9` → takes `9`
+
+Bigni's cards: `[6, 8]`
