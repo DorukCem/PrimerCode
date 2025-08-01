@@ -4,10 +4,14 @@ he is in his bat form to strike him when he is fragile. You are gathering
 logs of all bat sightings in the area to find the perfect time for the ambush.
 Some of these bats are just normal bats but thankfully the vampire bat has some distinctive qualities.
 
-Your function takes a single input **logs** which is a string that follows a special format.
-The format is:
-- Each log is separated by a newline.
-- Each log starts with a time stamp, followed by the dimensions of the bat, followed by the color of the bats eyes
+## Input
+Your function takes a single input 
+- `logs` which is a string that follows a special format.
+
+## Rules
+The format for each line of `logs` is:
+  - Each log is separated by a newline.
+  - Each log starts with a time stamp, followed by the dimensions of the bat, followed by the color of the bats eyes
 
 An example log:
 ```
@@ -23,9 +27,12 @@ A bat can be identified as vampire if both:
 - Its eyes are RED
 - And its total size (the product of its dimensions) is bigger than `400`
 
+
+## Output
 Return a list of all timestamps where the bat is a vampire. The time stamp should be in HH:MM format (same format as the logs)
 
-For example:
+
+## Output
 ```py
 logs = """03:53 37*22 RED
 04:32 34*10 BROWN

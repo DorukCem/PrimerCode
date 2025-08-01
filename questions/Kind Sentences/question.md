@@ -1,10 +1,15 @@
 # Polite sentences
+
+
 Sentences are polite if they have the word please in them.
 
-Your function takes a single input sentence, which is a string.
-Return True if the sentence contains the word "please", regardless of casing. Otherwise, return False.
+## Input
+Your function takes a single input 
+- `sentence`: a string.
 
-For example
+Return True if the `sentence` contains the word `"please"`, regardless of casing. Otherwise, return False.
+
+## Example
 ```py
 assert(is_polite("Please help me") == True)
 ```

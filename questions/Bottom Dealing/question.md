@@ -1,6 +1,6 @@
 # Bottom Dealing
 
-## Story
+
 
 The grandest wizards in the SpellSlingers Casino have summoned Bigni the Imp to the overworld to fill an empty seat at the poker table.
 Competing against wizards with sharp minds – now further amplified by *Raise Intellect* spells – Bigni decides he’ll need to create his own luck.

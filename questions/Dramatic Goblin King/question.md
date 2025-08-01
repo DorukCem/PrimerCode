@@ -1,11 +1,18 @@
 # The Overly-Dramatic Goblin King
+
+
 The Goblin King demands **tribute**, but he's a stickler for **paperwork**. 
 All tribute reports must be a **string formatted with each item, its quantity, and a mandatory compliment**, or he'll throw a royal tantrum.
 
+## Task
+Return a formatted string using the inputs
+
+## Input
 Your function takes two inputs:
 - `items` : a list of strings representing tribute items, possibly with repeats
 - `compliment`: a string representing a mandatory message to flatter the Goblin King
 
+## Output
 Return a string that follows this exact format:
 Each item should appear once, in the order it first appears, followed by how many times it appeared in the list.
 Each line should look like this:
@@ -14,7 +21,7 @@ Each line should look like this:
 ```
 At the end, add a line with the compliment.
 
-For example
+## Example
 ```py
 items = ["gold_stick", "silver coin", "sword", "silver coin"]
 compliment = "To our great Goblin Lord"

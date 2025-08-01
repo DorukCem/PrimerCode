@@ -1,20 +1,27 @@
 # Shelter
-You are the lead scout for a nomadic tribe searching for a new home.
-Your tribe has been haunted by storms of magnificent size for ages, forcing you to constantly seek new shelter.
-The survivability of any new settlement depends on how well it's shielded from the harsh, cutting winds.
 
-Your function takes a single input grid, which is a 2D list of integers where each integer is the **height** of that tile.
-We can determine how sheltered a tile is by summing:
-- The difference between the tile’s height and the highest tile in the same column **above** the tile.
-- The difference between the tile’s height and the highest tile in the same column **below** the tile.
-- The difference between the tile’s height and the highest tile in the same row **to the left** of the tile.
-- The difference between the tile’s height and the highest tile in the same row **to the right** of the tile.
 
+You are the lead scout for a nomadic tribe searching for a **new home**.
+Your tribe has been haunted by storms of magnificent size for ages, forcing you to **constantly seek new shelter**.
+The survivability of any new settlement depends on **how well it's shielded from the harsh, cutting winds**.
+
+## Input
+Your function takes a single input 
+- `grid`: a 2D list of integers where each integer is the **height** of that tile.
+
+## Rules
+- We can determine how sheltered a tile is by summing:
+  - The difference between the tile’s height and the **highest** tile in the same column **above** the tile.
+  - The difference between the tile’s height and the **highest** tile in the same column **below** the tile.
+  - The difference between the tile’s height and the **highest** tile in the same row **to the left** of the tile.
+  - The difference between the tile’s height and the **highest** tile in the same row **to the right** of the tile.
+- If a tile has no other tiles in a particular direction, then the shelter score for that direction is 0.
+
+## Output
 Return the index (x, y) of the tile that has the maximum shelter score.
 
-**Note**: If a tile has no other tiles in a particular direction, then the shelter score for that direction is 0.
 
-For example
+## Example
 ```py
 grid = [
     [72, 61, 61, 91], 

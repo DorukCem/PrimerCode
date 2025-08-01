@@ -1,6 +1,6 @@
 # Birdwatching
 
-## Story
+
 
 Erg the Ogre is fascinated by birds, even though he still can’t figure out how they manage to fly.
 He often notes how many birds he saw in a day in his notepad. Given his limited ability with numbers he

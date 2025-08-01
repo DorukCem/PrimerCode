@@ -5,19 +5,19 @@ The timeline is extremely fragile, and **any unauthorized jumps through time cou
 Fortunately, the machine keeps periodic logs.
 If you can figure out **where time travel has occurred**, you might be able to **reverse the damage**.
 
-Your function takes a single input:
+## Input
 - `logs`: a multiline string where **each line** represents a log entry in this format:
 ```
 [DD/MM/YYYY] [Some text]
 ```
-
+## Output
 You need to count how many times the log entries **go back in time**, meaning the date is **earlier than the date on the previous line**.
 
 In other words, every time a new log entry has a **date earlier** than the one before it, that’s a **time travel**.
 
 Return a integer representing the **number of time travels** found in the logs.
 
-For example:
+## Example
 ```py
 logs = """[01/01/2000] System started
 [02/01/2000] User logged in

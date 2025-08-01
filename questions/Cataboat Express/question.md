@@ -1,6 +1,6 @@
 # Cataboat Express
 
-## Story
+
 
 The **Cataboat Express** prides itself on its signature two-part express journey:
 Passengers first cross a river by boat.

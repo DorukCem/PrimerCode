@@ -1,6 +1,6 @@
 # Busiest Beaver Contest
 
-## Story
+
 
 The beavers are competing to see who can perform the longest routine.
 You have been selected as a judge to find the [busiest beaver](https://en.wikipedia.org/wiki/Busy_beaver) — the one whose routine runs the longest.

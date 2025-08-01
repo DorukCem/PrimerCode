@@ -1,6 +1,6 @@
 # AAAAAAAAA
 
-## Story
+
 As you explore the untouched parts of the Amazon forest with your group of fellow adventurers, you start to feel like you're being watched.
 One by one, your friends get pulled into the forest.
 It seems that the people being dragged away are trying to say something... but they always disappear before they can finish.

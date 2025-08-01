@@ -1,23 +1,31 @@
 # Mimic Checksums
 
+
 You’ve finally found the treasure you’ve been searching for!
 However, it seems that some chests **are** [Mimics](https://en.wikipedia.org/wiki/Mimic_%28Dungeons_%26_Dragons%29) 
 disguised as loot, waiting to devour greedy adventurers.
 Thankfully, you came equipped with a checksum formula to **identify** them. Each **real chest** has a **name** and a **checksum** on it.
 The Mimics haven’t figured out how to generate valid checksums; they just stamp on random numbers. 
+
+## Task
 Your task is to use the name and checksum to tell which chests are real.
 
+## Input
 Your function takes a single input:
-- `chests`: a multiline string, where each line contains:
+- `chests`: a multiline string, where each line follows the following format:
 ```
 [name] [checksum]
 ```
-Each checksum is created by measuring the absolute alphabetical distance between each consecutive pair of letters in the name, and joining the results together.
-- The distance between two letters is the absolute difference of their positions in the alphabet. (For example: a=1, b=2, ..., z=26)
 
-Return a list of names that have a valid checksum.
+## Rules
+- A checksum for a chest is created by measuring the absolute alphabetical distance between each consecutive pair of letters in the name, and joining the results together.
+  - The distance between two letters is the absolute difference of their positions in the alphabet. (For example: a=1, b=2, ..., z=26)
+- Each name consists of lowercase letters and has at least two characters
 
-For example:
+## Output
+Return a list of names that have a valid checksum in the order they appear in the input `chests`.
+
+# Example
 ```py
 chests = """anna 13013
 jack 928
@@ -43,6 +51,3 @@ is correct because:
   - Checksum: "14151" is in correct as it should be "1137" 
   
 So we get the final answer `["anna", "jack"]`
-
-Note: 
-each name only has only lowercase letters and has at least two characters

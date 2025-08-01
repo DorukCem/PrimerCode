@@ -9,10 +9,12 @@ Every morning, he solves the daily Wordle, and uses his path to the solution to 
 You’re in luck, he left a crumpled sticky note on his desk, listing all of today’s guesses.
 You just need to figure out how Gary turns Wordle guesses into a password.
 
+## Input
 Your function takes two inputs:
 - `answer`: a 5 letter lowercase string representing that days answer
 - `guesses`: a list of 5 letter lowercase strings representing your coworkers guesses.
 
+## Rules
 After each guess, Gary compares it to the answer and builds a 5-digit ternary number (base-3) based on the result:
 Each letter in the guess becomes a digit:
 - 0 (gray): Letter is not in the answer at all
@@ -27,7 +29,8 @@ Once a guess is converted into a 5-digit base-3 number, Gary:
 2. Multiplies the values for all guesses together.
 3. That final product is his password.
 
-For example:
+
+## Example
 ```py
 answer = "today"
 guesses = [

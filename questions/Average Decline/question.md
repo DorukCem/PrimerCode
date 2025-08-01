@@ -1,6 +1,6 @@
 # Average Decline
 
-## Story
+
 
 Unsatisfied with his last experiment, our critic from last time still has his suspicions that the quality of dishes in restaurants decline over time.
 This time he intends to use a "better" method.

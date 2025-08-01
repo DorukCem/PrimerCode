@@ -1,6 +1,6 @@
 # Debt King
 
-## Story
+
 One of the conditions to become king is to **pay off the debts of every man and woman in the village**.
 Thankfully, you discover a helpful simplification: since **you are the one making all the payments**, you don’t need to handle every individual debt.
 Instead, for each person, you calculate **how much they are owed in total minus how much they owe**.

@@ -1,6 +1,6 @@
 # Busiest Time
 
-## Story
+
 
 Our new automated factory line is a marvel of efficiency. But the Operations Chief isn't celebrating yet. 'A system under no stress shows no weakness,' she says. 'I want to know when it's screaming.' She believes that the moment of peak production, when the most units are moving at once, is precisely when a conveyor belt will snap or a robotic arm will jam. 
 

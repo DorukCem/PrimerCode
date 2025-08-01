@@ -1,6 +1,6 @@
 # Alchemist's Volatile Brew
 
-## Story
+
 
 You are an alchemist, searching for the Potion of Unstable Power.
 To brew it, you must carefully add ingredients from the available stock, building its magical potency in the process.
