@@ -1,0 +1,4 @@
+{
+  "function_name": "find_empty",
+  "function_args": ["seats: list[bool], idx: int"]
+}
