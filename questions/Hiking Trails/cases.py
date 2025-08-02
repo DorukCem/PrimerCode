@@ -1,0 +1,15 @@
+cases = [
+    TestCase(inputs=("##.####..###...###", 3), expected=True),
+    TestCase(inputs=("##.####..###....###", 3), expected=False),
+    TestCase(inputs=("######", 0), expected=True),
+    TestCase(inputs=("..", 2), expected=True),
+    TestCase(inputs=("..", 1), expected=False),
+    TestCase(inputs=("#.#.#.#", 1), expected=True),
+    TestCase(inputs=("#..#..#..#", 2), expected=True),
+    TestCase(inputs=("#...#.#", 2), expected=False),
+    TestCase(inputs=("###....###", 3), expected=False),
+    TestCase(inputs=(".#.#.#.", 0), expected=False),
+    TestCase(inputs=("#.#..###...#", 3), expected=True),
+    TestCase(inputs=("#.#..###...#", 2), expected=False),
+    TestCase(inputs=("#..###...#..#", 4), expected=True),
+]

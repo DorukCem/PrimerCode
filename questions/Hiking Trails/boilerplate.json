@@ -1,0 +1,4 @@
+{
+  "function_name": "is_completable",
+  "function_args": ["trail: str, jump_distance: int"]
+}
