@@ -22,7 +22,7 @@ export default function Navbar() {
         <div className="flex items-center gap-4">
           {/* Buy Me a Coffee Button */}
           <a
-            href="https://buymeacoffee.com/yourusername"
+            href="https://buymeacoffee.com/DorukCem"
             target="_blank"
             rel="noopener noreferrer"
             className="inline-flex items-center py-2 px-2  bg-neutral-700 hover:bg-yellow-600 text-gray-300 font-md  rounded-md transition-colors duration-200"
