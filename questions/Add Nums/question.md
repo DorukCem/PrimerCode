@@ -1,49 +1,42 @@
-# Add Number
-Write a function that returns the sum of its two arguments
+# Getting Started: How to Solve These Problems
 
-For example the statement below should not return an error
+Before diving into the adventure, let's get familiar with how these questions work.
+
+Each question will follow a standard format:
+* A narrative regarding the question
+* A **problem description**
+* A description of the **inputs** and **outputs**
+* Possibly some **rules or constraints**
+* One or more **examples** to clarify the task
+
+
+Your job is to write a function that solves the task exactly as described. You can assume that inputs will follow the rules, unless stated otherwise.
+
+
+## Task
+
+Write a function that takes two numbers and returns their sum.
+
+
+## Input
+
+Your function takes two inputs:
+
+* `x`: an integer
+* `y`: an integer
+
+
+## Output
+Return the sum of `x` and `y`.
+
+
+## Example
+
 ```py
-assert(add(5, 7) == 12)
+assert add(2, 3) == 5
 ```
-If you do not know how to get started: [how to use python functions](https://realpython.com/defining-your-own-python-function/)
 
+## Notes
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quam nibh, volutpat et risus vel, dictum ultricies magna. Maecenas tincidunt urna id tellus volutpat, vel fermentum sem dictum. Nam eu tempor purus. Vestibulum pulvinar turpis condimentum dolor pellentesque, et consectetur diam iaculis. Mauris nulla dui, venenatis eu tortor et, iaculis vehicula massa. Curabitur aliquet, est eget pharetra euismod, orci risus ullamcorper mauris, eu malesuada est augue nec ligula. Sed ullamcorper faucibus arcu efficitur blandit. Aliquam nec odio at nulla elementum consectetur. Sed finibus commodo porta. Quisque sodales ut nibh non imperdiet. Praesent quis pretium dui. Aenean quam dui, gravida scelerisque justo vitae, tincidunt iaculis orci.
-
-Quisque pellentesque enim vitae nisi porttitor scelerisque. In tincidunt fermentum sapien, ac commodo ipsum vestibulum et. Integer mollis aliquet est non lacinia. Quisque vel ornare velit. In ut cursus felis. In hac habitasse platea dictumst. Vivamus quis arcu eget dui sagittis lobortis. Integer nunc nibh, ultricies quis nunc eu, fermentum imperdiet massa. Aliquam metus elit, ornare vulputate felis in, bibendum varius risus.
-
-Aenean id efficitur nisi, nec ornare tortor. Nullam lobortis laoreet augue ut fringilla. Integer non aliquam magna. Mauris vitae maximus quam. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Morbi ultricies justo urna, ut condimentum libero aliquam quis. Suspendisse elementum imperdiet dapibus. Nunc rhoncus porta mauris eget auctor.
-
-Vestibulum ac aliquam elit. Praesent vestibulum elit sit amet est porta lobortis. Curabitur faucibus velit non magna tincidunt mattis et quis orci. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aliquam pharetra, velit non faucibus euismod, eros urna rutrum enim, vitae fringilla nisi sem ut sapien. Nulla facilisi. Curabitur semper convallis ullamcorper. Curabitur non arcu molestie, tincidunt est nec, condimentum mauris. Suspendisse pellentesque quam id lorem ultricies, vitae bibendum velit mollis. Duis at elementum nisl, vitae interdum nibh. Suspendisse elementum tortor vitae leo laoreet eleifend. Donec tincidunt consectetur urna id ultricies.
-
-Donec pretium nisl felis, non aliquam ligula rhoncus ut. Cras arcu magna, rutrum accumsan purus sed, ornare accumsan sapien. Phasellus at posuere diam. Integer ullamcorper dolor vitae maximus congue. Integer semper neque sit amet leo ultrices, sed egestas massa viverra. Donec fringilla finibus magna, consectetur ornare ligula consectetur eget. Nam nec lectus lorem. Vivamus tellus turpis, commodo sit amet semper eget, volutpat sit amet leo. Morbi vitae est ac risus sollicitudin rutrum quis et tellus. Sed nec iaculis tortor. Nam libero ante, vehicula id ex at, suscipit faucibus felis. Etiam at neque in nisl pellentesque vulputate at tincidunt dolor. Nulla cursus cursus pretium. Maecenas fringilla facilisis nulla vel facilisis. Integer id ex tellus.
-
-In tincidunt tempor ultricies. Ut porta vulputate elit eu lobortis. Aliquam erat volutpat. Vivamus ultricies vel neque pellentesque vehicula. Nunc lacinia ex at dolor malesuada, non vulputate metus ornare. Integer ut dolor nec nisi ullamcorper sodales vel vitae mi. Praesent rutrum tristique sagittis. Morbi eleifend molestie tempus. Sed lectus elit, sodales nec tortor vel, efficitur feugiat sem. Nunc elit justo, ultrices quis nisl vel, molestie posuere leo. Vivamus molestie lacus ut facilisis scelerisque. Sed interdum congue tellus, sed auctor ex efficitur ut. Maecenas pulvinar, dolor non auctor semper, sapien mi bibendum eros, tempor vehicula turpis libero id sapien. Ut pulvinar, libero a convallis vehicula, risus orci rutrum metus, eu consequat nibh neque quis velit.
-
-Sed vitae finibus est. Aliquam a lorem ut ligula interdum suscipit ultrices id est. In vitae ornare mauris. Vivamus egestas eu nulla sed finibus. Aliquam pulvinar elit et iaculis rhoncus. Vestibulum viverra at neque at scelerisque. Ut vehicula luctus viverra. Vivamus convallis dapibus orci, a dignissim eros pretium vel. Vivamus venenatis turpis ex, et vestibulum neque ultrices eu. Mauris consequat sagittis dictum. Curabitur suscipit faucibus purus nec imperdiet. Curabitur et dignissim lorem. Nullam non lorem sed est ullamcorper faucibus.
-
-Vestibulum nisl felis, posuere at nisl quis, blandit porttitor libero. Proin tellus lorem, aliquam vitae enim malesuada, condimentum tristique augue. Fusce tincidunt rutrum arcu. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Integer blandit, felis eu dictum imperdiet, nisl velit malesuada elit, non condimentum elit est at sem. Fusce consequat elit a semper euismod. Integer purus augue, dapibus ut diam facilisis, congue molestie arcu. Mauris non imperdiet metus, et hendrerit ligula. Curabitur eget porttitor lectus.
-
-Cras ultricies dolor eu ex sagittis tincidunt. Quisque faucibus mollis pulvinar. Mauris tristique, orci id mollis sagittis, lacus nibh ornare dui, a consectetur neque tellus vel dui. Nullam vitae metus at purus vulputate semper in ultricies tellus. Ut a tellus aliquet, faucibus purus ac, aliquam ante. Nulla ac dignissim nulla, id ornare est. Sed sed dui ante. Integer posuere ex sit amet lectus cursus consequat. Maecenas porta non justo et suscipit. Quisque diam libero, porta ac velit eu, dictum faucibus magna. Aenean in magna convallis, scelerisque mi quis, pellentesque lacus. Nulla eleifend euismod velit ac eleifend. Nullam viverra, sem non tincidunt maximus, nulla est feugiat magna, sit amet dapibus ante est id sapien. Phasellus non turpis nisl. Cras sodales maximus lorem, et posuere quam rhoncus sit amet. Quisque vitae lorem vel diam bibendum hendrerit vel at leo.
-
-Integer sed malesuada lectus, eu scelerisque orci. Praesent pretium at enim ac commodo. Sed sodales orci risus, et molestie ante sagittis at. Quisque tempus neque eget cursus feugiat. Etiam tristique rutrum odio, at fermentum mauris interdum quis. Morbi finibus massa tellus. Fusce congue pretium libero, a pulvinar felis eleifend at. Duis lobortis aliquam nibh id semper. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Duis egestas ligula metus, et lacinia mauris auctor ac. Integer viverra, arcu in cursus laoreet, elit risus consectetur sapien, nec posuere urna turpis eu leo. Sed magna nisi, sodales nec ligula in, fringilla luctus metus. Proin faucibus lacinia nibh, vel maximus augue cursus sed. Sed tellus mi, volutpat vel egestas vel, scelerisque ut massa.
-
-Suspendisse ut interdum erat. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed sed suscipit mi. Maecenas sit amet rutrum erat. Duis accumsan, purus at aliquet varius, arcu nisl auctor ipsum, vel dictum libero erat non ante. Sed et porta risus. Vestibulum ac risus nibh. Aliquam scelerisque ac nisl nec gravida. Phasellus vel mi sit amet enim facilisis consequat. Aenean varius mi vitae neque lacinia tempor. Mauris sagittis feugiat mauris, a mattis lacus rutrum varius.
-
-Nulla mattis elit ex. Morbi rhoncus molestie laoreet. Donec quis interdum urna. In eget ornare massa, at pellentesque massa. Nulla rhoncus dictum ante. Mauris eget libero quam. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Praesent blandit augue non mollis luctus. Duis non odio quam. Curabitur dapibus purus ac viverra sollicitudin. Maecenas ac dictum diam. Sed blandit nulla sed commodo maximus. Sed a vehicula risus. Suspendisse ut risus tincidunt, gravida turpis vitae, congue nisi. Nullam pellentesque interdum nisi a porta. Fusce placerat nisl nec mi sodales, non consequat mi aliquet.
-
-Proin gravida scelerisque odio non ultrices. Morbi felis quam, consectetur sit amet rutrum id, viverra eget erat. Sed feugiat nulla finibus, lobortis odio ut, venenatis ligula. Quisque tincidunt posuere leo nec lacinia. Integer ornare vel sapien nec porttitor. Suspendisse imperdiet blandit risus, vitae placerat metus tincidunt eu. Nam orci risus, tempor et rutrum ac, luctus sed orci.
-
-Morbi orci lectus, dapibus in urna sit amet, vulputate lacinia erat. Cras quis ipsum nulla. Morbi porta venenatis lectus, interdum gravida diam varius et. Integer vehicula feugiat magna, sed tempor ante hendrerit eu. Integer eleifend metus felis, vitae euismod nunc tincidunt vitae. Quisque ac pulvinar lectus. Sed dignissim sem in arcu eleifend consequat lacinia feugiat mi. Nunc varius magna ornare aliquam tincidunt.
-
-Donec vitae congue velit. Cras rutrum, felis vehicula tincidunt scelerisque, massa lorem interdum urna, vel auctor mauris nisl eu magna. Nam vel arcu eu sem luctus congue. Vestibulum quam purus, eleifend sit amet nisl at, molestie scelerisque nisi. Aenean at mauris vitae ex ullamcorper porttitor non sed metus. Sed malesuada diam est, sed imperdiet nunc rutrum et. Vestibulum est tortor, laoreet id nisi id, pretium sagittis elit. Mauris nec metus porttitor, blandit arcu ac, tempus mauris. Integer nec aliquam leo. Duis nec metus eu enim tristique hendrerit sit amet in tortor. Integer ultricies tempus blandit. Maecenas ac sodales quam. Morbi cursus ex magna, nec mollis ante maximus at. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-
-Cras iaculis semper ante, sit amet pellentesque ex viverra vitae. Nam hendrerit vitae tortor ac viverra. Donec id porta purus, ut interdum neque. Nunc scelerisque fringilla ligula, et scelerisque risus iaculis et. Aliquam tristique sed nisl sed ornare. Aliquam non magna elementum, molestie neque at, luctus ante. Sed tincidunt mi consectetur purus vulputate ultricies. Integer ut felis ut eros volutpat cursus ac eget turpis. Donec pulvinar orci quis efficitur dictum. Cras gravida, arcu vel commodo dapibus, dolor tortor posuere nisi, id molestie ipsum metus non lorem.
-
-Nam iaculis lectus nec commodo bibendum. Sed ornare eros in consectetur bibendum. Phasellus eget eros vitae leo malesuada maximus ut pretium tellus. Sed commodo tellus eros, quis elementum sapien mollis et. Nam ultricies justo at odio accumsan, vel rhoncus nibh laoreet. Pellentesque vulputate nibh nisi, eget laoreet neque consequat vel. Suspendisse potenti. Sed condimentum neque tincidunt vestibulum tristique. Nullam dictum interdum lacus. In felis sapien, consectetur sit amet erat fermentum, lacinia fermentum nibh. In sit amet magna a risus porta malesuada in ac tortor.
-
-Praesent tortor odio, fermentum vitae rhoncus sit amet, tristique ac elit. Nulla non sapien ac leo aliquet venenatis. Ut sollicitudin at purus vel dictum. Praesent pretium, diam eget ultrices dignissim, est urna volutpat ex, ut facilisis elit arcu at ex. Fusce et dictum arcu, vitae congue sapien. Cras aliquam purus a sem consectetur, id molestie mi venenatis. Donec feugiat gravida accumsan. Nullam placerat, elit a pulvinar sollicitudin, tellus ipsum tristique ipsum, quis tincidunt dui nulla congue justo. Suspendisse mauris lorem, consectetur eget nulla vitae, blandit consequat risus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Maecenas lobortis elementum quam, a dictum turpis molestie sit amet. Integer vel neque ligula.
-
-Vestibulum viverra vulputate lorem sed gravida. Vestibulum commodo felis quis vehicula imperdiet. Fusce convallis sapien nisl, ac posuere ligula vulputate sit amet. Sed et ex ultricies, euismod neque vitae, lacinia purus. Nunc porta in felis eget pulvinar. Cras malesuada auctor commodo. Suspendisse vestibulum mauris ante, ac iaculis nisl venenatis dictum.
-
-Donec ultricies molestie purus ornare vestibulum. Sed lobortis nibh a lacus elementum gravida. Ut tristique nulla ut lacus malesuada, quis semper arcu lacinia. Aliquam rutrum suscipit massa ac sollicitudin. Maecenas faucibus metus condimentum urna tristique aliquam. Etiam rhoncus posuere velit. Vestibulum sed metus ac massa ullamcorper maximus laoreet eget lorem. Donec egestas id odio eu cursus. Aliquam ipsum risus, aliquet a enim ut, dignissim laoreet justo. Maecenas aliquam sem at est rutrum, in vehicula elit feugiat. Vivamus eget massa lobortis quam lobortis luctus id vel mi. Quisque vitae nulla dignissim nibh imperdiet bibendum vel vitae lectus. Suspendisse potenti. Nullam non facilisis odio. Vivamus ut pharetra ex, aliquet efficitur eros. Nulla vitae leo ante. 
+* Your solution must return the output not print it.
+* The example above shows how the function will be tested.
