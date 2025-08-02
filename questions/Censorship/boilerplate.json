@@ -1,0 +1,4 @@
+{
+  "function_name": "censor",
+  "function_args": ["file: str, names: list[str]"]
+}

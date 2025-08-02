@@ -1,4 +1,0 @@
-{
-  "function_name": "divide_list",
-  "function_args": ["arr: list[int]"]
-}
