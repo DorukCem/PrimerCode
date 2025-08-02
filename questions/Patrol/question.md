@@ -50,4 +50,4 @@ result =
 assert(patrol_results(grid, 5) == result)
     
 ```
-is correct. We can se that x = 0, y = 2 has two officers but we still put a single 'X'.
+is correct. We can see that x = 0, y = 2 has two officers but we still put a single 'X'.

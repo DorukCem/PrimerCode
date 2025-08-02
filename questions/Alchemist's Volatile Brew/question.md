@@ -62,7 +62,7 @@ assert brew(
 The calculation is:
 
 ```
-1 * 9 + 2 * 9 + 3 * 10 = 57
+9*1 + 9*2 + 10*3 = 57
 ```
 
-The last ingredient is not added because the threshold has already been reached.
+After adding `"RAVENS EYE"`, the total potency (57) exceeds the threshold (30), so the process stops.

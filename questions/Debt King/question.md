@@ -39,7 +39,7 @@ assert(pay_debt(ledger) == 7)
 ```
 is correct because:
 - Alice owes 10 coins and is owed 3 coins, the net difference is -7 so she gets nothing.
-- BoB owes 5 coins and is owed 310 coins, the net difference is 5 so he gets 5 coins.
-- Charlie owes 3 coins and is owed 5 coins, the net difference is 2 so he gets 2coins.
+- Bob owes 5 coins and is owed 10 coins, the net difference is 5 so he gets 5 coins.
+- Charlie owes 3 coins and is owed 5 coins, the net difference is 2 so he gets 2 coins.
 
 In total you have to pay: 0 + 5 + 2 = 7 coins 

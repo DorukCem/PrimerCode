@@ -33,8 +33,8 @@ machines = "|AB:CD| -> |CD:XZ| -> |MN:KZ|"
 assert(output(machines) == "XZ")
 ```
 is correct because:
-- The first machine inputs outputs `CD`
-- The second machine inputs `CD` so it can processes the first machine output.
+- The first machine outputs `CD`
+- The second machine inputs `CD` so it can process the first machine's output.
 - The second machine outputs `XZ`
 - The third machine expects `MN` but receives `XZ` so the process is stopped
 - Final output is `"XZ"`.

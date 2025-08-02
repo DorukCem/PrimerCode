@@ -18,7 +18,7 @@ grid =  [
             ["K", "O", "K", "K"],
             ["O", "O", "K", "O"],
             ["O", "K", "K", "O"],
-        ],
+        ]
                 
 assert(search(grid, "OK") == 7)
 ```

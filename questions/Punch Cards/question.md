@@ -29,7 +29,7 @@ Your function should return a single string with the same format that shows the 
 ```py
 cards = [
     "01001",
-    "01101"
+    "01101",
     "10000"
 ]
 

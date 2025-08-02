@@ -14,7 +14,7 @@ Your function takes a single input:
 
 ## Rules
 - Each non-empty string is present two times in the grid.
-- The distance between each pair is calculated as the [Euclidean Distance](https://en.wikipedia.org/wiki/Euclidean_distance) rounded down the nearest integer
+- The distance between each pair is calculated as the [Euclidean Distance](https://en.wikipedia.org/wiki/Euclidean_distance) rounded down to the nearest integer
 
 ## Output
 Return a dictionary containing the distance between each pair.

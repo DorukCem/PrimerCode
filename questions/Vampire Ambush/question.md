@@ -32,7 +32,7 @@ A bat can be identified as vampire if both:
 Return a list of all timestamps where the bat is a vampire. The time stamp should be in HH:MM format (same format as the logs)
 
 
-## Output
+## Example
 ```py
 logs = """03:53 37*22 RED
 04:32 34*10 BROWN
@@ -42,8 +42,8 @@ logs = """03:53 37*22 RED
 assert(find_vampire(logs) == ['03:53'])
 ```
 Is correct because:
-- The first bat has red eys and dimensions `37*22` which means that it has size `37*22 = 814` which is larger than `400` therefore it must be a vampire.
-- The second bat has brown eys meaning that it cannot be vampire
+- The first bat has red eyes and dimensions `37*22` which means that it has size `37*22 = 814` which is larger than `400` therefore it must be a vampire.
+- The second bat has brown eyes meaning that it cannot be vampire
 - The third bat has brown eyes meaning that it cannot be vampire
-- The fourth bat has red eys and dimensions `25*16` which means that it has size `25*16 = 400` which is not larger than `400` therefore it cannot be vampire.
-Therefore only the first time stamp which is "03.53" must be in the list that is returned
+- The fourth bat has red eyes and dimensions `25*16` which means that it has size `25*16 = 400` which is not larger than `400` therefore it cannot be vampire.
+Therefore only the first time stamp which is `"03:53"` must be in the list that is returned

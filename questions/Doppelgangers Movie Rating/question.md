@@ -21,6 +21,6 @@ You need to return the overall average rating, after collapsing all duplicate na
 
 ## Example
 ```py
-assert(average_rating([("Arthur", 5), ("Ford", 7), ("Arthur", 7), ("Zaphod", 4), ("Arhur", 10), ("Zaphod", 2), ("Marvin", 4)]) == 6.0)
+assert(average_rating([("Arthur", 5), ("Ford", 7), ("Arthur", 7), ("Zaphod", 4), ("Arthur", 10), ("Zaphod", 2), ("Marvin", 4)]) == 6.0)
 ```
 Is correct because `((5+7+10)/3 + 7  + (4+2) + 4) / 4  = 6.0`

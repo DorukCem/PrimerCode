@@ -48,6 +48,6 @@ is correct because:
 - "dory":
   -  d(4) , o(15) , r(18) , y(25)
   - Distances: 11, 3, 7
-  - Checksum: "14151" is in correct as it should be "1137" 
+  - Checksum: "14151" is incorrect as it should be "1137" 
   
 So we get the final answer `["anna", "jack"]`

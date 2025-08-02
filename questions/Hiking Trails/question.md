@@ -34,8 +34,8 @@ jump_distance = 3
 assert(is_completable(trail, 3) == True)
 ```
 is correct because there are 3 gaps in the trail:
-- One "." -> size 1
-- One ".." -> size 2
-- One "..."" -> size 3
+1. `"."` -> size 1
+2. `".."` -> size 2
+3. `"..."` -> size 3
 
 All are within the hiker’s max jump distance of 3, so the trail is completable.

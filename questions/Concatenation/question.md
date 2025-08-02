@@ -6,7 +6,7 @@ To reveal the full list of directives, you’ll need to **combine both parts in 
 ## Input
 Your function takes two inputs
 - `arr_1`: a list of string representing your part of the message
-- `arr_2`: a list of string representing your partners part of the message
+- `arr_2`: a list of string representing your partner's part of the message
 
 ## Output
 Return a single list that combines `arr_1` followed by `arr_2`.

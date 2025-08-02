@@ -20,7 +20,7 @@ You should return the total number of thrill generated.
 
 ## Example
 ```py
-assert(calculate_thrill([0, 1, 4, 15, 20, 10 , 5, 10, 30 , 50, 10, 2]))
+assert(calculate_thrill([0, 1, 4, 15, 20, 10 , 5, 10, 30 , 50, 10, 2] == 2460))
 ```
 Is correct because:
 - The ascent from 0 to 20 generates 20 anticipation

@@ -1,7 +1,7 @@
 # Dough-tonator
 
 
-You are on a mission bake the fluffiest sourdough ever thanks to your coworker's new invention: The **Dough-tonator 5000**.
+You are on a mission to bake the fluffiest sourdough ever thanks to your coworker's new invention: The **Dough-tonator 5000**.
 But there’s a catch.
 You quickly discover that the machine is set to **self-destruct** if the recipe is not followed with exact precision.
 Apparently, this was designed to prevent unauthorized use.

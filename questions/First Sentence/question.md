@@ -14,6 +14,6 @@ Each sentence end with a dot (.).
 Return the first complete sentence in the string, including the period.
 
 ## Example
-```
-assert(first_sentence("Hello there. How are you.") == "How are you.")
+```py
+assert(first_sentence("Hello there. How are you.") == "Hello there.")
 ```

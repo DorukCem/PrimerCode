@@ -13,11 +13,14 @@ Your function takes a single input:
 ## Output
 Return `True` if average of the first half of the reviews is greater than the average of the second half of the reviews. Otherwise return `False`.
 
+## Rules
+- For lists with odd number of items, the middle element is part of the first half
+
 
 ## Example
 
 ```py
-assert(avg_decline([4, 3, 5, 8, 6, 1, 2] == True))
+assert(avg_decline([4, 3, 5, 8, 6, 1, 2]) == True)
 ```
 
 is correct because (4+3+5+8)/4 > (6+1+2)/3

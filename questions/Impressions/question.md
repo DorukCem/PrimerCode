@@ -21,4 +21,4 @@ Return the total sum of all values in the list.
 ```py
 assert(impression([5, 6, "wooow", 0, 3]) == 64)
 ```
-Should be correct because: 5 + 6 + 10 * 5 + 0 + 3 = 64
+Should be correct because: 5 + 6 + 10*5 + 0 + 3 = 64

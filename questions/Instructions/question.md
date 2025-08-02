@@ -23,7 +23,7 @@ Your function will take two inputs:
 
 ## Rules 
 - Each instruction has a special effect on the system
-  - DOUBLE  Doubles the number of particles in the system
+  - DOUBLE : Doubles the number of particles in the system
   - VANISH : Removes one particle from the system
   - GENERATE : Adds one new particle to the system
   - STABILIZE : The system stabilizes and any event occurring after this has no effect.

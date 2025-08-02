@@ -49,6 +49,7 @@ pub fn get_question_summaries(conn: &mut SqliteConnection) -> QueryResult<Vec<Qu
     use crate::schema::questions::dsl::*;
     questions
         .select((id, title, slug, tags))
+        .order_by(rank.asc())
         .load::<QuestionSummary>(conn)
 }
 
