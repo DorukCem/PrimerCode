@@ -6,4 +6,4 @@
 >    print(x)
 > ```
 
-> We can append an element to a list using its `.append() method`sele
+> We can append an element to a list using its `.append() method`

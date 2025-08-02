@@ -1,4 +1,4 @@
 {
   "function_name": "concat",
-  "function_args": ["arr_1: list[int]", "arr_2: list[int]"]
+  "function_args": ["arr_1: list[str]", "arr_2: list[str]"]
 }
