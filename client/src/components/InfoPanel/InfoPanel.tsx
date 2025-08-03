@@ -6,7 +6,7 @@ import { useEffect, useState, useMemo } from "react";
 import { Check } from "lucide-react";
 import type { QuestionMDResponse } from "../../types/QuestionMDResponse";
 
-export default function InfoPanel({ slug }: any) {
+export default function InfoPanel({ slug, resetSolved }: any) {
   const [questionMD, setQuestionMD] = useState<QuestionMDResponse | null>(null);
   
   const solvedQuestions = useMemo(() => {
@@ -15,7 +15,7 @@ export default function InfoPanel({ slug }: any) {
     } catch {
       return {};
     }
-  }, []);
+  }, [resetSolved]);
   
   const isSolved = questionMD?.id ? solvedQuestions[questionMD.id] : false;
 

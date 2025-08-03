@@ -7,7 +7,7 @@ import type { CodeInput } from "../../types/CodeInput";
 
 import Modal from "./Modal";
 
-export default function CodeEditor({ slug }: any) {
+export default function CodeEditor({ slug, resetSolved, setResetSolved}: any) {
   const [resetPanels, setResetPanels] = useState(1);
 
   const editorRef = useRef<any | null>(null);
@@ -156,6 +156,8 @@ export default function CodeEditor({ slug }: any) {
               "solvedQuestions",
               JSON.stringify(solvedQuestions)
             );
+
+            setResetSolved(resetSolved+1)
           }
         }
       })
