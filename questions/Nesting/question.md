@@ -12,7 +12,7 @@ Your function takes a single input
 - `gift`: a deeply nested list of lists.
 
 ## Output
-You should return a flat list containing only the innermost items.
+You should return a flat list containing only the innermost items while preserving the original order.
 
 ## Example
 ```py

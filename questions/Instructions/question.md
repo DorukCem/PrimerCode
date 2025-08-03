@@ -2,11 +2,11 @@
 
 
 Scientists are tracking a newly discovered particle.
-This particle displays extraordinary behavior such as suddenly duplicating itself or vanishing from existence.
+This particle displays **extraordinary behavior** such as suddenly duplicating itself or vanishing from existence.
 
-Due to its unpredictable nature, once an experiment starts, it becomes impossible to directly count the number of particles in the system.
-Thankfully, the particle can only perform a few well-understood and observable actions.
-The scientist hope that they can conclude the number of particles in the system by using this knowledge.
+Due to its unpredictable nature, once an experiment starts, it becomes **impossible to directly count** the number of particles in the system.
+Thankfully, the particle can only perform a few **well-understood and observable actions**.
+The scientist hope that they can conclude the **number of particles** in the system by using this knowledge.
 
 ## Task
 Find the number of particles in the system at the end of the process.
@@ -23,10 +23,10 @@ Your function will take two inputs:
 
 ## Rules 
 - Each instruction has a special effect on the system
-  - DOUBLE : Doubles the number of particles in the system
-  - VANISH : Removes one particle from the system
-  - GENERATE : Adds one new particle to the system
-  - STABILIZE : The system stabilizes and any event occurring after this has no effect.
+  - `"DOUBLE"` : Doubles the number of particles in the system
+  - `"VANISH"` : Removes one particle from the system
+  - `"GENERATE"` : Adds one new particle to the system
+  - `"STABILIZE"` : The system stabilizes and any event occurring after this has no effect.
 
 
 ## Output

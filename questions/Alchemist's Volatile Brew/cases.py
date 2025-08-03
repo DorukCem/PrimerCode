@@ -1,5 +1,5 @@
 cases = [
-    -TestCase(
+    TestCase(
         inputs=(["DRAGON SCALE", "PHOENIX FEATHER", "UNICORN HORN"], 150),
         expected=51,
     ),

@@ -1,8 +1,8 @@
 # Vampire Ambush
-A vampire has been terrorizing your town. Your aim is to ambush him when
-he is in his bat form to strike him when he is fragile. You are gathering 
-logs of all bat sightings in the area to find the perfect time for the ambush.
-Some of these bats are just normal bats but thankfully the vampire bat has some distinctive qualities.
+A vampire has been terrorizing your town. Your aim is to 
+**ambush him when he is in his bat form** to strike him when he is fragile. You are gathering 
+**logs of all bat sightings** in the area to find the perfect time for the ambush.
+Some of these bats are just normal bats but thankfully the vampire bat has some **distinctive qualities**.
 
 ## Input
 Your function takes a single input 
@@ -24,7 +24,7 @@ For the above log:
 - The second log indicates a bat sighting at `13:52` with dimensions `16*29` and eyes `BLACK`
 
 A bat can be identified as vampire if both:
-- Its eyes are RED
+- Its eyes are `"RED"`
 - And its total size (the product of its dimensions) is bigger than `400`
 
 

@@ -1,5 +1,5 @@
 ```py
-def count_time_travel(logs: str):
+def count_time_travels(logs: str):
     date_length = len("[DD/MM/YYYY]")
 
     dates = []
@@ -16,6 +16,25 @@ def count_time_travel(logs: str):
         current = dates[i]
 
         if prev > current: 
+            count += 1
+    return count
+```
+
+```py
+def count_time_travels(logs: str):
+    dates = []
+    for line in logs.splitlines():
+        date, *_rest = line.split()
+        date = date.replace("[", "").replace("]", "")
+        d,m,y =  date.split("/")
+        dates.append((d,m,y))
+
+    count = 0
+    for i in range(1, len(dates)):
+        prev = dates[i-1]
+        current = dates[i]
+
+        if prev > current:
             count += 1
     return count
 ```

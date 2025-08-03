@@ -6,7 +6,7 @@ cases = [
             ['', '', '', ''],
             ['', '', 'Y', 'X'],
         ],),
-        expected={'X': 3, 'Y': 4}
+        expected={'X': 4, 'Y': 3}
     ),
     TestCase(
         inputs=([

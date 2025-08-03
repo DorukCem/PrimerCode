@@ -6,7 +6,7 @@ the crew has agreed that **all doppelgangers of the same person must now share a
 
 After every movie night, the movie is rated by all crew members to decide if it should be replayed in the future.
 As time has passed, the doppelgangers have now evolved to the point **where each of them can rate the movie differently**.
-Under the new voting system, it has been decided that the **average rating given by all doppelgangers of a person will be counted as that person’s final rating**.
+Under the new voting system, it has been decided that the **average rating given by all doppelgangers of a person** will be counted as that person’s final rating.
 
 ## Task
 Find the average rating for a movie while accounting for the rule for doppelgangers

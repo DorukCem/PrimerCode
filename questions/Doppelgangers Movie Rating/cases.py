@@ -13,7 +13,7 @@ cases = [
                 ("Zaphod", 4),
                 ("Ford", 5),
                 ("Ford", 1),
-            ]
+            ],
         ),
         expected=3.3,
     ),

@@ -1,15 +1,18 @@
 # Word Search
-Grandma really enjoys completing word search puzzles after every 30 she finishes, she gets a special coupon.
+Grandma really enjoys completing word search puzzles.
 Lately, though, her eyesight isn’t what it used to be, and she’s been having trouble finding all the words in the puzzle.
+Looking over her puzzle, you spot some words right away. Maybe you can complete the puzzle to get her closer to her coupon.
 
 ## Input
 Your function takes two inputs: 
 - `grid`: a 2D list of single-character strings.
 - `word`: your target word
-The word can appear either left-to-right in a row or top-to-bottom in a column.
+
+## Rules
+The `word` can appear either left-to-right in a row or top-to-bottom in a column in the grid.
 
 ## Output
-Return the number of times the word appears in the grid.
+Return the number of times the word appears in the grid according to the rules.
 
 ## Example
 ```py
