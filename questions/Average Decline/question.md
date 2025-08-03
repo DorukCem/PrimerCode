@@ -1,7 +1,5 @@
 # Average Decline
 
-
-
 Unsatisfied with his last experiment, our critic from last time still has his suspicions that the quality of dishes in restaurants decline over time.
 This time he intends to use a "better" method.
 
@@ -15,6 +13,7 @@ Return `True` if average of the first half of the reviews is greater than the av
 
 ## Rules
 - For lists with odd number of items, the middle element is part of the first half
+- `reviews` will always have at least 2 items 
 
 
 ## Example

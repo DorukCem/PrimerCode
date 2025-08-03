@@ -2,7 +2,7 @@
 
 
 The Goblin King demands **tribute**, but he's a stickler for **paperwork**. 
-All tribute reports must be a **string formatted with each item, its quantity, and a mandatory compliment**, or he'll throw a royal tantrum.
+All tribute reports must be a string **formatted** with each item, its quantity, and a mandatory compliment, or he'll throw a **royal tantrum**.
 
 ## Task
 Return a formatted string using the inputs

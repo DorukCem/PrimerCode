@@ -9,13 +9,13 @@ Your function takes a single input
 - `places`, which is a list containing both numbers and strings. Each item represents how much Lucy liked a place.
 
 ## Rules
-- For each item:
-  - If the item is a number, it should be added as-is.
-  - If the item is a string, its value is equal to 10 times its length.
+For each item:
+- If the item is a number, it should be added as-is.
+- If the item is a string, its value is equal to 10 times its length.
 
   
 ## Output  
-Return the total sum of all values in the list.
+Return the total sum of all values in the list calculated with the rules described above.
 
 ## Example
 ```py

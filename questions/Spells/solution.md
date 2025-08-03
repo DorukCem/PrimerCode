@@ -2,23 +2,12 @@ Loop approach
 ```py
 def cast_spell(spell: str):
     result = ""
-    searching = False
-    for letter in spell:
-        if letter == "*":
-            start_search = not start_search
+    search = False
+    for x in spell:
+        if x == "*":
+            search = not search
             continue
-
-        if start_search:
-            result += letter
-    
+        if search:
+            result += x
     return result
-```
-
-Substring approach
-```py
-def cast_spell(spell: str):
-    first = spell.find("*")
-    second = spell[first+1:].find("*")
-
-    return spell[first+1:second]
 ```

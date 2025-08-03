@@ -23,8 +23,8 @@ You should return the total number of thrill generated.
 assert(calculate_thrill([0, 1, 4, 15, 20, 10 , 5, 10, 30 , 50, 10, 2] == 2460))
 ```
 Is correct because:
-- The ascent from 0 to 20 generates 20 anticipation
+- The ascent from 0 to 20 generates `20` anticipation
 - The descent from 20 to 5 generates `15 * 20 = 300` thrill 
-- the ascent from 5 to 50 generates 45 anticipation
+- the ascent from 5 to 50 generates `45` anticipation
 - the descent from 50 to 2 generates `48 * 45 = 2160` thrill
-- The total amount of thrill generated is 2460
+- The total amount of thrill generated is `2460`

@@ -13,7 +13,7 @@ Return a version of the file where every occurrence of any name in the list is r
 
 ## Example
 ```py
-file = "Agent Alice met Agent Bob at the secret base. Alice handed the file to Bob."
+file_content = "Agent Alice met Agent Bob at the secret base. Alice handed the file to Bob."
 names = ["Alice", "Bob"]
 
 censored_version = "Agent ***** met Agent *** at the secret base. ***** handed the file to ***."

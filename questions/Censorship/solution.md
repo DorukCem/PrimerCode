@@ -1,7 +1,7 @@
 ```py
-def censor(file: str, names: list[str]):
+def censor(file_content: str, names: list[str]):
    
-    result = file
+    result = file_content
     
     # Replace each name with asterisks of the same length
     for name in names:

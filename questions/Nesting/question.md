@@ -2,7 +2,7 @@
 
 
 It's Christmas, and you're going to unwrap your gift from your aunt. But as you begin to unwrap it, you're faced with a dilemma:
-Not only does the package consist of other packages, but even the inner packages may contain packages in them, all nested one inside the other!
+Not only does the **package consist of other packages**, but even the **inner packages may contain packages in them**, all nested one inside the other!
 
 ## Task
 Your task is to unpack all these layers to reveal the innermost items.

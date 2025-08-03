@@ -1,4 +1,4 @@
 {
   "function_name": "fits_range",
-  "function_args": ["gnomes: list[int], range: tuple[int, int]"]
+  "function_args": ["gnomes: list[int], ride_range: tuple[int, int]"]
 }

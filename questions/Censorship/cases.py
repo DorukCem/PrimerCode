@@ -17,7 +17,7 @@ cases = [
     ),
     TestCase(
         inputs=("AliceAliceAlice", ["Alice"]),
-        expected="*******************"  
+        expected="***************"  
     ),
     TestCase(
         inputs=("", ["Alice"]),

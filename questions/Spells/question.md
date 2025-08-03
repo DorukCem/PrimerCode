@@ -10,7 +10,7 @@ Your function takes a single input
 Return the part between the asterisk (`*`) symbols inside the string `spell`; this is the actual magical phrase.
 
 ## Rules
-- There will always be two asterisk (`*`) symbols present in the string
+- There will always be exactly two asterisk (`*`) symbols present in the string
 
 ## Example
 ```py

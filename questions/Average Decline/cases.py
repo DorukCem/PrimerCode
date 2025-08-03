@@ -19,14 +19,7 @@ cases = [
         inputs=([9, 8, 7, 6, 4, 3, 2, 1],),
         expected=True,  
     ),
-    TestCase(
-        inputs=([1],),
-        expected=True,  
-    ),
-    TestCase(
-        inputs=([],),
-        expected=False,  
-    ),
+
     TestCase(
         inputs=([3, 3, 3, 3, 2, 2, 2, 2],),
         expected=True,  

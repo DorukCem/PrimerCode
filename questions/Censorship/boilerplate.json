@@ -1,4 +1,4 @@
 {
   "function_name": "censor",
-  "function_args": ["file: str, names: list[str]"]
+  "function_args": ["file_content: str, names: list[str]"]
 }

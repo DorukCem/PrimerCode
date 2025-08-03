@@ -1,6 +1,6 @@
 # Nicknames
 
-Orc squads are selecting nicknames among themselves. The orc hierarchy for each squad will be based on how good their nickname is. The quality of an orc's nickname is determined by how many words it contains. More words mean a better nickname, as it signifies the orc has many remarkable traits!
+Orc squads are selecting nicknames among themselves. The orc hierarchy for each squad will be based on **how good their nickname is**. The quality of an orc's nickname is determined by **how many words it contains**. More words mean a better nickname, as it signifies the orc has **many remarkable traits**!
 
 ## Input
 Your function takes a single input
