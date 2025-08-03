@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import type { QuestionList } from "../types/QuestionList";
 import {
   CheckCheck, Search, Brackets, Braces, Hash, Grid3X3, TextSearch,
-  CaseSensitive, Rabbit, PawPrint, SquareFunction, Repeat, LetterText, Binary, CaseUpper
+  PawPrint, SquareFunction, Repeat, LetterText, Binary, CaseUpper
 } from "lucide-react";
 import Select, { components, type MultiValueGenericProps, type OptionProps } from "react-select";
 import type { QuestionOverview } from "../types/QuestionOverview";
@@ -22,9 +22,28 @@ const tagIconMap: Record<string, any> = {
   bool: Binary
 };
 
+// NEW: Human-readable labels for tags
+const tagLabelMap: Record<string, string> = {
+  list: "Lists",
+  dict: "Dictionaries", 
+  set: "Sets",
+  grid: "Grid/Matrix",
+  parse: "String Parsing",
+  string: "String Manipulation",
+  type: "Data Types",
+  function: "Functions",
+  loop: "Loops/Iteration",
+  format: "String Formatting",
+  bool: "Boolean Logic"
+};
+
 function getIconForTag(tag: string): any {
   let icon = tagIconMap[tag];
   return icon;
+}
+
+function getLabelForTag(tag: string): string {
+  return tagLabelMap[tag] || tag;
 }
 
 type TagOptionType = { value: string; label: string; icon?: any };
@@ -79,7 +98,7 @@ export default function QuestionList() {
     () =>
       allTags.map((t) => ({
         value: t,
-        label: t,
+        label: getLabelForTag(t), // Use human-readable label
         icon: getIconForTag(t),
       })),
     [allTags]
@@ -241,11 +260,11 @@ export default function QuestionList() {
 
               {/* RIGHT: tags (icons) then check */}
               <div className="flex items-center gap-3">
-                {/* Tag icons */}
+                {/* Tag icons with human-readable tooltips */}
                 <div className="flex items-center gap-2 mr-4">
                   {question.tags?.map((tag) => {
                     const Icon = getIconForTag(tag);
-                    const label = tag;
+                    const label = getLabelForTag(tag); // Use human-readable label for tooltip
                     return (
                       <span
                         key={tag}
@@ -268,9 +287,7 @@ export default function QuestionList() {
                     <CheckCheck
                       size={20}
                       className={
-                        solvedQuestions[question.id]?.synced
-                          ? "text-green-500"
-                          : "text-orange-500"
+                        "text-green-500"
                       }
                     />
                   )}

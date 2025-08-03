@@ -42,6 +42,7 @@ pub struct QuestionMDResponse {
     pub question: String,
     pub hint: String,
     pub solution: String,
+    pub id: i32
 }
 
 #[derive(TS, Debug, Deserialize, Serialize)]

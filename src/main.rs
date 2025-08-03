@@ -208,7 +208,7 @@ async fn get_question_boilerplate(
                 serde_json::from_str(&question.function_args).unwrap_or_default();
             let args_joined = args.join(", ");
             let signature = format!(
-                "class Solution:\n    def {}({}):\n        pass",
+                "def {}({}):\n    pass",
                 name, args_joined
             );
             signature.into_response()
@@ -236,6 +236,7 @@ async fn get_question_md(
                 question: q.question_md,
                 hint: q.hint_md,
                 solution: q.solution_md,
+                id: q.id
             };
             ([(header::CONTENT_TYPE, "application/json")], Json(response)).into_response()
         }
@@ -253,7 +254,7 @@ async fn get_question_md(
 fn inject_code(content: String, question: Question) -> String {
     let imports = std::fs::read_to_string("injections/imports.py")
         .expect("Expected to find injections folder");
-    let change_name = format!("__some_function = Solution.{}", question.function_name);
+    let change_name = format!("__some_function = {}", question.function_name);
     let cases = question.cases;
 
     let strategy = match question.test_strategy.as_ref().map(String::as_ref) {
@@ -357,7 +358,7 @@ async fn post_submit_code(
                                 }
 
                                 let message = if all_passed {
-                                    "Code executed successfully".to_string()
+                                    "All tests have passed".to_string()
                                 } else {
                                     "Some tests failed".to_string()
                                 };
