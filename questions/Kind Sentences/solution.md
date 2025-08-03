@@ -1,5 +1,5 @@
 ```py
-def is_polite(sentence: str ):
-    lower_case_sentence = sentence.to_lower()
-    return "polite" in lower_case_sentence
+def is_kind(sentence: str ):
+    lower_case_sentence = sentence.lower()
+    return "please" in lower_case_sentence
 ```

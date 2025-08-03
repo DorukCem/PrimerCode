@@ -45,12 +45,15 @@ export default function CodeOutput({ error, response, loading }: any) {
                 : "bg-red-900/30 border border-red-800 text-amber-100"
             }`}
           >
-            <div className="flex items-center gap-3">
+            <div className="flex flex-col  gap-3">
               {!response.success ? (
-                <AlertTriangleIcon size={20} className="text-red-400" />
+                <div className="flex items-center border-b-1">
+                  <AlertTriangleIcon size={20} className="text-red-400 mr-2" />
+                  <span className="font-bold text-lg">Error</span>
+                </div>
               ) : null}
 
-              <h2 className="font-medium text-white">{response.message}</h2>
+              <h2 className="font-medium text-white whitespace-pre">{response.message}</h2>
             </div>
           </div>
 

@@ -10,6 +10,6 @@ Return `True` if the `sentence` contains the word `"please"`, **regardless of ca
 
 ## Example
 ```py
-assert(is_polite("Please help me") == True)
+assert(is_kind("Please help me") == True)
 ```
 is correct because it has the word "please" in it

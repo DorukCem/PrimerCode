@@ -311,7 +311,7 @@ async fn post_submit_code(
                                 question_id,
                                 success: false,
                                 message: format!(
-                                    "Execution error: {}, signal: {:?}, stdout: {}",
+                                    "Execution error: {} \nsignal: {:?} \nstdout: {}",
                                     format_stderr(&piston_response.run.stderr),
                                     piston_response.run.signal,
                                     piston_response.run.stdout
