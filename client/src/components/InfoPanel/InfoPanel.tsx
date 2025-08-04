@@ -5,6 +5,7 @@ import SolutionTab from "./SolutionTab";
 import { useEffect, useState, useMemo } from "react";
 import { Check } from "lucide-react";
 import type { QuestionMDResponse } from "../../types/QuestionMDResponse";
+import API_CONFIG from "../../config/api";
 
 export default function InfoPanel({ slug, resetSolved }: any) {
   const [questionMD, setQuestionMD] = useState<QuestionMDResponse | null>(null);
@@ -20,7 +21,7 @@ export default function InfoPanel({ slug, resetSolved }: any) {
   const isSolved = questionMD?.id ? solvedQuestions[questionMD.id] : false;
 
   useEffect(() => {
-    fetch(`http://127.0.0.1:3000/question/${slug}`)
+    fetch(`${API_CONFIG.BASE_URL}/question/${slug}`)
       .then((response) => {
         if (!response.ok) {
           return response.text().then((text) => {

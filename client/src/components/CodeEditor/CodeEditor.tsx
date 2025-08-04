@@ -6,6 +6,7 @@ import type { CodeSubmissionResponse } from "../../types/CodeSubmissionResponse"
 import type { CodeInput } from "../../types/CodeInput";
 
 import Modal from "./Modal";
+import API_CONFIG from "../../config/api";
 
 export default function CodeEditor({ slug, resetSolved, setResetSolved}: any) {
   const [resetPanels, setResetPanels] = useState(1);
@@ -67,7 +68,7 @@ export default function CodeEditor({ slug, resetSolved, setResetSolved}: any) {
 
   useEffect(() => {
     // Fetch boilerplate from the backend
-    fetch(`http://127.0.0.1:3000/boilerplate/${slug}`)
+    fetch(`${API_CONFIG.BASE_URL}/boilerplate/${slug}`)
       .then((res) => {
         if (!res.ok) {
           throw new Error(`Failed to fetch: ${res.status}`);
@@ -122,7 +123,7 @@ export default function CodeEditor({ slug, resetSolved, setResetSolved}: any) {
       content: sourceCode,
     };
 
-    fetch(`http://127.0.0.1:3000/submit_code/${slug}`, {
+    fetch(`${API_CONFIG.BASE_URL}/submit_code/${slug}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

@@ -5,6 +5,7 @@ import {
   useContext,
   type ReactNode,
 } from "react";
+import API_CONFIG from "../config/api";
 
 export interface User {
   id: string;
@@ -24,7 +25,7 @@ interface AuthContextType {
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-const API_BASE_URL = "http://127.0.0.1:3000";
+const API_BASE_URL = `${API_CONFIG.BASE_URL}`;
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);

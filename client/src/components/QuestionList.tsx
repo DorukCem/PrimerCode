@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import Select, { components, type MultiValueGenericProps, type OptionProps } from "react-select";
 import type { QuestionOverview } from "../types/QuestionOverview";
+import API_CONFIG from "../config/api.ts";
 
 const tagIconMap: Record<string, any> = {
   list: Brackets,
@@ -57,7 +58,7 @@ export default function QuestionList() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   useEffect(() => {
-    fetch("http://127.0.0.1:3000/all-questions", {
+    fetch(`${API_CONFIG.BASE_URL}/all-questions`, {
       credentials: "include",
     })
       .then((response) => {
