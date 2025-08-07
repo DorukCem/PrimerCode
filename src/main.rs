@@ -14,7 +14,7 @@ use reqwest::{StatusCode, header};
 use serde_json::json;
 use std::{env, sync::Arc, time::Duration};
 use tower_governor::{
-    governor::{GovernorConfig, GovernorConfigBuilder}, key_extractor::SmartIpKeyExtractor, GovernorLayer
+    governor::GovernorConfigBuilder, key_extractor::SmartIpKeyExtractor, GovernorLayer
 };
 use tower_http::cors::CorsLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
@@ -25,7 +25,6 @@ use types::{
 use crate::{
     auth::{AppState, AuthUser, create_redis_store, oauth_client},
     models::NewSolved,
-    schema::questions,
     types::{QuestionIds, QuestionOverview},
 };
 
