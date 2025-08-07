@@ -1,3 +1,4 @@
 /target
 generator.py
 database.db
+.env
