@@ -17,7 +17,6 @@ export default function CodeEditor({ slug, resetSolved, setResetSolved}: any) {
   const [boilerplate, setBoilerplate] = useState("");
   const [editorValue, setEditorValue] = useState("# Loading...");
   const [editorLoading, setEditorLoading] = useState(true);
-  const [isSaving, setIsSaving] = useState(false);
 
   const [response, setResponse] = useState<CodeSubmissionResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -40,10 +39,8 @@ export default function CodeEditor({ slug, resetSolved, setResetSolved}: any) {
         clearTimeout(saveTimeoutRef.current);
       }
 
-      setIsSaving(true);
       saveTimeoutRef.current = setTimeout(() => {
         localStorage.setItem(getStorageKey(), value);
-        setIsSaving(false);
       }, 500); // Save after 500ms of no changes
     },
     [slug]
@@ -110,7 +107,6 @@ export default function CodeEditor({ slug, resetSolved, setResetSolved}: any) {
       clearTimeout(saveTimeoutRef.current);
     }
     localStorage.removeItem(getStorageKey());
-    setIsSaving(false);
   };
 
   const getCode = () => {
