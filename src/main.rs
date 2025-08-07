@@ -12,7 +12,10 @@ use http::{HeaderValue, Method};
 use models::{Question, QuestionSummary};
 use reqwest::{StatusCode, header};
 use serde_json::json;
-use std::env;
+use std::{env, sync::Arc, time::Duration};
+use tower_governor::{
+    governor::{GovernorConfig, GovernorConfigBuilder}, key_extractor::SmartIpKeyExtractor, GovernorLayer
+};
 use tower_http::cors::CorsLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use types::{
@@ -32,8 +35,6 @@ pub mod models;
 pub mod schema;
 mod types;
 
-// TODO ?? Procedurally generate some decoration for each question
-// TODO add next/prev question button
 // TODO Production Setup: In production, you'll want to use proper domain names and ensure cookies are properly configured with the Secure flag for HTTPS
 // TODO Production Setup: Start redis on that server or something, right now on my computer redis is starting on boot
 
@@ -77,6 +78,30 @@ async fn main() {
         pool: pool.clone(),
     };
 
+    // Allow bursts with up to five requests per IP address
+    // and replenishes one element every two seconds
+    // We Box it because Axum 0.6 requires all Layers to be Clone
+    // and thus we need a static reference to it
+    let governor_conf = Arc::new(
+        GovernorConfigBuilder::default()
+            .key_extractor(SmartIpKeyExtractor)
+            .per_second(2)
+            .burst_size(5)
+            .finish()
+            .unwrap(),
+    );
+
+    let governor_limiter = governor_conf.limiter().clone();
+    let interval = Duration::from_secs(60);
+    // a separate background task to clean up
+    std::thread::spawn(move || {
+        loop {
+            std::thread::sleep(interval);
+            tracing::info!("rate limiting storage size: {}", governor_limiter.len());
+            governor_limiter.retain_recent();
+        }
+    });
+
     let cors = CorsLayer::new()
         .allow_origin(
             "http://127.0.0.1:5173"
@@ -102,6 +127,9 @@ async fn main() {
         .route("/auth/status", get(auth::auth_status))
         .route("/sync-questions", post(sync_solved_questions))
         .with_state(app_state)
+        .layer(GovernorLayer {
+            config: governor_conf,
+        })
         .layer(cors);
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
@@ -125,12 +153,16 @@ async fn get_all_questions(State(pool): State<DbPool>) -> impl IntoResponse {
 
     match get_question_summaries(conn) {
         Ok(summaries) => {
-            let questions = summaries.into_iter().map(|s| QuestionOverview {
-                id: s.id,
-                slug: s.slug,
-                title: s.title,
-                tags: serde_json::from_str::<Vec<String>>(&s.tags).expect("Should never be invalid JSON"),
-            }).collect();
+            let questions = summaries
+                .into_iter()
+                .map(|s| QuestionOverview {
+                    id: s.id,
+                    slug: s.slug,
+                    title: s.title,
+                    tags: serde_json::from_str::<Vec<String>>(&s.tags)
+                        .expect("Should never be invalid JSON"),
+                })
+                .collect();
             Json(QuestionList { questions }).into_response()
         }
         Err(err) => (
@@ -207,10 +239,7 @@ async fn get_question_boilerplate(
             let args: Vec<String> =
                 serde_json::from_str(&question.function_args).unwrap_or_default();
             let args_joined = args.join(", ");
-            let signature = format!(
-                "def {}({}):\n    pass",
-                name, args_joined
-            );
+            let signature = format!("def {}({}):\n    pass", name, args_joined);
             signature.into_response()
         }
         Err(e) => {
@@ -236,7 +265,7 @@ async fn get_question_md(
                 question: q.question_md,
                 hint: q.hint_md,
                 solution: q.solution_md,
-                id: q.id
+                id: q.id,
             };
             ([(header::CONTENT_TYPE, "application/json")], Json(response)).into_response()
         }
