@@ -103,7 +103,7 @@ async fn main() {
 
     let cors = CorsLayer::new()
         .allow_origin(
-            "http://127.0.0.1:5173"
+            dotenvy::var("FRONTEND_ORIGIN").expect("Expected to find FRONTEND_ORIGIN in env")
                 .parse::<HeaderValue>()
                 .expect("Expected to parse origin"),
         )
