@@ -280,7 +280,7 @@ async fn get_question_md(
 }
 
 fn inject_code(content: String, question: Question) -> String {
-    let imports = std::fs::read_to_string("injections/imports.py")
+    let imports = std::fs::read_to_string("~/dev/wilderness/injections/imports.py")
         .expect("Expected to find injections folder");
     let change_name = format!("__some_function = {}", question.function_name);
     let cases = question.cases;
@@ -290,7 +290,7 @@ fn inject_code(content: String, question: Question) -> String {
         Some(x) => panic!("Unexpected data in database: test_strategy= {x}"),
         None => "standard",
     };
-    let py_runner = std::fs::read_to_string(format!("injections/{strategy}.py"))
+    let py_runner = std::fs::read_to_string(format!("~/dev/wilderness/injections/{strategy}.py"))
         .expect("Expected to find injections folder");
 
     format!("{imports}\n\n{content}\n\n{change_name}\n\n{cases}\n\n{py_runner}")
