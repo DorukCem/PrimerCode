@@ -14,7 +14,7 @@ use reqwest::{StatusCode, header};
 use serde_json::json;
 use std::{env, sync::Arc, time::Duration};
 use tower_governor::{
-    governor::GovernorConfigBuilder, key_extractor::SmartIpKeyExtractor, GovernorLayer
+    GovernorLayer, governor::GovernorConfigBuilder, key_extractor::SmartIpKeyExtractor,
 };
 use tower_http::cors::CorsLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
@@ -77,33 +77,34 @@ async fn main() {
         pool: pool.clone(),
     };
 
-    // Allow bursts with up to five requests per IP address
-    // and replenishes one element every two seconds
-    // We Box it because Axum 0.6 requires all Layers to be Clone
-    // and thus we need a static reference to it
-    let governor_conf = Arc::new(
-        GovernorConfigBuilder::default()
-            .key_extractor(SmartIpKeyExtractor)
-            .per_second(2)
-            .burst_size(5)
-            .finish()
-            .unwrap(),
-    );
+    // // Allow bursts with up to five requests per IP address
+    // // and replenishes one element every two seconds
+    // // We Box it because Axum 0.6 requires all Layers to be Clone
+    // // and thus we need a static reference to it
+    // let governor_conf = Arc::new(
+    //     GovernorConfigBuilder::default()
+    //         .key_extractor(SmartIpKeyExtractor)
+    //         .per_second(2)
+    //         .burst_size(5)
+    //         .finish()
+    //         .unwrap(),
+    // );
 
-    let governor_limiter = governor_conf.limiter().clone();
-    let interval = Duration::from_secs(60);
-    // a separate background task to clean up
-    std::thread::spawn(move || {
-        loop {
-            std::thread::sleep(interval);
-            tracing::info!("rate limiting storage size: {}", governor_limiter.len());
-            governor_limiter.retain_recent();
-        }
-    });
-
+    // let governor_limiter = governor_conf.limiter().clone();
+    // let interval = Duration::from_secs(60);
+    // // a separate background task to clean up
+    // std::thread::spawn(move || {
+    //     loop {
+    //         std::thread::sleep(interval);
+    //         tracing::info!("rate limiting storage size: {}", governor_limiter.len());
+    //         governor_limiter.retain_recent();
+    //     }
+    // });
+  
     let cors = CorsLayer::new()
         .allow_origin(
-            dotenvy::var("FRONTEND_ORIGIN").expect("Expected to find FRONTEND_ORIGIN in env")
+            dotenvy::var("FRONTEND_ORIGIN")
+                .expect("Expected to find FRONTEND_ORIGIN in env")
                 .parse::<HeaderValue>()
                 .expect("Expected to parse origin"),
         )
@@ -126,9 +127,9 @@ async fn main() {
         .route("/auth/status", get(auth::auth_status))
         .route("/sync-questions", post(sync_solved_questions))
         .with_state(app_state)
-        .layer(GovernorLayer {
-            config: governor_conf,
-        })
+        // .layer(GovernorLayer {
+        //     config: governor_conf,
+        // })
         .layer(cors);
 
     let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
@@ -280,7 +281,7 @@ async fn get_question_md(
 }
 
 fn inject_code(content: String, question: Question) -> String {
-    let imports = std::fs::read_to_string("~/dev/wilderness/injections/imports.py")
+    let imports = std::fs::read_to_string("injections/imports.py")
         .expect("Expected to find injections folder");
     let change_name = format!("__some_function = {}", question.function_name);
     let cases = question.cases;
@@ -290,7 +291,7 @@ fn inject_code(content: String, question: Question) -> String {
         Some(x) => panic!("Unexpected data in database: test_strategy= {x}"),
         None => "standard",
     };
-    let py_runner = std::fs::read_to_string(format!("~/dev/wilderness/injections/{strategy}.py"))
+    let py_runner = std::fs::read_to_string(format!("injections/{strategy}.py"))
         .expect("Expected to find injections folder");
 
     format!("{imports}\n\n{content}\n\n{change_name}\n\n{cases}\n\n{py_runner}")
