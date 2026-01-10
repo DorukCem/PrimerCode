@@ -1,0 +1,36 @@
+# ---------- Build stage ----------
+FROM rust:1.85 as builder
+
+WORKDIR /app
+
+# Cache dependencies
+COPY Cargo.toml Cargo.lock ./
+COPY src ./src
+COPY build.rs ./
+COPY injections ./injections
+RUN cargo build --release
+
+# ---------- Runtime stage ----------
+FROM debian:bookworm-slim
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y \
+    ca-certificates \
+    libssl3 \
+    libsqlite3-0 \
+    && rm -rf /var/lib/apt/lists/*
+
+
+COPY --from=builder /app/target/release/wilderness /app/wilderness
+COPY --from=builder /app/injections /app/injections
+
+# SQLite DB location
+VOLUME ["/app/data"]
+
+ENV DATABASE_URL=/app/data/database.db
+ENV RUST_LOG=info
+
+EXPOSE 3000
+
+CMD ["./wilderness"]

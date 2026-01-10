@@ -77,29 +77,6 @@ async fn main() {
         pool: pool.clone(),
     };
 
-    // // Allow bursts with up to five requests per IP address
-    // // and replenishes one element every two seconds
-    // // We Box it because Axum 0.6 requires all Layers to be Clone
-    // // and thus we need a static reference to it
-    // let governor_conf = Arc::new(
-    //     GovernorConfigBuilder::default()
-    //         .key_extractor(SmartIpKeyExtractor)
-    //         .per_second(2)
-    //         .burst_size(5)
-    //         .finish()
-    //         .unwrap(),
-    // );
-
-    // let governor_limiter = governor_conf.limiter().clone();
-    // let interval = Duration::from_secs(60);
-    // // a separate background task to clean up
-    // std::thread::spawn(move || {
-    //     loop {
-    //         std::thread::sleep(interval);
-    //         tracing::info!("rate limiting storage size: {}", governor_limiter.len());
-    //         governor_limiter.retain_recent();
-    //     }
-    // });
   
     let cors = CorsLayer::new()
         .allow_origin(
@@ -127,16 +104,13 @@ async fn main() {
         .route("/auth/status", get(auth::auth_status))
         .route("/sync-questions", post(sync_solved_questions))
         .with_state(app_state)
-        // .layer(GovernorLayer {
-        //     config: governor_conf,
-        // })
         .layer(cors);
 
-    let listener = tokio::net::TcpListener::bind("127.0.0.1:3000")
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
         .await
         .expect("Expected to create tcp server");
     println!(
-        "listening on http://127.0.0.1:{}",
+        "listening on http://0.0.0.0:{}",
         listener
             .local_addr()
             .expect("Expected to get local address")
@@ -307,7 +281,7 @@ async fn post_submit_code(
     let language = "python";
     let version = "3.10.0";
     // let piston_url = "https://emkc.org/api/v2/piston/execute";
-    let piston_url = "http://localhost:2000/api/v2/execute"; // Piston API endpoint
+    let piston_url = "http://host.docker.internal:2000/api/v2/execute"; // Piston API endpoint
 
     let question = get_single_question(&slug, &pool).expect("Expected to find question");
     let question_id = question.id;

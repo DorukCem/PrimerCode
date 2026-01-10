@@ -1,0 +1,36 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: wilderness-backend
+    env_file:
+      - .env
+    volumes:
+      - ./database.db:/app/data/database.db
+    ports:
+      - "3000:3000"
+    depends_on:
+      - redis
+    extra_hosts:
+    - "host.docker.internal:host-gateway"
+
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: wilderness-frontend
+    environment:
+      VITE_API_URL: http://localhost:3000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+  redis:
+    image: redis:7-alpine
+    container_name: wilderness-redis
+
+volumes:
+  db_data:
