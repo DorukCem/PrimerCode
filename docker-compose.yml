@@ -8,8 +8,7 @@ services:
       - .env
     volumes:
       - ./database.db:/app/data/database.db
-    ports:
-      - "3000:3000"
+    
     depends_on:
       - redis
     extra_hosts:
@@ -22,15 +21,24 @@ services:
       dockerfile: Dockerfile.frontend
     container_name: wilderness-frontend
     environment:
-      VITE_API_URL: http://localhost:3000
-    ports:
-      - "5173:5173"
+      VITE_API_URL: /api
+    
     depends_on:
       - backend
 
   redis:
     image: redis:7-alpine
     container_name: wilderness-redis
-
+  
+  nginx:
+    image: nginx:alpine
+    container_name: wilderness-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - backend
 volumes:
   db_data:

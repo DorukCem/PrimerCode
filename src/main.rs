@@ -78,16 +78,16 @@ async fn main() {
     };
 
     let cors = CorsLayer::new()
-        .allow_origin([
-            dotenvy::var("FRONTEND_ORIGIN")
-                .expect("Expected to find FRONTEND_ORIGIN in env")
-                .parse::<HeaderValue>()
-                .expect("Expected to parse origin"),
-            dotenvy::var("LAN_IP")
-                .expect("Expected to find LAN_IP in env")
-                .parse::<HeaderValue>()
-                .expect("Expected to parse origin"),
-        ])
+        // .allow_origin([
+        //     dotenvy::var("FRONTEND_ORIGIN")
+        //         .expect("Expected to find FRONTEND_ORIGIN in env")
+        //         .parse::<HeaderValue>()
+        //         .expect("Expected to parse origin"),
+        //     dotenvy::var("LAN_IP")
+        //         .expect("Expected to find LAN_IP in env")
+        //         .parse::<HeaderValue>()
+        //         .expect("Expected to parse origin"),
+        // ])
         .allow_methods([Method::GET, Method::POST, Method::OPTIONS])
         .allow_headers([header::CONTENT_TYPE, header::AUTHORIZATION, header::COOKIE])
         .allow_credentials(true); // This is crucial for cookies to work

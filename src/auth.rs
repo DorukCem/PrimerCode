@@ -282,7 +282,6 @@ pub async fn login_authorized(
         .context("failed to store session")?
         .context("unexpected error retrieving cookie value")?;
 
-    // Build the cookie - IMPORTANT: Remove Secure flag for localhost
     let cookie = format!("{COOKIE_NAME}={cookie}; SameSite=Lax; HttpOnly; Path=/");
 
     // Set cookie
