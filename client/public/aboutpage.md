@@ -44,13 +44,13 @@ Use: **[doruk.cem@gmail.com](mailto:doruk.cem@gmail.com)** to contact me.
 ## FAQ 
 
 ### There is an issue with a problem
-Create an issue here **TODO**
+Please contact me via email
 
 ### How can I support you
-There is a buy me a coffee button **TODO**. 
+There is a buy me a coffee button
 
 ### Can I use these questions
-**TODO**
+Please contact me to discuss details
 
 
 ## Recommended Resources
