@@ -10,10 +10,16 @@ services:
       - ./database.db:/app/data/database.db
     depends_on:
       - redis
+    extra_hosts:
+      - "host.docker.internal:host-gateway"  # Add this for Linux compatibility
+    networks:
+      - wilderness-net
 
   redis:
     image: redis:7-alpine
     container_name: wilderness-redis
+    networks:
+      - wilderness-net
 
   nginx:
     build:
@@ -29,7 +35,8 @@ services:
       - ./certbot/www:/var/www/certbot:ro
     depends_on:
       - backend
-    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    networks:
+      - wilderness-net
 
   certbot:
     image: certbot/certbot
@@ -38,3 +45,13 @@ services:
       - ./certbot/conf:/etc/letsencrypt
       - ./certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    networks:
+      - wilderness-net
+
+networks:
+  wilderness-net:
+    name: wilderness-net
+    driver: bridge
+
+volumes:
+  db_data:

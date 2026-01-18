@@ -34,8 +34,17 @@ pub mod models;
 pub mod schema;
 mod types;
 
-// TODO Production Setup: In production, you'll want to use proper domain names and ensure cookies are properly configured with the Secure flag for HTTPS
-// TODO Production Setup: Start redis on that server or something, right now on my computer redis is starting on boot
+// TODO add piston to deployment
+// TODO complete about page
+// TODO complete signup/signin
+// TODO fix app name / remove wilderness from everywhere
+// TODO Stop exposing backend port publicly
+// TODO CORS (maybe supposed to be handled by nginx)
+// TODO public keys?? 
+// TODO look at how looks from laptop
+// TODO add stat solving question now to about page
+// * Not urgent
+// TODO mobile view
 
 pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();
@@ -284,7 +293,7 @@ async fn post_submit_code(
     let language = "python";
     let version = "3.10.0";
     // let piston_url = "https://emkc.org/api/v2/piston/execute";
-    let piston_url = "http://host.docker.internal:2000/api/v2/execute"; // Piston API endpoint
+    let piston_url = "http://piston_api:2000/api/v2/execute"; // Piston API endpoint
 
     let question = get_single_question(&slug, &pool).expect("Expected to find question");
     let question_id = question.id;
