@@ -282,8 +282,7 @@ pub async fn login_authorized(
         .context("failed to store session")?
         .context("unexpected error retrieving cookie value")?;
 
-    let cookie = format!("{COOKIE_NAME}={cookie}; SameSite=Lax; HttpOnly; Path=/");
-
+    let cookie = format!("{COOKIE_NAME}={cookie}; SameSite=Lax; HttpOnly; Secure; Path=/");
     // Set cookie
     let mut headers = HeaderMap::new();
     headers.insert(
