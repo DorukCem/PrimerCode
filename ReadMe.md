@@ -1,13 +1,26 @@
-### How to run
-`cd client`
-`cargo run`
-`npm run dev`
-Inside piston folder:
-`docker compose up`
+# Primer Code
 
-Typescript might complain that it might cannot find the types folder but that should be created after `cargo run`
+A coding practice platform with automated test execution and user progress tracking.
 
-### Current Stack
-Rust Axum
-React
-Tailwind
+**Live Demo:** [primercode.app](https://primercode.app)
+
+## Tech Stack
+
+**Backend:** Rust (Axum framework)  
+**Frontend:** React + TypeScript + Tailwind CSS  
+**Database:** SQLite  
+**Cache:** Redis  
+**Code Execution:** Piston (self-hosted)  
+**Deployment:** Docker, Nginx, Let's Encrypt SSL
+**Small Scripts and Code execution** Python
+**Code execution Engine** [Piston Api](https://github.com/engineer-man/piston)
+
+
+## Features
+
+- **Open Source** - Free to use and contribute
+- **Integrated IDE** - Solve questions directly in the browser with real-time code execution
+- **Transparent Testing** - All test cases are visible before submission
+- **Learning Support** - Solutions and hints available for each question
+- **Progress Tracking** - Local storage by default, optional cloud sync with Google OAuth
+- **No Barriers** - Start solving questions immediately, no signup required

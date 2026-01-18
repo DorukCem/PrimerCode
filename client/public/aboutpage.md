@@ -43,15 +43,20 @@ Use: **[doruk.cem@gmail.com](mailto:doruk.cem@gmail.com)** to contact me.
 
 ## FAQ 
 
-### There is an issue with a problem
-Please contact me via email
+**Q: I found a bug in a problem**  
+A: Email me at [doruk.cem@gmail.com](mailto:doruk.cem@gmail.com)
 
-### How can I support you
-There is a buy me a coffee button
+**Q: Can I use these questions?**  
+A: Contact me to discuss. I'm open to it!
 
-### Can I use these questions
-Please contact me to discuss details
+**Q: How can I support this project?**  
+A: There's a "Buy Me a Coffee" button, or just spread the word!
 
+**Q: Why Python only?**  
+A: Python has the clearest syntax for beginners.
+
+**Q: Where is the Github page for this project?**
+A: [Here](https://github.com/DorukCem/PrimerCode)
 
 ## Recommended Resources
 

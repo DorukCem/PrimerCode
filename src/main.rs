@@ -34,9 +34,7 @@ pub mod models;
 pub mod schema;
 mod types;
 
-// TODO add piston to deployment
-// TODO complete about page
-// TODO complete signup/signin
+
 // TODO fix app name / remove wilderness from everywhere
 // TODO Stop exposing backend port publicly
 // TODO CORS (maybe supposed to be handled by nginx)
