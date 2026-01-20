@@ -4,3 +4,4 @@ database.db
 .env
 certbot/
 renew-certs.sh
+*.pem
