@@ -2,7 +2,7 @@
 
 ## Welcome
 
-Hi! I am the creator of this site. I hope that you find the questions here useful and fun.
+Hi! I am the creator of this site. I hope that you find the questions here useful and fun. 
 
 
 ## Purpose
@@ -12,12 +12,12 @@ This site is meant to serve as a set of programming questions, especially focusi
 
 ## Getting Started
 
-You can start solving questions immediately in any order. The questions are sorted from simple to less simple, but objectively giving questions a difficulty is notoriously difficult. You can optionally create an account to track the questions that you have solved across devices, but it will still be tracked on your browser’s local storage if you do not. Signup is entirely handled by OAuth; in general, this reveals no information about you beyond what is already public.
+You can start solving questions immediately in any order. The questions are sorted from simple to less simple, but objectively assigning questions a difficulty level is notoriously difficult. You can optionally create an account to track the questions that you have solved across devices, but it will still be tracked on your browser’s local storage if you do not. Signup is entirely handled by OAuth; in general, this reveals no information about you beyond what is already publicy available.
 
 
 ## How to Read a Question
 
-Each question is composed of two parts. The flavour text is meant to give some fun context to the question, and for the most part it is not required to solve the question. The actual question will always be below the flavor text, which should contain all information needed to solve the question. If you are not in the mood for reading a short story, you can just jump to that part.
+Each question is composed of two parts. The flavour text is meant to give some fun context to the question, and for the most part it is not required to solve the question. The actual question will always be below the flavour text, which should contain all information needed to solve the question. If you are not in the mood for reading a short story, you can just jump to that part.
 
 
 ## Features
@@ -31,7 +31,7 @@ You are free to employ any strategy for learning from these questions. My approa
 
 I would also try to scribble a solution without using code (on paper or a tool like Paint) before starting a question to build a diagram on how the code should act. You can see a good example of this practice [here](https://www.youtube.com/watch?v=KLlXCFG5TnA).
 
-If you are totally stuck and cannot produce anything even after trying to come up with a solution for 30 minutes, it is fine to look at the solution. At that point, you have already spent so much time trying to come up with a solution that once you are given the solution you will probably internalize it.
+If you are totally stuck and cannot produce anything even after trying to come up with a solution for 30 minutes, it is fine to look at the solution. At that point, you have already spent so much time trying to come up with a solution that once you are given the solution, you will probably internalize it.
 
 Again, feel free to use any approach; this is just my approach to coding questions.
 
@@ -55,7 +55,7 @@ A: There's a "Buy Me a Coffee" button, or just spread the word!
 **Q: Why Python only?**  
 A: Python has the clearest syntax for beginners.
 
-**Q: Where is the Github page for this project?**
+**Q: Where is the Github page for this project?**  
 A: [Here](https://github.com/DorukCem/PrimerCode)
 
 ## Recommended Resources

@@ -40,7 +40,7 @@ function HintButton({ children }: any) {
 
 export default function MarkdownRenderer({ content }: { content: string }) {
   return (
-    <div className="markdown-body h-full overflow-y-scroll">
+    <div className="markdown-body h-full overflow-y-auto">
       <Markdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeRaw]}

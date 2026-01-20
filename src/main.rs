@@ -8,14 +8,11 @@ use axum::{
 use db::DbPool;
 use diesel::{dsl::insert_or_ignore_into, prelude::*};
 use dotenvy::dotenv;
-use http::{HeaderValue, Method};
+use http::Method;
 use models::{Question, QuestionSummary};
 use reqwest::{StatusCode, header};
 use serde_json::json;
-use std::{env, sync::Arc, time::Duration};
-use tower_governor::{
-    GovernorLayer, governor::GovernorConfigBuilder, key_extractor::SmartIpKeyExtractor,
-};
+use std::env;
 use tower_http::cors::CorsLayer;
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 use types::{
@@ -39,7 +36,6 @@ mod types;
 // TODO Stop exposing backend port publicly
 // TODO CORS (maybe supposed to be handled by nginx)
 // TODO public keys?? 
-// TODO look at how looks from laptop
 // TODO add stat solving question now to about page
 // * Not urgent
 // TODO mobile view
