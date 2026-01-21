@@ -31,14 +31,9 @@ pub mod models;
 pub mod schema;
 mod types;
 
-
-// TODO fix app name / remove wilderness from everywhere
-// TODO Stop exposing backend port publicly
-// TODO CORS (maybe supposed to be handled by nginx)
-// TODO public keys?? 
-// TODO add stat solving question now to about page
-// * Not urgent
-// TODO mobile view
+// TODO welcome page
+// TODO security
+// TODO design doc
 
 pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();

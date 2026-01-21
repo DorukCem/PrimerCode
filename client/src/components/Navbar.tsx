@@ -6,9 +6,9 @@ export default function Navbar() {
   const { user } = useAuth();
 
   return (
-    <nav className="bg-neutral-800 p-4 shadow-md text-lg">
+    <nav className="bg-neutral-800 p-4 shadow-md text-base sm:text-lg">
       <div className="mx-4 flex justify-between items-center">
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-4 sm:gap-8">
           <Link
             to="/questions"
             className="text-gray-300 hover:text-white font-medium"
@@ -19,7 +19,7 @@ export default function Navbar() {
             About
           </Link>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="hidden sm:flex items-center gap-4">
           {/* Buy Me a Coffee Button */}
           <a
             href="https://buymeacoffee.com/DorukCem"
