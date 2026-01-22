@@ -31,7 +31,6 @@ pub mod models;
 pub mod schema;
 mod types;
 
-// TODO security
 // TODO design doc
 
 pub fn establish_connection() -> SqliteConnection {
@@ -74,21 +73,6 @@ async fn main() {
         pool: pool.clone(),
     };
 
-    let cors = CorsLayer::new()
-        // .allow_origin([
-        //     dotenvy::var("FRONTEND_ORIGIN")
-        //         .expect("Expected to find FRONTEND_ORIGIN in env")
-        //         .parse::<HeaderValue>()
-        //         .expect("Expected to parse origin"),
-        //     dotenvy::var("LAN_IP")
-        //         .expect("Expected to find LAN_IP in env")
-        //         .parse::<HeaderValue>()
-        //         .expect("Expected to parse origin"),
-        // ])
-        .allow_methods([Method::GET, Method::POST, Method::OPTIONS])
-        .allow_headers([header::CONTENT_TYPE, header::AUTHORIZATION, header::COOKIE])
-        .allow_credentials(true); // This is crucial for cookies to work
-
     let router = Router::new()
         .route("/", get(auth::index))
         .route("/all-questions", get(get_all_questions))
@@ -103,8 +87,7 @@ async fn main() {
         .route("/auth/me", get(auth::get_current_user))
         .route("/auth/status", get(auth::auth_status))
         .route("/sync-questions", post(sync_solved_questions))
-        .with_state(app_state)
-        .layer(cors);
+        .with_state(app_state);
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
         .await
