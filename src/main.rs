@@ -31,7 +31,6 @@ pub mod models;
 pub mod schema;
 mod types;
 
-// TODO welcome page
 // TODO security
 // TODO design doc
 

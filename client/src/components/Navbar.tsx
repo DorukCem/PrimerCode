@@ -6,8 +6,8 @@ export default function Navbar() {
   const { user } = useAuth();
 
   return (
-    <nav className="bg-neutral-800 p-4 shadow-md text-base sm:text-lg">
-      <div className="mx-4 flex justify-between items-center">
+    <nav className="bg-neutral-800 p-4 shadow-md text-base sm:text-lg ">
+      <div className="md:mx-4 flex justify-between items-center">
         <div className="flex items-center gap-4 sm:gap-8">
           <Link
             to="/questions"
@@ -15,7 +15,7 @@ export default function Navbar() {
           >
             Questions
           </Link>
-          <Link to="/" className="text-gray-300 hover:text-white font-medium mr-4">
+          <Link to="/about" className="text-gray-300 hover:text-white font-medium mr-4">
             About
           </Link>
         </div>

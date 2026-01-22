@@ -8,6 +8,7 @@ import { useEffect } from "react";
 import type { QuestionIds } from "./types/QuestionIds";
 import About from "./components/About";
 import API_CONFIG from "./config/api";
+import LandingPage from "./components/LandingPage";
 
 function App() {
   const { isAuthenticated, isLoading } = useAuth();
@@ -101,7 +102,8 @@ function App() {
         <Navbar />
         <div className="flex-1 overflow-auto">
           <Routes>
-            <Route path="/" element={<About />} />
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/about" element={<About />} />
             <Route path="/questions" element={<QuestionList />} />
             <Route path="/questions/:slug" element={<Question />} />
           </Routes>
