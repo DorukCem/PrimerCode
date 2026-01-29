@@ -1,24 +1,26 @@
 ```py
-def search(grid: list[list[str]], word : str):
-    if not grid or not grid[0] or not word:
-        return 0
-
+def search(grid: list[list[str]], word: str):
+    len_row = len(grid[0])
+    len_col = len(grid)
     count = 0
-    word = list(word)  # For easier comparison
-    rows = len(grid)
-    cols = len(grid[0])
 
-    for j in range(rows):
-        for i in range(cols - len(word) + 1):
-            horizontal = grid[j][i : i + len(word)]
-            if horizontal == word:
+    # all horizontal
+    for row in grid:
+        for i in range(0, (len_row-len(word))+1):
+            current = "".join(row[i:i+len(word)])
+            if current == word:
                 count += 1
 
-            if j > cols - len(word):
-                continue 
-            vertical = [grid[k][i] for k in range(j, j + len(word))]
-            if vertical == word:
-                count += 1
+    # all vertical
+    for col in range(len_row):
+        current = []
+        for i in range(0, (len_col-len(word))+1):
+            current = []  
+            for j in range(len(word)): 
+                current.append(grid[i+j][col])
+            current = "".join(current)
+            if current == word:
+                    count += 1
 
-    return count
+    return count 
 ```
