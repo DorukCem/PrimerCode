@@ -3,12 +3,18 @@ FROM rust:1.85 as builder
 
 WORKDIR /app
 
-# Cache dependencies
 COPY Cargo.toml Cargo.lock ./
-COPY src ./src
 COPY build.rs ./
 COPY injections ./injections
+
+# Dummy src - now build.rs is present so it can run
+RUN mkdir src && echo "fn main() {}" > src/main.rs
 RUN cargo build --release
+RUN rm -rf src
+
+# Real source
+COPY src ./src
+RUN touch src/main.rs && cargo build --release
 
 # ---------- Runtime stage ----------
 FROM debian:bookworm-slim

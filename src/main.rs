@@ -31,8 +31,6 @@ pub mod models;
 pub mod schema;
 mod types;
 
-// TODO design doc
-
 pub fn establish_connection() -> SqliteConnection {
     dotenv().ok();
 
