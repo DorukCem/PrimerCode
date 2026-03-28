@@ -90,16 +90,19 @@ async fn main() {
     if dotenvy::var("IS_DEV").is_ok() {
         let cors = CorsLayer::new()
             .allow_origin(
-                "http://127.0.0.1:5173"
+                "http://localhost:5173"
                     .parse::<HeaderValue>()
                     .expect("Expected to parse origin"),
             )
             .allow_methods([Method::GET, Method::POST, Method::OPTIONS])
             .allow_headers([header::CONTENT_TYPE, header::AUTHORIZATION, header::COOKIE])
             .allow_credentials(true);
-        router = router.layer(cors)
+        router = router.layer(cors);
+        println!("Running LOCAL DEV config");
+    } else {
+        println!("Running PRODUCTION config");
     }
-    let router = router; // remove mut
+    let router = router; 
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
         .await

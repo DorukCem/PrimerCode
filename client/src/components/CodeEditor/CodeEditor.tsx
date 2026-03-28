@@ -1,14 +1,14 @@
 import Editor from "@monaco-editor/react";
 import { useCallback, useEffect, useRef, useState } from "react";
 import CodeOutput from "./CodeOutput";
-import { Panel, PanelGroup, PanelResizeHandle } from "react-resizable-panels";
+import { Panel, Group, Separator } from "react-resizable-panels";
 import type { CodeSubmissionResponse } from "../../types/CodeSubmissionResponse";
 import type { CodeInput } from "../../types/CodeInput";
 
 import Modal from "./Modal";
 import API_CONFIG from "../../config/api";
 
-export default function CodeEditor({ slug, resetSolved, setResetSolved}: any) {
+export default function CodeEditor({ slug, resetSolved, setResetSolved }: any) {
   const [resetPanels, setResetPanels] = useState(1);
 
   const editorRef = useRef<any | null>(null);
@@ -43,7 +43,7 @@ export default function CodeEditor({ slug, resetSolved, setResetSolved}: any) {
         localStorage.setItem(getStorageKey(), value);
       }, 500); // Save after 500ms of no changes
     },
-    [slug]
+    [slug],
   );
 
   const onMount = (editor: any) => {
@@ -140,7 +140,7 @@ export default function CodeEditor({ slug, resetSolved, setResetSolved}: any) {
         if (result.success) {
           if (result) {
             const solvedQuestions = JSON.parse(
-              localStorage.getItem("solvedQuestions") || "{}"
+              localStorage.getItem("solvedQuestions") || "{}",
             );
 
             solvedQuestions[result.question_id] = {
@@ -151,10 +151,10 @@ export default function CodeEditor({ slug, resetSolved, setResetSolved}: any) {
 
             localStorage.setItem(
               "solvedQuestions",
-              JSON.stringify(solvedQuestions)
+              JSON.stringify(solvedQuestions),
             );
 
-            setResetSolved(resetSolved+1)
+            setResetSolved(resetSolved + 1);
           }
         }
       })
@@ -206,8 +206,8 @@ export default function CodeEditor({ slug, resetSolved, setResetSolved}: any) {
         </div>
       </div>
       {/* Editor */}
-      <PanelGroup direction="vertical" className="rounded-b-xl">
-        <Panel defaultSize={60} minSize={20} order={1}>
+      <Group orientation="vertical" className="rounded-b-xl">
+        <Panel defaultSize={60} minSize={20}>
           <Editor
             theme="vs-dark"
             defaultLanguage="python"
@@ -221,13 +221,12 @@ export default function CodeEditor({ slug, resetSolved, setResetSolved}: any) {
 
         {response && (
           <>
-            <PanelResizeHandle />
+            <Separator className="[&[data-separator='hover']]:bg-slate-500 [&[data-separator='active']]:bg-slate-400 h-[4px]"  />
             <Panel
               defaultSize={40}
               collapsible={true}
               collapsedSize={0}
               minSize={0}
-              order={2}
               key={resetPanels}
             >
               <CodeOutput
@@ -238,7 +237,7 @@ export default function CodeEditor({ slug, resetSolved, setResetSolved}: any) {
             </Panel>
           </>
         )}
-      </PanelGroup>
+      </Group>
       <div className="flex flex-row-reverse bg-neutral-800 p-4 px-4 border-t-1 border-white rounded-b-lg">
         <button
           className="bg-green-700 text-white border border-white rounded-md px-4 py-1 my-auto hover:cursor-pointer"
