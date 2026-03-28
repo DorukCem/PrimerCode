@@ -8,7 +8,7 @@ use axum::{
 use db::DbPool;
 use diesel::{dsl::insert_or_ignore_into, prelude::*};
 use dotenvy::dotenv;
-use http::Method;
+use http::{HeaderValue, Method};
 use models::{Question, QuestionSummary};
 use reqwest::{StatusCode, header};
 use serde_json::json;
@@ -71,7 +71,7 @@ async fn main() {
         pool: pool.clone(),
     };
 
-    let router = Router::new()
+    let mut router = Router::new()
         .route("/", get(auth::index))
         .route("/all-questions", get(get_all_questions))
         .route("/user-questions", get(get_all_user_questions))
@@ -86,6 +86,20 @@ async fn main() {
         .route("/auth/status", get(auth::auth_status))
         .route("/sync-questions", post(sync_solved_questions))
         .with_state(app_state);
+
+    if dotenvy::var("IS_DEV").is_ok() {
+        let cors = CorsLayer::new()
+            .allow_origin(
+                "http://127.0.0.1:5173"
+                    .parse::<HeaderValue>()
+                    .expect("Expected to parse origin"),
+            )
+            .allow_methods([Method::GET, Method::POST, Method::OPTIONS])
+            .allow_headers([header::CONTENT_TYPE, header::AUTHORIZATION, header::COOKIE])
+            .allow_credentials(true);
+        router = router.layer(cors)
+    }
+    let router = router; // remove mut
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
         .await
@@ -261,9 +275,11 @@ async fn post_submit_code(
     let content = payload.content;
     let language = "python";
     let version = "3.10.0";
-    // let piston_url = "https://emkc.org/api/v2/piston/execute";
-    let piston_url = "http://piston_api:2000/api/v2/execute"; // Piston API endpoint
-
+    let piston_url = if dotenvy::var("IS_DEV").is_ok() {
+        "http://0.0.0.0:2000/api/v2/execute" // Piston API endpoint
+    } else {
+        "http://piston_api:2000/api/v2/execute"
+    };
     let question = get_single_question(&slug, &pool).expect("Expected to find question");
     let question_id = question.id;
     let injected_code = inject_code(content, question);
