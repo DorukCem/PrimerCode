@@ -5,4 +5,3 @@ database.db
 certbot/
 renew-certs.sh
 *.pem
-vite-env.d.ts
