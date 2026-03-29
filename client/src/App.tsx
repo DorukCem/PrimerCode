@@ -1,6 +1,6 @@
 import "./App.css";
 import Navbar from "./components/Navbar";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useParams } from "react-router-dom";
 import QuestionList from "./components/QuestionList";
 import Question from "./components/Question";
 import { useAuth } from "./contexts/AuthContext";
@@ -96,6 +96,11 @@ function App() {
     }
   }, [isAuthenticated, isLoading]);
 
+  const QuestionWrapper = () => {
+    const { slug } = useParams();
+    return <Question key={slug} />;
+  };
+
   return (
     <Router>
       <div className="flex flex-col h-screen bg-neutral-900">
@@ -105,7 +110,7 @@ function App() {
             <Route path="/" element={<LandingPage />} />
             <Route path="/about" element={<About />} />
             <Route path="/questions" element={<QuestionList />} />
-            <Route path="/questions/:slug" element={<Question />} />
+            <Route path="/questions/:slug" element={<QuestionWrapper />} />
           </Routes>
         </div>
       </div>

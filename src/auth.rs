@@ -22,22 +22,23 @@ use serde::{Deserialize, Serialize};
 use serde_json::json;
 use std::{convert::Infallible, env};
 
-use crate::{db::DbPool, models::NewUser, AppError};
+use crate::{AppError, db::DbPool, models::{NewUser, QuestionName}};
 
 static COOKIE_NAME: &str = "SESSION";
 static CSRF_TOKEN: &str = "csrf_token";
 
 #[derive(Clone)]
 pub struct AppState {
-    pub store: RedisSessionStore,
+    pub auth_store: RedisSessionStore,
     pub oauth_client: BasicClient,
     pub pool: Pool<ConnectionManager<SqliteConnection>>,
+    pub question_names: Vec<QuestionName>,
 }
 
 // * --- This part is basically to tell Axum how to get components of AppState from a AppState ref ---
 impl FromRef<AppState> for RedisSessionStore {
     fn from_ref(state: &AppState) -> Self {
-        state.store.clone()
+        state.auth_store.clone()
     }
 }
 
@@ -50,6 +51,12 @@ impl FromRef<AppState> for BasicClient {
 impl FromRef<AppState> for Pool<ConnectionManager<SqliteConnection>> {
     fn from_ref(state: &AppState) -> Self {
         state.pool.clone()
+    }
+}
+
+impl FromRef<AppState> for Vec<QuestionName>{
+    fn from_ref(state: &AppState) -> Self {
+        state.question_names.clone()
     }
 }
 

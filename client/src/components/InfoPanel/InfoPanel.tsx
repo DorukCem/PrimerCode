@@ -6,10 +6,11 @@ import { useEffect, useState, useMemo } from "react";
 import { Check } from "lucide-react";
 import type { QuestionMDResponse } from "../../types/QuestionMDResponse";
 import API_CONFIG from "../../config/api";
+import { Link } from "react-router-dom";
 
 export default function InfoPanel({ slug, resetSolved }: any) {
   const [questionMD, setQuestionMD] = useState<QuestionMDResponse | null>(null);
-  
+
   const solvedQuestions = useMemo(() => {
     try {
       return JSON.parse(localStorage.getItem("solvedQuestions") || "{}");
@@ -17,7 +18,7 @@ export default function InfoPanel({ slug, resetSolved }: any) {
       return {};
     }
   }, [resetSolved]);
-  
+
   const isSolved = questionMD?.id ? solvedQuestions[questionMD.id] : false;
 
   useEffect(() => {
@@ -62,13 +63,41 @@ export default function InfoPanel({ slug, resetSolved }: any) {
               Solution
             </Tab>
           </div>
-          {isSolved && (
-            <div className="px-4  text-green-400 flex items-center">
-              <Check size={18} className ="mr-2" />
-              <span className="text-sm">Solved</span>
-            </div>
-          )}
+
+          <div className="flex items-center gap-2 px-4">
+            {isSolved && (
+              <div className="text-green-400 flex items-center">
+                <Check size={18} className="mr-2" />
+                <span className="text-sm mr-2">Solved</span>
+              </div>
+            )}
+            {questionMD?.prev ? (
+              <Link
+                to={`/questions/${questionMD.prev.slug}`}
+                className="px-3 py-1 text-sm text-gray-300 hover:text-white border border-gray-600 hover:border-gray-400 rounded transition-colors"
+              >
+                ← Prev
+              </Link>
+            ) : (
+              <span className="px-3 py-1 text-sm text-gray-600 border border-gray-700 rounded cursor-not-allowed">
+                ← Prev
+              </span>
+            )}
+            {questionMD?.next ? (
+              <Link
+                to={`/questions/${questionMD.next.slug}`}
+                className="px-3 py-1 text-sm text-gray-300 hover:text-white border border-gray-600 hover:border-gray-400 rounded transition-colors"
+              >
+                Next →
+              </Link>
+            ) : (
+              <span className="px-3 py-1 text-sm text-gray-600 border border-gray-700 rounded cursor-not-allowed">
+                Next →
+              </span>
+            )}
+          </div>
         </TabList>
+
         <TabPanel>
           <QuestionDescription markdown={questionMD?.question} />
         </TabPanel>

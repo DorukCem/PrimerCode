@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use ts_rs::TS;
 
-use crate::models::QuestionSummary;
+use crate::models::{QuestionName, QuestionSummary};
 
 #[derive(TS, Serialize, Deserialize)]
 #[ts(export)]
@@ -42,7 +42,9 @@ pub struct QuestionMDResponse {
     pub question: String,
     pub hint: String,
     pub solution: String,
-    pub id: i32
+    pub id: i32,
+    pub next: Option<QuestionName>,
+    pub prev: Option<QuestionName>,
 }
 
 #[derive(TS, Debug, Deserialize, Serialize)]
@@ -76,6 +78,7 @@ pub fn export_all_types() {
     QuestionList::export().unwrap();
     QuestionIds::export().unwrap();
     QuestionOverview::export().unwrap();
+    QuestionName::export().unwrap();
 }
 
 // Piston API response types

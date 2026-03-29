@@ -21,7 +21,7 @@ use types::{
 
 use crate::{
     auth::{AppState, AuthUser, create_redis_store, oauth_client},
-    models::NewSolved,
+    models::{NewSolved, QuestionName},
     types::{QuestionIds, QuestionOverview},
 };
 
@@ -46,6 +46,13 @@ pub fn get_question_summaries(conn: &mut SqliteConnection) -> QueryResult<Vec<Qu
         .order_by(rank.asc())
         .load::<QuestionSummary>(conn)
 }
+pub fn get_question_names(conn: &mut SqliteConnection) -> QueryResult<Vec<QuestionName>> {
+    use crate::schema::questions::dsl::*;
+    questions
+        .select((id, title, slug))
+        .order_by(rank.asc())
+        .load::<QuestionName>(conn)
+}
 
 #[tokio::main]
 async fn main() {
@@ -63,10 +70,18 @@ async fn main() {
     let pool: diesel::r2d2::Pool<diesel::r2d2::ConnectionManager<SqliteConnection>> =
         db::establish_pool();
 
-    let store = create_redis_store().expect("Expected to connect to redis");
+    let question_names =
+        get_question_names(&mut pool.get().expect("expected to get db connection"))
+            .expect("Expected to get question names for local hashmap");
+    if question_names.len() < 10 {
+        panic!("Could not get all questions")
+    }
+
+    let auth_store = create_redis_store().expect("Expected to connect to redis");
     let oauth_client = oauth_client().expect("Expected to create successfully oauth client");
     let app_state = AppState {
-        store,
+        auth_store,
+        question_names,
         oauth_client,
         pool: pool.clone(),
     };
@@ -102,7 +117,7 @@ async fn main() {
     } else {
         println!("Running PRODUCTION config");
     }
-    let router = router; 
+    let router = router;
 
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000")
         .await
@@ -227,13 +242,22 @@ async fn get_question_boilerplate(
 
 async fn get_question_md(
     State(pool): State<DbPool>,
+    State(question_names): State<Vec<QuestionName>>,
     Path(slug): Path<String>,
 ) -> impl IntoResponse {
     let question = get_single_question(&slug, &pool);
 
     match question {
         Ok(q) => {
+            let q_rank = question_names
+                .iter()
+                .position(|x| x.id == q.id)
+                .expect("Tried to find question is queston_names but somehow could not");
+            let prev = if q_rank > 0 {question_names.get(q_rank - 1).cloned()} else {None};
+            let next = question_names.get(q_rank + 1).cloned();
             let response = QuestionMDResponse {
+                next,
+                prev,
                 question: q.question_md,
                 hint: q.hint_md,
                 solution: q.solution_md,

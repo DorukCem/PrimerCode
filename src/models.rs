@@ -30,6 +30,14 @@ pub struct QuestionSummary {
     pub slug: String,
     pub tags: String,
 }
+#[derive(Queryable, Debug)]
+#[derive(TS,  Deserialize, Serialize, Clone)]
+#[ts(export)]
+pub struct QuestionName {
+    pub id: i32,
+    pub title: String,
+    pub slug: String,
+}
 
 #[derive(Queryable, Debug)]
 pub struct QuestionBoilerplate {
