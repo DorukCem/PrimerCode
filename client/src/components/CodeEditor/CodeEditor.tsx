@@ -206,7 +206,7 @@ export default function CodeEditor({ slug, resetSolved, setResetSolved }: any) {
         </div>
       </div>
       {/* Editor */}
-      <Group orientation="vertical" className="rounded-b-xl">
+      <Group orientation="vertical" className="">
         <Panel defaultSize={60} minSize={20}>
           <Editor
             theme="vs-dark"
@@ -221,7 +221,9 @@ export default function CodeEditor({ slug, resetSolved, setResetSolved }: any) {
 
         {response && (
           <>
-            <Separator className="[&[data-separator='hover']]:bg-slate-500 [&[data-separator='active']]:bg-slate-400 h-[4px]"  />
+            <Separator className="[&[data-separator='hover']]:bg-slate-500 [&[data-separator='active']]:bg-slate-400 h-[10px]  border-t border-white flex items-center justify-center cursor-col-resize bg-neutral-800">
+              <div className = "w-12 h-[3px] rounded-full bg-slate-400"></div>
+            </Separator>
             <Panel
               defaultSize={40}
               collapsible={true}
@@ -238,7 +240,7 @@ export default function CodeEditor({ slug, resetSolved, setResetSolved }: any) {
           </>
         )}
       </Group>
-      <div className="flex flex-row-reverse bg-neutral-800 p-4 px-4 border-t-1 border-white rounded-b-lg">
+      <div className="flex flex-row-reverse bg-neutral-800 p-4 px-4 border-t border-white rounded-b-lg">
         <button
           className="bg-green-700 text-white border border-white rounded-md px-4 py-1 my-auto hover:cursor-pointer"
           onClick={getCode}

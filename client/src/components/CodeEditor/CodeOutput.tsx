@@ -5,7 +5,7 @@ import { AlertTriangleIcon } from "lucide-react";
 
 export default function CodeOutput({ error, response, loading }: any) {
   return (
-    <div className="space-y-4 h-full bg-neutral-800 text-gray-100 p-4 overflow-y-auto  scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-gray-900 border-t-1 border-white ">
+    <div className="space-y-4 h-full bg-neutral-800 text-gray-100 p-4 overflow-y-auto">
       {loading && (
         <div className="flex items-center justify-center py-12">
           <div className="flex flex-col items-center gap-4">
