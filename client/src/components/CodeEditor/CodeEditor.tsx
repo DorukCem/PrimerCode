@@ -228,7 +228,7 @@ export default function CodeEditor({ slug, resetSolved, setResetSolved }: any) {
 
         {response && (
           <>
-            <Separator className="[&[data-separator='hover']]:bg-slate-500 [&[data-separator='active']]:bg-slate-400 h-[10px]  border-t border-white flex items-center justify-center cursor-col-resize bg-neutral-800">
+            <Separator className="[&[data-separator='hover']]:bg-slate-500 [&[data-separator='active']]:bg-slate-400 h-[10px]  border-t border-white flex items-center justify-center cursor-col-resize bg-neutral-800" style={{ touchAction: 'none' }} >
               <div className="w-12 h-[3px] rounded-full bg-slate-400"></div>
             </Separator>
             <Panel
