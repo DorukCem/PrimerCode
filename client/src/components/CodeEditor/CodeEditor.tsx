@@ -7,6 +7,7 @@ import type { CodeInput } from "../../types/CodeInput";
 
 import Modal from "./Modal";
 import API_CONFIG from "../../config/api";
+import { useIsMobile } from "../../hooks/useIsMobile";
 
 export default function CodeEditor({ slug, resetSolved, setResetSolved }: any) {
   const [resetPanels, setResetPanels] = useState(1);
@@ -24,11 +25,11 @@ export default function CodeEditor({ slug, resetSolved, setResetSolved }: any) {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const isMobile = useIsMobile();
   const [fontSize, setFontSize] = useState(() => {
     const storedSetting = localStorage.getItem("fontSize");
-    return storedSetting ? JSON.parse(storedSetting) : 16;
+    return storedSetting ? JSON.parse(storedSetting) : isMobile ? 12 : 16;
   });
-
   // Generate a unique key for this question's saved code
   const getStorageKey = () => `savedCode_${slug}`;
 
@@ -173,9 +174,15 @@ export default function CodeEditor({ slug, resetSolved, setResetSolved }: any) {
     minimap: { enabled: false },
     scrollBeyondLastLine: false,
     folding: true,
-    padding: {
-      top: 12,
-    },
+    padding: { top: 12 },
+    // Mobile: wrap lines and hide horizontal scrollbar entirely
+    ...(isMobile && {
+      wordWrap: "on" as const,
+      scrollbar: {
+        horizontal: "hidden" as const,
+        handleMouseWheel: true,
+      },
+    }),
   };
 
   function closeModal() {
@@ -222,7 +229,7 @@ export default function CodeEditor({ slug, resetSolved, setResetSolved }: any) {
         {response && (
           <>
             <Separator className="[&[data-separator='hover']]:bg-slate-500 [&[data-separator='active']]:bg-slate-400 h-[10px]  border-t border-white flex items-center justify-center cursor-col-resize bg-neutral-800">
-              <div className = "w-12 h-[3px] rounded-full bg-slate-400"></div>
+              <div className="w-12 h-[3px] rounded-full bg-slate-400"></div>
             </Separator>
             <Panel
               defaultSize={40}
