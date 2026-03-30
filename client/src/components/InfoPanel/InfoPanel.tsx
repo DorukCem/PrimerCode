@@ -39,10 +39,10 @@ export default function InfoPanel({ slug, resetSolved }: any) {
   }, []);
   return (
     <div
-      className={`flex flex-col bg-neutral-800 shadow-lg border border-white
+      className={`flex flex-col bg-neutral-800 shadow-lg border border-white rounded-lg
         ${isMobile
-          ? "min-h-screen w-full rounded-none border-x-0"
-          : "h-full rounded-lg overflow-y-scroll"
+          ? "min-h-screen w-full"
+          : "h-full  overflow-y-scroll"
         }`}
     >
       <Tabs className="flex flex-col text-white h-full">

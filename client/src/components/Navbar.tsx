@@ -6,7 +6,7 @@ export default function Navbar() {
   const { user } = useAuth();
 
   return (
-    <nav className="bg-neutral-800 p-4 shadow-md text-base sm:text-lg ">
+    <nav className="bg-neutral-800 p-4 shadow-md text-base border-b border-white border-dashed sm:text-lg md:border-none ">
       <div className="md:mx-4 flex justify-between items-center">
         <div className="flex items-center gap-4 sm:gap-8">
           <Link

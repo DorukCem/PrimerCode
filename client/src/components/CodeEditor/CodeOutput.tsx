@@ -39,7 +39,7 @@ export default function CodeOutput({ error, response, loading }: any) {
             </div>
           </div>
           <div
-            className={`p-4 mb-6 rounded-lg ${
+            className={`p-4 mb-6 rounded-lg overflow-auto ${
               response.success
                 ? "bg-emerald-900/30 border border-emerald-800 text-emerald-100"
                 : "bg-red-900/30 border border-red-800 text-amber-100"

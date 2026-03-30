@@ -14,8 +14,10 @@ export default function Question() {
   if (isMobile) {
     return (
       <div className="flex flex-col overflow-y-auto">
-        <InfoPanel slug={slug} resetSolved={resetSolved} />
-        <div className="w-screen h-[70vh]">
+        <div className="py-4 ">
+          <InfoPanel slug={slug} resetSolved={resetSolved} />
+        </div>
+        <div className="w-screen h-[70vh] pb-8">
           <CodeEditor
             slug={slug}
             resetSolved={resetSolved}
